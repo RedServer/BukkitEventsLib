@@ -7,33 +7,23 @@ import org.bukkit.Material;
  */
 public final class BlockStateData {
 
-	private final int id;
-	private final int data;
 	private final Material type;
+	private final int data;
 
 	/**
-	 * @param id ID блока
+	 * @param type Material блока
 	 * @param data Meta блока
 	 */
-	public BlockStateData(int id, int data) {
-		this.id = id;
+	public BlockStateData(Material type, int data) {
+		this.type = type;
 		this.data = data;
-		type = Material.getMaterial(id);
 	}
 
 	/**
-	 * @param id ID блока
+	 * @param type ID блока
 	 */
-	public BlockStateData(int id) {
-		this(id, 0);
-	}
-
-	/**
-	 * ID блока
-	 * @return
-	 */
-	public int getTypeId() {
-		return id;
+	public BlockStateData(Material type) {
+		this(type, 0);
 	}
 
 	/**

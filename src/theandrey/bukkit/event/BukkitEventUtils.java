@@ -2,13 +2,15 @@ package theandrey.bukkit.event;
 
 import cpw.mods.fml.common.FMLLog;
 import java.lang.reflect.Method;
-import java.util.logging.Level;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.ForgeDirection;
+import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.logging.log4j.Level;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +19,7 @@ public final class BukkitEventUtils {
 
 	private static Method asBukkitCopyMethod;
 	private static Method getBukkitEntityMethod;
+	private static Method getBlockStateMethod;
 
 	static {
 		try {
@@ -31,10 +34,33 @@ public final class BukkitEventUtils {
 				}
 			}
 
+			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".block.CraftBlockState");
+			getBlockStateMethod = сraftBlockState.getMethod("getBlockState", new Class[]{net.minecraft.world.World.class, int.class, int.class, int.class});
+
 			getBukkitEntityMethod = net.minecraft.entity.Entity.class.getMethod("getBukkitEntity");
 		} catch (Throwable ex) {
 			throw new RuntimeException("[BukkitUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
 		}
+	}
+
+	/**
+	 * Получает Material блока
+	 * @param block Блок
+	 * @return Bukkit Material
+	 */
+	@SuppressWarnings("deprecation")
+	public static Material getMaterial(net.minecraft.block.Block block) {
+		return Material.getMaterial(net.minecraft.block.Block.getIdFromBlock(block));
+	}
+
+	/**
+	 * Получает Material предмета
+	 * @param item Предмет
+	 * @return Bukkit Material
+	 */
+	@SuppressWarnings("deprecation")
+	public static Material getMaterial(net.minecraft.item.Item item) {
+		return Material.getMaterial(net.minecraft.item.Item.getIdFromItem(item));
 	}
 
 	/**
@@ -68,7 +94,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Block
 	 */
 	public static Block getBlock(TileEntity te) {
-		return getBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+		return getBlock(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
 	}
 
 	/**
@@ -90,7 +116,7 @@ public final class BukkitEventUtils {
 			try {
 				return (Entity)getBukkitEntityMethod.invoke(entity);
 			} catch (Throwable ex) {
-				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Bukkit Entity.");
+				FMLLog.log(Level.ERROR, ex, "[BukkitUtils] Не удалось получить Bukkit Entity.");
 			}
 		}
 		return null;
@@ -128,8 +154,22 @@ public final class BukkitEventUtils {
 			try {
 				return (ItemStack)asBukkitCopyMethod.invoke(null, stack);
 			} catch (Throwable ex) {
-				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
+				FMLLog.log(Level.ERROR, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
 			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получает BlockState
+	 */
+	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
+		try {
+			if(getBlockStateMethod != null && world != null) {
+				return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
+			}
+		} catch (Exception ex) {
+			FMLLog.log("BukkitUtils", Level.ERROR, ex, "Не удалось получить BlockState.");
 		}
 		return null;
 	}

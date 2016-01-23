@@ -4,11 +4,11 @@
 	<import file="nbproject/build-impl.xml"/>
 
 	<property name="bon.path" value="D:\MCP\deobf_decomp\BON2.jar" />
-	<property name="mcp.folder" value="D:\MCP\1.4.7" />
-	<property name="release.folder" value="../lib/BukkitEventsLib/1.4.7" />
-	<property name="release.file.dev" value="BukkitEventsLib-1.4.7-dev.jar" />
-	<property name="release.file.source" value="BukkitEventsLib-1.4.7-src.zip" />
-	<property name="release.file.normal" value="BukkitEventsLib-1.4.7-server.jar" />
+	<property name="mcp.folder" value="D:\MCP\1.7.10-forge" />
+	<property name="release.folder" value="../lib/BukkitEventsLib/1.7.10" />
+	<property name="release.file.dev" value="BukkitEventsLib-1.7.10-dev.jar" />
+	<property name="release.file.source" value="BukkitEventsLib-1.7.10-src.zip" />
+	<property name="release.file.normal" value="BukkitEventsLib-1.7.10-server.jar" />
 
 	<target name="-post-jar">
 		<antcall target="copydev" />
@@ -26,11 +26,9 @@
 			<arg value="-from" />
 			<arg value="MCP" />
 			<arg value="-to" />
-			<arg value="OBF" />
+			<arg value="SRG" />
 			<arg value="-side" />
 			<arg value="UNIVERSAL" />
-			<arg value="-jref" />
-			<arg value="../lib/mods 1.4.7/" />
 			<arg value="-ref" />
 			<arg value="${mcp.folder}/bin/minecraft" />
 			<arg value="-in" />
