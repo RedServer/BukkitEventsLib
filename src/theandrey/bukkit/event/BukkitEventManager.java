@@ -1,4 +1,4 @@
-package theandrey.bukkit;
+package theandrey.bukkit.event;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,12 +29,12 @@ public final class BukkitEventManager {
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		Player bukkitPlayer = BukkitUtils.getPlayer(player);
-		ItemStack bukkitStack = BukkitUtils.getItemStack(stack);
+		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
+		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
 		PlayerBucketFillEvent event = new PlayerBucketFillEvent(
 				bukkitPlayer,
 				bukkitPlayer.getWorld().getBlockAt(x, y, z),
-				BukkitUtils.getBlockFace(side),
+				BukkitEventUtils.getBlockFace(side),
 				(bukkitStack != null) ? bukkitStack.getType() : Material.WATER_BUCKET,
 				bukkitStack
 		);
@@ -53,12 +53,12 @@ public final class BukkitEventManager {
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		Player bukkitPlayer = BukkitUtils.getPlayer(player);
-		ItemStack bukkitStack = BukkitUtils.getItemStack(stack);
+		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
+		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
 		PlayerBucketEmptyEvent event = new PlayerBucketEmptyEvent(
 				bukkitPlayer,
 				bukkitPlayer.getWorld().getBlockAt(x, y, z),
-				BukkitUtils.getBlockFace(side),
+				BukkitEventUtils.getBlockFace(side),
 				(bukkitStack != null) ? bukkitStack.getType() : Material.WATER_BUCKET,
 				bukkitStack
 		);
@@ -71,7 +71,7 @@ public final class BukkitEventManager {
 	 * @return true если эвент не был отменен.
 	 */
 	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
-		Player bukkitPlayer = BukkitUtils.getPlayer(player);
+		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		if(bukkitPlayer == null) return false;
 		Block block = bukkitPlayer.getWorld().getBlockAt(x, y, z);
 		BlockBreakEvent event = new BlockBreakEvent(block, bukkitPlayer);
@@ -89,7 +89,7 @@ public final class BukkitEventManager {
 	 */
 	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
 		if(attacker == null || damagee == null) return false;
-		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitUtils.getBukkitEntity(attacker), BukkitUtils.getBukkitEntity(damagee), cause, damage);
+		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(damagee), cause, damage);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}

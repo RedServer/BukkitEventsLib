@@ -1,4 +1,4 @@
-package theandrey.bukkit;
+package theandrey.bukkit.event;
 
 import cpw.mods.fml.common.FMLLog;
 import java.lang.reflect.Method;
@@ -13,7 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public final class BukkitUtils {
+public final class BukkitEventUtils {
 
 	private static Method asBukkitCopyMethod;
 	private static Method getBukkitEntityMethod;
