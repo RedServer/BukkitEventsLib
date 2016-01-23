@@ -42,7 +42,7 @@
 
 	<target name="copydev" if="true">
 		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.dev}" overwrite="true" />
-		<zip destfile="${release.folder}/${release.file.source}" basedir="src" update="false" />
+		<zip destfile="${release.folder}/${release.file.source}" basedir="src" update="false" encoding="UTF-8" />
 	</target>
 
 	<target name="copylib" if="true">
