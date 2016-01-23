@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +18,7 @@ public final class BukkitEventUtils {
 
 	private static Method asBukkitCopyMethod;
 	private static Method getBukkitEntityMethod;
+	private static Method getBlockStateMethod;
 
 	static {
 		try {
@@ -30,6 +32,9 @@ public final class BukkitEventUtils {
 					break;
 				}
 			}
+
+			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".block.CraftBlockState");
+			getBlockStateMethod = сraftBlockState.getMethod("getBlockState", new Class[]{net.minecraft.world.World.class, int.class, int.class, int.class});
 
 			getBukkitEntityMethod = net.minecraft.entity.Entity.class.getMethod("getBukkitEntity");
 		} catch (Throwable ex) {
@@ -130,6 +135,21 @@ public final class BukkitEventUtils {
 			} catch (Throwable ex) {
 				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
 			}
+		}
+		return null;
+	}
+
+	/**
+	 * Получает BlockState
+	 * @param world
+	 * @param x
+	 * @return
+	 */
+	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
+		try {
+			return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
+		} catch (Exception ex) {
+			FMLLog.log("BukkitUtils", Level.SEVERE, ex, "Не удалось получить BlockState.");
 		}
 		return null;
 	}

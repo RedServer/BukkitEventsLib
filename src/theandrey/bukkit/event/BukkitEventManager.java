@@ -4,9 +4,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -28,7 +32,7 @@ public final class BukkitEventManager {
 	 * @param side
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
+	public static boolean callBucketFill(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
 		PlayerBucketFillEvent event = new PlayerBucketFillEvent(
@@ -52,7 +56,7 @@ public final class BukkitEventManager {
 	 * @param side
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
+	public static boolean callBucketEmpty(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
 		PlayerBucketEmptyEvent event = new PlayerBucketEmptyEvent(
@@ -68,6 +72,10 @@ public final class BukkitEventManager {
 
 	/**
 	 * Кидает эвент разрушения блока
+	 * @param player
+	 * @param z
+	 * @param x
+	 * @param y
 	 * @return true если эвент не был отменен.
 	 */
 	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
@@ -87,10 +95,45 @@ public final class BukkitEventManager {
 	 * @param damage Урон
 	 * @return true, если эвет не был отменён
 	 */
-	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
+	public static boolean callEntityDamageByEntity(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
 		if(attacker == null || damagee == null) return false;
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(damagee), cause, damage);
 		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Кидает эвент установки блока
+	 * @param player
+	 * @param x
+	 * @param stackBlock
+	 * @param z
+	 * @param y
+	 * @return true если эвент не был отменен.
+	 */
+	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stackBlock) {
+		if(player == null || stackBlock == null) return false;
+		BlockState replacedBlockState = BukkitEventUtils.getBlockState(player.worldObj, x, y, z);
+		BlockPlaceEvent event = new BlockPlaceEvent(replacedBlockState.getBlock(), replacedBlockState, BukkitEventUtils.getBlock(player.worldObj, x, y, z), BukkitEventUtils.getItemStack(stackBlock), BukkitEventUtils.getPlayer(player), true);
+		Bukkit.getPluginManager().callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Кидает эвент перемещения блока (используется для жидкостей)
+	 * @param worldObj
+	 * @param zto
+	 * @param x
+	 * @param yto
+	 * @param z
+	 * @param y
+	 * @param xto
+	 * @return true если эвент не был отменен.
+	 */
+	public static boolean callBlockFromToEvent(net.minecraft.world.World worldObj, int x, int y, int z, int xto, int yto, int zto) {
+		World bworld = BukkitEventUtils.getWorld(worldObj);
+		BlockFromToEvent event = new BlockFromToEvent(bworld.getBlockAt(x, y, x), bworld.getBlockAt(xto, yto, zto));
+		Bukkit.getPluginManager().callEvent(event);
 		return !event.isCancelled();
 	}
 
