@@ -32,7 +32,7 @@ public final class BukkitEventManager {
 	 * @param side
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketFill(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
+	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
 		PlayerBucketFillEvent event = new PlayerBucketFillEvent(
@@ -56,7 +56,7 @@ public final class BukkitEventManager {
 	 * @param side
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketEmpty(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
+	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
 		PlayerBucketEmptyEvent event = new PlayerBucketEmptyEvent(
@@ -78,7 +78,7 @@ public final class BukkitEventManager {
 	 * @param y
 	 * @return true если эвент не был отменен.
 	 */
-	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
+	public static boolean callBlockBreakEvent(EntityPlayer player, int x, int y, int z) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		if(bukkitPlayer == null) return false;
 		Block block = bukkitPlayer.getWorld().getBlockAt(x, y, z);
@@ -95,7 +95,7 @@ public final class BukkitEventManager {
 	 * @param damage Урон
 	 * @return true, если эвет не был отменён
 	 */
-	public static boolean callEntityDamageByEntity(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
+	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
 		if(attacker == null || damagee == null) return false;
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(damagee), cause, damage);
 		pluginManager.callEvent(event);
