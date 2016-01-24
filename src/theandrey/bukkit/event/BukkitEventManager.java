@@ -4,12 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -142,6 +144,24 @@ public final class BukkitEventManager {
 		Block bblock = bplayer.getWorld().getBlockAt(x, y, z);
 		ItemStack bstack = BukkitEventUtils.getItemStack(stack);
 		PlayerInteractEvent event = new PlayerInteractEvent(bplayer, action, bstack, bblock, face);
+		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Кидает эвент перемещения блока (используется для жидкостей)
+	 * @param world Мир
+	 * @param x Координата блока
+	 * @param y Координата блока
+	 * @param z Координата блока
+	 * @param xto Координата перемещения блока
+	 * @param yto Координата перемещения блока
+	 * @param zto Координата перемещения блока
+	 * @return true если эвент не был отменен.
+	 */
+	public static boolean callBlockFromToEvent(net.minecraft.world.World world, int x, int y, int z, int xto, int yto, int zto) {
+		World bworld = BukkitEventUtils.getWorld(world);
+		BlockFromToEvent event = new BlockFromToEvent(bworld.getBlockAt(x, y, x), bworld.getBlockAt(xto, yto, zto));
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
