@@ -75,7 +75,7 @@ public final class BukkitEventManager {
 	 * Кидает эвент разрушения блока
 	 * @return true если эвент не был отменен.
 	 */
-	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
+	public static boolean callBlockBreakEvent(EntityPlayer player, int x, int y, int z) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		if(bukkitPlayer == null) return false;
 		Block block = bukkitPlayer.getWorld().getBlockAt(x, y, z);
@@ -109,7 +109,7 @@ public final class BukkitEventManager {
 	 * @param stack Предмет в руке (блок)
 	 * @return true если эвент не был отменен.
 	 */
-	public static boolean callBlockPlace(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
+	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
 		if(player == null || stack == null) return false;
 		BlockState replacedBlockState = BukkitEventUtils.getBlockState(player.worldObj, x, y, z);
 		BlockPlaceEvent event = new BlockPlaceEvent(
@@ -137,13 +137,31 @@ public final class BukkitEventManager {
 	 * @param stack Предмет в руке, которым кликнули по блоку
 	 * @return true если эвент не был отменен.
 	 */
-	public static boolean callPlayerInteract(net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, Action action, BlockFace face, net.minecraft.item.ItemStack stack) {
+	public static boolean callPlayerInteractEvent(net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, Action action, BlockFace face, net.minecraft.item.ItemStack stack) {
 		Player bplayer = BukkitEventUtils.getPlayer(player);
 		Block bblock = bplayer.getWorld().getBlockAt(x, y, z);
 		ItemStack bstack = BukkitEventUtils.getItemStack(stack);
 		PlayerInteractEvent event = new PlayerInteractEvent(bplayer, action, bstack, bblock, face);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
+	}
+
+	@Deprecated
+	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
+		new RuntimeException("Вызов устаревшего метода").printStackTrace();
+		return callBlockBreakEvent(player, x, y, z);
+	}
+
+	@Deprecated
+	public static boolean callBlockPlace(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
+		new RuntimeException("Вызов устаревшего метода").printStackTrace();
+		return callBlockPlaceEvent(player, x, y, z, stack);
+	}
+
+	@Deprecated
+	public static boolean callPlayerInteract(net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, Action action, BlockFace face, net.minecraft.item.ItemStack stack) {
+		new RuntimeException("Вызов устаревшего метода").printStackTrace();
+		return callPlayerInteractEvent(player, x, y, z, action, face, stack);
 	}
 
 }
