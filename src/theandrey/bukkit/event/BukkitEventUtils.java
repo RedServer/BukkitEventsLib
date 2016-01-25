@@ -16,16 +16,16 @@ import org.bukkit.inventory.ItemStack;
 
 public final class BukkitEventUtils {
 
+	public static final String NMS_PACKAGE_VERSION;
 	private static Method asBukkitCopyMethod;
 	private static Method getBukkitEntityMethod;
 	private static Method getBlockStateMethod;
 
 	static {
+		String packageName = Bukkit.getServer().getClass().getPackage().getName();
+		NMS_PACKAGE_VERSION = packageName.substring(packageName.lastIndexOf('.') + 1);
 		try {
-			String packageName = Bukkit.getServer().getClass().getPackage().getName();
-			String nmsPackageVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
-
-			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".inventory.CraftItemStack");
+			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".inventory.CraftItemStack");
 			for(Method method : craftItem.getMethods()) {
 				if(method.getName().equals("asBukkitCopy")) {
 					asBukkitCopyMethod = method;
@@ -33,9 +33,8 @@ public final class BukkitEventUtils {
 				}
 			}
 
-			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".block.CraftBlockState");
+			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".block.CraftBlockState");
 			getBlockStateMethod = сraftBlockState.getMethod("getBlockState", new Class[]{net.minecraft.world.World.class, int.class, int.class, int.class});
-
 			getBukkitEntityMethod = net.minecraft.entity.Entity.class.getMethod("getBukkitEntity");
 		} catch (Throwable ex) {
 			throw new RuntimeException("[BukkitUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
