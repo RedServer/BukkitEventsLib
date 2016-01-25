@@ -17,16 +17,17 @@ import net.minecraft.world.World;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
+import theandrey.bukkit.event.api.IExplosionEvent;
 
 /**
  * Используется для взрывов
  */
-public class CustomExplosion {
+public abstract class CustomExplosion {
 
 	public boolean isFlaming = false;
 	public boolean isSmoking = true;
@@ -41,18 +42,42 @@ public class CustomExplosion {
 	public final List<ChunkPosition> affectedBlockPositions = new ArrayList<>();
 	public boolean wasCanceled = false;
 	private final Explosion classicExplosion; // некоторые методы требуют этот объект
+	private final ChunkPosition explodedBlock;
+	private final String ownerUsername;
 
-	public CustomExplosion(World world, Entity explodedEntity, double explosionX, double explosionY, double explosionZ, float explosionSize) {
+	/**
+	 * @param world Мир
+	 * @param explodedEntity Entity, который вызвал взрыв, если нет - null
+	 * @param explodedBlock Координаты блока, который вызвал взрыв, если нет - null
+	 * @param explosionX Точка X взрыва
+	 * @param explosionY Точка Y взрыва
+	 * @param explosionZ Точка Z взрыва
+	 * @param explosionSize Радиус взрыва
+	 * @param ownerUsername Имя владельца взорвавшегося Entity/блока. null - если неизвестно.
+	 */
+	public CustomExplosion(World world, Entity explodedEntity, ChunkPosition explodedBlock, double explosionX, double explosionY, double explosionZ, float explosionSize, String ownerUsername) {
 		this.worldObj = world;
 		this.exploder = explodedEntity;
+		this.explodedBlock = explodedBlock;
 		this.explosionSize = (float)Math.max((double)explosionSize, 0.0D);
 		this.explosionX = explosionX;
 		this.explosionY = explosionY;
 		this.explosionZ = explosionZ;
 		classicExplosion = new Explosion(world, explodedEntity, explosionX, explosionY, explosionZ, explosionSize);
+		this.ownerUsername = ownerUsername;
 	}
 
-	public void doExplosionA() {
+	/**
+	 * Запускает взрыв
+	 */
+	public void doExplosion() {
+		doExplosionA();
+		doExplosionB(true);
+	}
+
+	protected abstract Event getBukkitEvent(Location explosionPoint, org.bukkit.entity.Entity explodedEntity, org.bukkit.block.Block explodedBlock, List<org.bukkit.block.Block> blocks);
+
+	protected void doExplosionA() {
 		if(this.explosionSize >= 0.1F) {
 			float f = this.explosionSize;
 			HashSet<ChunkPosition> hashset = new HashSet<>();
@@ -103,11 +128,10 @@ public class CustomExplosion {
 			int l1 = MathHelper.floor_double(this.explosionY + (double)this.explosionSize + 1.0D);
 			int i2 = MathHelper.floor_double(this.explosionZ - (double)this.explosionSize - 1.0D);
 			int j2 = MathHelper.floor_double(this.explosionZ + (double)this.explosionSize + 1.0D);
-			List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)i, (double)k, (double)i2, (double)j, (double)l1, (double)j2));
+			List<Entity> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this.exploder, AxisAlignedBB.getAABBPool().addOrModifyAABBInPool((double)i, (double)k, (double)i2, (double)j, (double)l1, (double)j2));
 			Vec3 vec3 = this.worldObj.getWorldVec3Pool().getVecFromPool(this.explosionX, this.explosionY, this.explosionZ);
 
-			for(int k2 = 0; k2 < list.size(); ++k2) {
-				Entity entity = (Entity)list.get(k2);
+			for(Entity entity : list) {
 				double d7 = entity.getDistance(this.explosionX, this.explosionY, this.explosionZ) / (double)this.explosionSize;
 				if(d7 <= 1.0D) {
 					double d0 = entity.posX - this.explosionX;
@@ -120,15 +144,16 @@ public class CustomExplosion {
 						d2 /= d8;
 						double d9 = (double)this.worldObj.getBlockDensity(vec3, entity.boundingBox);
 						double d10 = (1.0D - d7) * d9;
-						org.bukkit.entity.Entity bukkkitEntity = (entity == null) ? null : BukkitEventUtils.getBukkitEntity(entity);
+						org.bukkit.entity.Entity bukkkitEntity = BukkitEventUtils.getBukkitEntity(entity);
 						int damageDone = (int)((d10 * d10 + d10) / 2.0D * 8.0D * (double)this.explosionSize + 1.0D);
 						if(bukkkitEntity != null) {
 							if(this.exploder == null) {
-								EntityDamageByBlockEvent damager = new EntityDamageByBlockEvent((org.bukkit.block.Block)null, bukkkitEntity, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, damageDone);
-								Bukkit.getPluginManager().callEvent(damager);
-								if(!damager.isCancelled()) {
-									bukkkitEntity.setLastDamageCause(damager);
-									entity.attackEntityFrom(DamageSource.explosion, damager.getDamage());
+								org.bukkit.block.Block bblock = (explodedBlock != null) ? BukkitEventUtils.getBlock(worldObj, explodedBlock.x, explodedBlock.y, explodedBlock.z) : null;
+								EntityDamageByBlockEvent event = new EntityDamageByBlockEvent(bblock, bukkkitEntity, EntityDamageEvent.DamageCause.BLOCK_EXPLOSION, damageDone);
+								Bukkit.getPluginManager().callEvent(event);
+								if(!event.isCancelled()) {
+									bukkkitEntity.setLastDamageCause(event);
+									entity.attackEntityFrom(DamageSource.explosion, event.getDamage());
 									double d11 = EnchantmentProtection.func_92092_a(entity, d10);
 									entity.motionX += d0 * d11;
 									entity.motionY += d1 * d11;
@@ -136,14 +161,7 @@ public class CustomExplosion {
 								}
 							} else {
 								org.bukkit.entity.Entity bukkitExploder = BukkitEventUtils.getBukkitEntity(exploder);
-								EntityDamageEvent.DamageCause damageCause;
-								if(bukkitExploder instanceof TNTPrimed) {
-									damageCause = EntityDamageEvent.DamageCause.BLOCK_EXPLOSION;
-								} else {
-									damageCause = EntityDamageEvent.DamageCause.ENTITY_EXPLOSION;
-								}
-
-								EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(bukkitExploder, bukkkitEntity, damageCause, damageDone);
+								EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(bukkitExploder, bukkkitEntity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, damageDone);
 								Bukkit.getPluginManager().callEvent(event);
 								if(!event.isCancelled()) {
 									bukkkitEntity.setLastDamageCause(event);
@@ -162,7 +180,7 @@ public class CustomExplosion {
 		}
 	}
 
-	public void doExplosionB(boolean par1) {
+	protected void doExplosionB(boolean par1) {
 		this.worldObj.playSoundEffect(this.explosionX, this.explosionY, this.explosionZ, "random.explode", 4.0F, (1.0F + (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
 		if(this.explosionSize >= 2.0F && this.isSmoking) {
 			this.worldObj.spawnParticle("hugeexplosion", this.explosionX, this.explosionY, this.explosionZ, 1.0D, 0.0D, 0.0D);
@@ -172,28 +190,29 @@ public class CustomExplosion {
 
 		if(this.isSmoking) {
 			org.bukkit.World bukkitWorld = BukkitEventUtils.getWorld(worldObj);
-			org.bukkit.entity.Entity explode = this.exploder == null ? null : BukkitEventUtils.getBukkitEntity(exploder);
+			org.bukkit.entity.Entity bukkitExploder = (this.exploder == null) ? null : BukkitEventUtils.getBukkitEntity(exploder);
+			org.bukkit.block.Block bukkitBlock = (explodedBlock != null) ? bukkitWorld.getBlockAt(explodedBlock.x, explodedBlock.y, explodedBlock.z) : null;
 			Location location = new Location(bukkitWorld, this.explosionX, this.explosionY, this.explosionZ);
 			ArrayList<org.bukkit.block.Block> blockList = new ArrayList<>();
 
 			for(int i = affectedBlockPositions.size() - 1; i >= 0; --i) {
 				ChunkPosition block = this.affectedBlockPositions.get(i);
 				org.bukkit.block.Block block1 = bukkitWorld.getBlockAt(block.x, block.y, block.z);
-				if(block1.getType() != Material.AIR) {
-					blockList.add(block1);
-				}
+				if(block1.getType() != Material.AIR) blockList.add(block1);
 			}
 
-			EntityExplodeEvent bukkitEvent = new EntityExplodeEvent(explode, location, blockList, 0.3F);
+			Event bukkitEvent = getBukkitEvent(location, bukkitExploder, bukkitBlock, blockList);
+			if(bukkitEvent == null) throw new NullPointerException("Получен null Event");
+			if(!(bukkitEvent instanceof IExplosionEvent)) throw new RuntimeException(bukkitEvent.toString() + " не реализует " + IExplosionEvent.class.getName());
 			Bukkit.getServer().getPluginManager().callEvent(bukkitEvent);
 			this.affectedBlockPositions.clear();
 
-			for(org.bukkit.block.Block bblock : bukkitEvent.blockList()) {
+			for(org.bukkit.block.Block bblock : ((IExplosionEvent)bukkitEvent).getBlocks()) {
 				ChunkPosition coords = new ChunkPosition(bblock.getX(), bblock.getY(), bblock.getZ());
 				this.affectedBlockPositions.add(coords);
 			}
 
-			if(bukkitEvent.isCancelled()) {
+			if((bukkitEvent instanceof Cancellable) && ((Cancellable)bukkitEvent).isCancelled()) {
 				this.wasCanceled = true;
 				return;
 			}
@@ -226,7 +245,7 @@ public class CustomExplosion {
 
 				if(l > 0 && l != Block.fire.blockID) {
 					Block var35 = Block.blocksList[l];
-					if(var35.canDropFromExplosion(classicExplosion)) var35.dropBlockAsItemWithChance(this.worldObj, i, j, k, this.worldObj.getBlockMetadata(i, j, k), bukkitEvent.getYield(), 0);
+					if(var35.canDropFromExplosion(classicExplosion)) var35.dropBlockAsItemWithChance(this.worldObj, i, j, k, this.worldObj.getBlockMetadata(i, j, k), 0.3F, 0);
 
 					if(this.worldObj.setBlockAndMetadataWithUpdate(i, j, k, 0, 0, this.worldObj.isRemote)) {
 						this.worldObj.notifyBlocksOfNeighborChange(i, j, k, 0);
