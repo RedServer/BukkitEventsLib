@@ -1,6 +1,7 @@
 package theandrey.bukkit.event.api;
 
 import org.bukkit.block.Block;
+import theandrey.bukkit.event.BlockStateData;
 import theandrey.bukkit.event.MachineAction;
 
 /**
@@ -25,5 +26,11 @@ public interface IMachineEvent {
 	 * @return
 	 */
 	public Block getBlock();
+
+	/**
+	 * Блок, который устанавливает механизм
+	 * @return
+	 */
+	public BlockStateData getBlockPlaced();
 
 }
