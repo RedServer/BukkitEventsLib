@@ -39,7 +39,7 @@ public final class BukkitEventUtils {
 
 			getBukkitEntityMethod = net.minecraft.entity.Entity.class.getMethod("getBukkitEntity");
 		} catch (Throwable ex) {
-			throw new RuntimeException("[BukkitUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
+			throw new RuntimeException("[BukkitEventUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
 		}
 	}
 
@@ -116,13 +116,17 @@ public final class BukkitEventUtils {
 			try {
 				return (Entity)getBukkitEntityMethod.invoke(entity);
 			} catch (Throwable ex) {
-				FMLLog.log(Level.ERROR, ex, "[BukkitUtils] Не удалось получить Bukkit Entity.");
+				FMLLog.log(Level.ERROR, ex, "[BukkitEventUtils] Не удалось получить Bukkit Entity.");
 			}
 		}
 		return null;
 	}
 
 	public static BlockFace getBlockFace(int side) {
+		if(side < 0 || side >= ForgeDirection.VALID_DIRECTIONS.length) {
+			FMLLog.log(Level.WARN, new Exception("Неправильный side = " + side), "[BukkitEventUtils] Неправильный вызов getBlockFace()");
+			return BlockFace.SELF;
+		}
 		return getBlockFace(ForgeDirection.VALID_DIRECTIONS[side]);
 	}
 
