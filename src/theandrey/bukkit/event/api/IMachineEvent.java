@@ -16,12 +16,6 @@ public interface IMachineEvent {
 	public MachineAction getAction();
 
 	/**
-	 * Получить блок механизма
-	 * @return
-	 */
-	public Block getMachineBlock();
-
-	/**
 	 * Блок, который изменяет механизм
 	 * @return
 	 */
