@@ -189,19 +189,16 @@ public final class BukkitEventManager {
 
 	@Deprecated
 	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
-		new RuntimeException("Вызов устаревшего метода").printStackTrace();
 		return callBlockBreakEvent(player, x, y, z);
 	}
 
 	@Deprecated
 	public static boolean callBlockPlace(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
-		new RuntimeException("Вызов устаревшего метода").printStackTrace();
 		return callBlockPlaceEvent(player, x, y, z, stack);
 	}
 
 	@Deprecated
 	public static boolean callPlayerInteract(net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, Action action, BlockFace face, net.minecraft.item.ItemStack stack) {
-		new RuntimeException("Вызов устаревшего метода").printStackTrace();
 		return callPlayerInteractEvent(player, x, y, z, action, face, stack);
 	}
 
