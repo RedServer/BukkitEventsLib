@@ -1,5 +1,8 @@
 package theandrey.bukkit.event;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import org.bukkit.Bukkit;
@@ -15,6 +18,7 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -162,6 +166,23 @@ public final class BukkitEventManager {
 	public static boolean callBlockFromToEvent(net.minecraft.world.World world, int x, int y, int z, int xto, int yto, int zto) {
 		World bworld = BukkitEventUtils.getWorld(world);
 		BlockFromToEvent event = new BlockFromToEvent(bworld.getBlockAt(x, y, x), bworld.getBlockAt(xto, yto, zto));
+		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Отправляет эвент чата
+	 * @param async Асинхронный? (отправлен не из главного потока)
+	 * @param sender Игрок-отправитель сообщения
+	 * @param message Сообщение
+	 * @param recipients Список получателей сообщения
+	 * @return true, если эвент не был отменён
+	 */
+	public static boolean callPlayerChatEvent(boolean async, EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
+		Player bsender = BukkitEventUtils.getPlayer(sender);
+		Set<Player> brecipients = new HashSet<>();
+		for(EntityPlayer r : recipients) brecipients.add(BukkitEventUtils.getPlayer(r));
+		AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, bsender, message, brecipients);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
