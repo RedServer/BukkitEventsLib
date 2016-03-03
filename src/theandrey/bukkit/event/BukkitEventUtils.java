@@ -4,6 +4,7 @@ import cpw.mods.fml.common.FMLLog;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -60,10 +61,19 @@ public final class BukkitEventUtils {
 	 */
 	public static Block getBlock(net.minecraft.world.World world, int x, int y, int z) {
 		World bworld = getWorld(world);
-		if(bworld != null) {
-			return bworld.getBlockAt(x, y, z);
-		}
+		if(bworld != null) return bworld.getBlockAt(x, y, z);
 		return null;
+	}
+
+	/**
+	 * Получение Bukkit Block по ChunkCoordinates
+	 * @param world Vanilla World
+	 * @param coord ChunkCoordinates
+	 * @return Bukkit Block
+	 */
+	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
+		if(coord == null) return null;
+		return getBlock(world, coord.posX, coord.posY, coord.posZ);
 	}
 
 	/**
