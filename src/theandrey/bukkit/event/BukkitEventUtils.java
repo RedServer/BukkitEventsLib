@@ -3,6 +3,7 @@ package theandrey.bukkit.event;
 import cpw.mods.fml.common.FMLLog;
 import java.lang.reflect.Method;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.apache.logging.log4j.Level;
 import org.bukkit.Bukkit;
@@ -70,6 +71,17 @@ public final class BukkitEventUtils {
 	 */
 	public static World getWorld(net.minecraft.world.World world) {
 		return Bukkit.getWorld(world.getWorldInfo().getWorldName());
+	}
+
+	/**
+	 * Получение Bukkit Block по ChunkCoordinates
+	 * @param world Vanilla World
+	 * @param coord ChunkCoordinates
+	 * @return Bukkit Block
+	 */
+	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
+		if(coord == null) return null;
+		return getBlock(world, coord.posX, coord.posY, coord.posZ);
 	}
 
 	/**
