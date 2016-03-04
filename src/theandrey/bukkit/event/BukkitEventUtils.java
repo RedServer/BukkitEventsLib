@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 public final class BukkitEventUtils {
 
+	public static final int API_VERSION = 1; // TODO: Версия API
 	public static final String NMS_PACKAGE_VERSION;
 	private static Method asBukkitCopyMethod;
 	private static Method getBukkitEntityMethod;

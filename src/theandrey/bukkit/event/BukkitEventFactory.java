@@ -46,4 +46,17 @@ public final class BukkitEventFactory {
 		return new EntityDamageByBlockEvent(block, bentity, cause, damage);
 	}
 
+	/**
+	 * Создаёт эвент получения урона Entity
+	 * @param blockpos Координаты блока
+	 * @param damaged Entity получивший урон
+	 * @param cause Причина
+	 * @param damage Урон
+	 * @return
+	 */
+	public static final EntityDamageEvent newEntityDamageEvent(net.minecraft.entity.Entity damaged, EntityDamageEvent.DamageCause cause, int damage) {
+		Entity bentity = BukkitEventUtils.getBukkitEntity(damaged);
+		return new EntityDamageEvent(bentity, cause, damage);
+	}
+
 }
