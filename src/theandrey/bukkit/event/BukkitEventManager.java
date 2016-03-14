@@ -3,6 +3,7 @@ package theandrey.bukkit.event;
 import java.util.Collection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.MovingObjectPosition;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -73,6 +74,17 @@ public final class BukkitEventManager {
 		);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
+	}
+
+	/**
+	 * Вызывает событие опустошения ведра
+	 * @param player Игрок
+	 * @param stack Предмет (ведро)
+	 * @param mop
+	 * @return true если событие не было отменено
+	 */
+	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, MovingObjectPosition mop) {
+		return callBucketEmptyEvent(player, stack, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit);
 	}
 
 	/**
