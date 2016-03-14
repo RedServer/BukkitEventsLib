@@ -35,7 +35,7 @@ public final class BukkitEventManager {
 	 * @param x x
 	 * @param y y
 	 * @param z z
-	 * @param side
+	 * @param side Не используется: -1
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
@@ -84,6 +84,7 @@ public final class BukkitEventManager {
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, MovingObjectPosition mop) {
+		if(mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) throw new IllegalArgumentException("MovingObjectPosition.typeOfHit != BLOCK (получено: " + mop.typeOfHit.name() + ")");
 		return callBucketEmptyEvent(player, stack, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit);
 	}
 
