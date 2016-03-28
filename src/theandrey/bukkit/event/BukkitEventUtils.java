@@ -134,12 +134,27 @@ public final class BukkitEventUtils {
 		return null;
 	}
 
+	/**
+	 * Получить BlockFace по номеру стороны
+	 * @param side Номер стороны
+	 * @return BlockFace. Если определить не удалось, вернёт SELF
+	 */
 	public static BlockFace getBlockFace(int side) {
-		if(side < 0 || side >= ForgeDirection.VALID_DIRECTIONS.length) {
-			FMLLog.log(Level.WARN, new Exception("Неправильный side = " + side), "[BukkitEventUtils] Неправильный вызов getBlockFace()");
-			return BlockFace.SELF;
+		switch(side) {
+			case 0:
+				return BlockFace.DOWN;
+			case 1:
+				return BlockFace.UP;
+			case 2:
+				return BlockFace.NORTH;
+			case 3:
+				return BlockFace.SOUTH;
+			case 4:
+				return BlockFace.WEST;
+			case 5:
+				return BlockFace.EAST;
 		}
-		return getBlockFace(ForgeDirection.VALID_DIRECTIONS[side]);
+		return BlockFace.SELF;
 	}
 
 	public static BlockFace getBlockFace(ForgeDirection direction) {
