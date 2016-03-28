@@ -5,7 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -32,22 +31,13 @@ public final class BukkitEventManager {
 	 * Вызывает событие наполнения ведра
 	 * @param player Игрок
 	 * @param stack Предмет (ведро)
-	 * @param x x
-	 * @param y y
-	 * @param z z
-	 * @param side Не используется: -1
+	 * @param blockX x
+	 * @param blockY y
+	 * @param blockZ z
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
-		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
-		PlayerBucketFillEvent event = new PlayerBucketFillEvent(
-				bukkitPlayer,
-				bukkitPlayer.getWorld().getBlockAt(x, y, z),
-				BukkitEventUtils.getBlockFace(side),
-				(bukkitStack != null) ? bukkitStack.getType() : Material.WATER_BUCKET,
-				bukkitStack
-		);
+	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int blockX, int blockY, int blockZ) {
+		PlayerBucketFillEvent event = BukkitEventFactory.newPlayerBucketFillEvent(player, blockX, blockY, blockZ, stack);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
@@ -55,23 +45,15 @@ public final class BukkitEventManager {
 	/**
 	 * Вызывает событие опустошения ведра
 	 * @param player Игрок
-	 * @param stack Предмет (ведро)
-	 * @param x x
-	 * @param y y
-	 * @param z z
-	 * @param side
+	 * @param stack Предмет в руке (ведро)
+	 * @param clickX x
+	 * @param clickY y
+	 * @param clickZ z
+	 * @param clickSide
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
-		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
-		PlayerBucketEmptyEvent event = new PlayerBucketEmptyEvent(
-				bukkitPlayer,
-				bukkitPlayer.getWorld().getBlockAt(x, y, z),
-				BukkitEventUtils.getBlockFace(side),
-				(bukkitStack != null) ? bukkitStack.getType() : Material.WATER_BUCKET,
-				bukkitStack
-		);
+	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int clickX, int clickY, int clickZ, int clickSide) {
+		PlayerBucketEmptyEvent event = BukkitEventFactory.newPlayerBucketEmptyEvent(player, clickX, clickY, clickZ, clickSide, stack);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
@@ -90,6 +72,10 @@ public final class BukkitEventManager {
 
 	/**
 	 * Кидает эвент разрушения блока
+	 * @param player Игрок
+	 * @param x
+	 * @param z
+	 * @param y
 	 * @return true если эвент не был отменен.
 	 */
 	public static boolean callBlockBreakEvent(EntityPlayer player, int x, int y, int z) {
@@ -207,6 +193,11 @@ public final class BukkitEventManager {
 	@Deprecated
 	public static boolean callPlayerInteract(net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, Action action, BlockFace face, net.minecraft.item.ItemStack stack) {
 		return callPlayerInteractEvent(player, x, y, z, action, face, stack);
+	}
+
+	@Deprecated
+	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
+		return callBucketFillEvent(player, stack, x, y, z);
 	}
 
 }
