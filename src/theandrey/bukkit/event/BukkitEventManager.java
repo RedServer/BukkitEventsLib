@@ -3,8 +3,9 @@ package theandrey.bukkit.event;
 import java.util.Collection;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -17,7 +18,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
 public final class BukkitEventManager {
@@ -28,22 +28,29 @@ public final class BukkitEventManager {
 	 * Вызывает событие наполнения ведра
 	 * @param player Игрок
 	 * @param stack Предмет (ведро)
-	 * @param x x
-	 * @param y y
-	 * @param z z
-	 * @param side
+	 * @param blockX x
+	 * @param blockY y
+	 * @param blockZ z
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
-		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
-		PlayerBucketFillEvent event = new PlayerBucketFillEvent(
-				bukkitPlayer,
-				bukkitPlayer.getWorld().getBlockAt(x, y, z),
-				BukkitEventUtils.getBlockFace(side),
-				(bukkitStack != null) ? bukkitStack.getType() : Material.WATER_BUCKET,
-				bukkitStack
-		);
+	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int blockX, int blockY, int blockZ) {
+		PlayerBucketFillEvent event = BukkitEventFactory.newPlayerBucketFillEvent(player, blockX, blockY, blockZ, stack);
+		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Вызывает событие опустошения ведра
+	 * @param player Игрок
+	 * @param stack Предмет в руке (ведро)
+	 * @param clickX x
+	 * @param clickY y
+	 * @param clickZ z
+	 * @param clickSide
+	 * @return true если событие не было отменено
+	 */
+	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int clickX, int clickY, int clickZ, int clickSide) {
+		PlayerBucketEmptyEvent event = BukkitEventFactory.newPlayerBucketEmptyEvent(player, clickX, clickY, clickZ, clickSide, stack);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
@@ -52,24 +59,12 @@ public final class BukkitEventManager {
 	 * Вызывает событие опустошения ведра
 	 * @param player Игрок
 	 * @param stack Предмет (ведро)
-	 * @param x x
-	 * @param y y
-	 * @param z z
-	 * @param side
+	 * @param mop
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
-		ItemStack bukkitStack = BukkitEventUtils.getItemStack(stack);
-		PlayerBucketEmptyEvent event = new PlayerBucketEmptyEvent(
-				bukkitPlayer,
-				bukkitPlayer.getWorld().getBlockAt(x, y, z),
-				BukkitEventUtils.getBlockFace(side),
-				(bukkitStack != null) ? bukkitStack.getType() : Material.WATER_BUCKET,
-				bukkitStack
-		);
-		pluginManager.callEvent(event);
-		return !event.isCancelled();
+	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, MovingObjectPosition mop) {
+		if(mop.typeOfHit != EnumMovingObjectType.TILE) throw new IllegalArgumentException("MovingObjectPosition.typeOfHit != TILE (получено: " + mop.typeOfHit.name() + ")");
+		return callBucketEmptyEvent(player, stack, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit);
 	}
 
 	/**
@@ -151,6 +146,11 @@ public final class BukkitEventManager {
 		AsyncPlayerChatEvent event = BukkitEventFactory.newPlayerChatEvent(sender, message, recipients);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
+	}
+
+	@Deprecated
+	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
+		return callBucketFillEvent(player, stack, x, y, z);
 	}
 
 }
