@@ -61,7 +61,8 @@ public final class BlockStateData {
 	 */
 	public static final BlockStateData fromItemStack(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemBlock)) return null;
-		return new BlockStateData(stack.itemID, ((ItemBlock)stack.getItem()).getHasSubtypes() ? stack.getItemDamage() : 0);
+		ItemBlock item = (ItemBlock)stack.getItem();
+		return new BlockStateData(stack.itemID, item.getHasSubtypes() ? item.getMetadata(stack.getItemDamage()) : 0);
 	}
 
 }
