@@ -1,5 +1,7 @@
 package theandrey.bukkit.event;
 
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import org.bukkit.Material;
 
 /**
@@ -50,6 +52,16 @@ public final class BlockStateData {
 	 */
 	public int getData() {
 		return data;
+	}
+
+	/**
+	 * Получает информацию о блоке из ItemStack
+	 * @param stack
+	 * @return
+	 */
+	public static final BlockStateData fromItemStack(ItemStack stack) {
+		if(stack == null || !(stack.getItem() instanceof ItemBlock)) return null;
+		return new BlockStateData(stack.itemID, ((ItemBlock)stack.getItem()).getHasSubtypes() ? stack.getItemDamage() : 0);
 	}
 
 }
