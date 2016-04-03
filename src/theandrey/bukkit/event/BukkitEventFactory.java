@@ -11,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -49,6 +50,20 @@ public final class BukkitEventFactory {
 		Entity bentity = BukkitEventUtils.getBukkitEntity(damaged);
 		Block block = bentity.getWorld().getBlockAt(blockpos.x, blockpos.y, blockpos.z);
 		return new EntityDamageByBlockEvent(block, bentity, cause, damage);
+	}
+
+	/**
+	 * Создаёт эвент нанесения урона одним Entity другому Entity
+	 * @param attacker Кто атаковал
+	 * @param damaged Entity получивший урон
+	 * @param cause Причина
+	 * @param damage Урон
+	 * @return
+	 */
+	public static final EntityDamageByEntityEvent newEntityDamageByEntityEvent(net.minecraft.entity.Entity attacker, net.minecraft.entity.Entity damaged, EntityDamageEvent.DamageCause cause, int damage) {
+		Entity battacker = BukkitEventUtils.getBukkitEntity(attacker);
+		Entity bentity = BukkitEventUtils.getBukkitEntity(damaged);
+		return new EntityDamageByEntityEvent(battacker, bentity, cause, damage);
 	}
 
 	/**
