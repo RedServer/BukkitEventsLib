@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 
 public final class BukkitEventUtils {
 
-	private static Method asBukkitCopyMethod;
+	private static Method asCraftMirrorMethod;
 	private static Method getBukkitEntityMethod;
 	private static Method getBlockStateMethod;
 
@@ -29,8 +29,8 @@ public final class BukkitEventUtils {
 
 			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".inventory.CraftItemStack");
 			for(Method method : craftItem.getMethods()) {
-				if(method.getName().equals("asBukkitCopy")) {
-					asBukkitCopyMethod = method;
+				if(method.getName().equals("asCraftMirror")) {
+					asCraftMirrorMethod = method;
 					break;
 				}
 			}
@@ -181,9 +181,9 @@ public final class BukkitEventUtils {
 	 * @return Bukkit ItemStack
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
-		if(asBukkitCopyMethod != null) {
+		if(asCraftMirrorMethod != null) {
 			try {
-				return (ItemStack)asBukkitCopyMethod.invoke(null, stack);
+				return (ItemStack)asCraftMirrorMethod.invoke(null, stack);
 			} catch (Throwable ex) {
 				FMLLog.log(Level.ERROR, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
 			}
