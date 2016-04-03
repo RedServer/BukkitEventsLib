@@ -19,7 +19,7 @@ public final class BukkitEventUtils {
 
 	public static final int API_VERSION = 1; // TODO: Версия API
 	public static final String NMS_PACKAGE_VERSION;
-	private static Method asBukkitCopyMethod;
+	private static Method asCraftMirrorMethod;
 	private static Method getBukkitEntityMethod;
 	private static Method getBlockStateMethod;
 
@@ -29,8 +29,8 @@ public final class BukkitEventUtils {
 		try {
 			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".inventory.CraftItemStack");
 			for(Method method : craftItem.getMethods()) {
-				if(method.getName().equals("asBukkitCopy")) {
-					asBukkitCopyMethod = method;
+				if(method.getName().equals("asCraftMirror")) {
+					asCraftMirrorMethod = method;
 					break;
 				}
 			}
@@ -111,8 +111,27 @@ public final class BukkitEventUtils {
 		return null;
 	}
 
+	/**
+	 * Получить BlockFace по номеру стороны
+	 * @param side Номер стороны
+	 * @return BlockFace. Если определить не удалось, вернёт SELF
+	 */
 	public static BlockFace getBlockFace(int side) {
-		return getBlockFace(ForgeDirection.VALID_DIRECTIONS[side]);
+		switch(side) {
+			case 0:
+				return BlockFace.DOWN;
+			case 1:
+				return BlockFace.UP;
+			case 2:
+				return BlockFace.NORTH;
+			case 3:
+				return BlockFace.SOUTH;
+			case 4:
+				return BlockFace.WEST;
+			case 5:
+				return BlockFace.EAST;
+		}
+		return BlockFace.SELF;
 	}
 
 	public static BlockFace getBlockFace(ForgeDirection direction) {
@@ -139,9 +158,9 @@ public final class BukkitEventUtils {
 	 * @return Bukkit ItemStack
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
-		if(asBukkitCopyMethod != null) {
+		if(asCraftMirrorMethod != null) {
 			try {
-				return (ItemStack)asBukkitCopyMethod.invoke(null, stack);
+				return (ItemStack)asCraftMirrorMethod.invoke(null, stack);
 			} catch (Throwable ex) {
 				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
 			}
