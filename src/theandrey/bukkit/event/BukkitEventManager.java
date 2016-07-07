@@ -96,7 +96,7 @@ public final class BukkitEventManager {
 	 * @return true, если эвет не был отменён
 	 */
 	@SuppressWarnings("deprecation")
-	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
+	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, double damage) {
 		if(attacker == null || damagee == null) return false;
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(damagee), cause, damage);
 		pluginManager.callEvent(event);
