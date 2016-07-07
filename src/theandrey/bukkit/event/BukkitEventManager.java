@@ -103,6 +103,11 @@ public final class BukkitEventManager {
 		return !event.isCancelled();
 	}
 
+	@Deprecated
+	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
+		return callEntityDamageByEntityEvent(attacker, damagee, cause, (double)damage);
+	}
+
 	/**
 	 * Кидает эвент установки блока
 	 * @param player Игрок
