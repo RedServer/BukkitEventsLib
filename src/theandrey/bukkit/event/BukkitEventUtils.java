@@ -20,6 +20,7 @@ public final class BukkitEventUtils {
 	public static final int API_VERSION = 1; // TODO: Версия API
 	public static final String NMS_PACKAGE_VERSION;
 	private static Method asCraftMirrorMethod;
+	private static Method asNMSCopyMethod;
 	private static Method getBukkitEntityMethod;
 	private static Method getBlockStateMethod;
 
@@ -29,10 +30,9 @@ public final class BukkitEventUtils {
 		try {
 			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".inventory.CraftItemStack");
 			for(Method method : craftItem.getMethods()) {
-				if(method.getName().equals("asCraftMirror")) {
-					asCraftMirrorMethod = method;
-					break;
-				}
+				if(method.getName().equals("asCraftMirror")) asCraftMirrorMethod = method;
+				if(method.getName().equalsIgnoreCase("asNMSCopy")) asNMSCopyMethod = method;
+				if(asCraftMirrorMethod != null && asNMSCopyMethod != null) break;
 			}
 
 			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".block.CraftBlockState");
@@ -49,6 +49,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit World
 	 */
 	public static World getWorld(net.minecraft.world.World world) {
+		if(world == null) throw new IllegalArgumentException("world");
 		return Bukkit.getWorld(world.getWorldInfo().getWorldName());
 	}
 
@@ -73,17 +74,18 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Block
 	 */
 	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
-		if(coord == null) return null;
+		if(coord == null) throw new IllegalArgumentException("coord");
 		return getBlock(world, coord.posX, coord.posY, coord.posZ);
 	}
 
 	/**
 	 * Возвращает блок механизма
-	 * @param te TileEntity
+	 * @param tile TileEntity
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(TileEntity te) {
-		return getBlock(te.worldObj, te.xCoord, te.yCoord, te.zCoord);
+	public static Block getBlock(TileEntity tile) {
+		if(tile == null) throw new IllegalArgumentException("tile");
+		return getBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 
 	/**
@@ -92,6 +94,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Player
 	 */
 	public static Player getPlayer(net.minecraft.entity.player.EntityPlayer player) {
+		if(player == null) throw new IllegalArgumentException("player");
 		return (Player)getBukkitEntity(player);
 	}
 
@@ -153,12 +156,12 @@ public final class BukkitEventUtils {
 	}
 
 	/**
-	 * Конвертирует Vanilla ItemStack в Bukkit ItemStack
+	 * Конвертирует Vanilla ItemStack в Bukkit ItemStack (используется asCraftMirror)
 	 * @param stack Vanilla ItemStack
 	 * @return Bukkit ItemStack
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
-		if(asCraftMirrorMethod != null) {
+		if(stack != null) {
 			try {
 				return (ItemStack)asCraftMirrorMethod.invoke(null, stack);
 			} catch (Throwable ex) {
@@ -169,12 +172,31 @@ public final class BukkitEventUtils {
 	}
 
 	/**
+	 * Конвертирует Bukkit ItemStack в Vanilla ItemStack (используется asNMSCopy)
+	 * @param stack Bukkit ItemStack
+	 * @return Vanilla ItemStack
+	 */
+	public static net.minecraft.item.ItemStack getVanillaItemStack(ItemStack stack) {
+		if(stack != null) {
+			try {
+				return (net.minecraft.item.ItemStack)asNMSCopyMethod.invoke(null, stack);
+			} catch (Throwable ex) {
+				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Vanilla ItemStack.");
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Получает BlockState
 	 * @param world
-	 * @param x
-	 * @return
+	 * @param x X блока
+	 * @param y Y блока
+	 * @param z Z блока
+	 * @return BlockState
 	 */
 	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
+		if(world == null) throw new IllegalArgumentException("world");
 		try {
 			return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
 		} catch (Exception ex) {
