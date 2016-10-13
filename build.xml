@@ -5,7 +5,7 @@
 
 	<property name="bon.path" value="D:\MCP\deobf_decomp\BON2.jar" />
 	<property name="mcp.folder" value="D:\MCP\1.4.7" />
-	<property name="release.folder" value="../lib/BukkitEventsLib/1.4.7" />
+	<property name="release.folder" value="../release/mods/1.4.7" />
 	<property name="release.file.dev" value="BukkitEventsLib-1.4.7-dev.jar" />
 	<property name="release.file.source" value="BukkitEventsLib-1.4.7-src.zip" />
 	<property name="release.file.normal" value="BukkitEventsLib-1.4.7-server.jar" />
@@ -40,13 +40,14 @@
 		</exec>
 	</target>
 
-	<target name="copydev" if="true">
-		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.dev}" overwrite="true" />
-		<zip destfile="${release.folder}/${release.file.source}" basedir="src" update="false" encoding="UTF-8" />
+	<target name="copydev">
+		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.dev}" overwrite="true" failonerror="true" />
+		<zip destfile="${dist.dir}/src.zip" basedir="src" update="false" encoding="UTF-8" />
+		<move file="${dist.dir}/src.zip" tofile="${release.folder}/${release.file.source}" overwrite="true" failonerror="true" />
 	</target>
 
-	<target name="copylib" if="true">
-		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.normal}" overwrite="true" />
+	<target name="copylib">
+		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.normal}" overwrite="true" failonerror="true" />
 	</target>
 
 </project>
