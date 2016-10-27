@@ -167,7 +167,7 @@ public final class BukkitEventManager {
 	 */
 	public static boolean callBlockFromToEvent(net.minecraft.world.World world, int x, int y, int z, int xto, int yto, int zto) {
 		World bworld = BukkitEventUtils.getWorld(world);
-		BlockFromToEvent event = new BlockFromToEvent(bworld.getBlockAt(x, y, x), bworld.getBlockAt(xto, yto, zto));
+		BlockFromToEvent event = new BlockFromToEvent(bworld.getBlockAt(x, y, z), bworld.getBlockAt(xto, yto, zto));
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
