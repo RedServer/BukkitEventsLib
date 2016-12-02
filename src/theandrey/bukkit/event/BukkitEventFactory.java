@@ -19,6 +19,9 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
  */
 public final class BukkitEventFactory {
 
+	private BukkitEventFactory() {
+	}
+
 	/**
 	 * Создаёт эвент чата, но не вызывает его. Этот эвент может быть вызван из любого потока.
 	 * @param sender Отправитель сообщения

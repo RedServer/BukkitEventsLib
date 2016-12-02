@@ -27,6 +27,9 @@ public final class BukkitEventManager {
 
 	private static final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
 
+	private BukkitEventManager() {
+	}
+
 	/**
 	 * Вызывает событие наполнения ведра
 	 * @param player Игрок

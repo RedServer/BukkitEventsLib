@@ -44,6 +44,9 @@ public final class BukkitEventUtils {
 		}
 	}
 
+	private BukkitEventUtils() {
+	}
+
 	/**
 	 * Получает Material блока
 	 * @param block Блок
