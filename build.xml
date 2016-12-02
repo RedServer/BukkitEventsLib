@@ -30,7 +30,7 @@
 			<arg value="-side" />
 			<arg value="UNIVERSAL" />
 			<arg value="-ref" />
-			<arg value="${mcp.folder}/bin/minecraft" />
+			<arg value="${file.reference.forgeSrc-1.7.10-10.13.4.1614-1.7.10.jar}" />
 			<arg value="-in" />
 			<arg file="${dist.jar}" />
 			<arg value="-out" />
