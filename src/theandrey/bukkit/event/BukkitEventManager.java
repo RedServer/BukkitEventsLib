@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.plugin.PluginManager;
 
 public final class BukkitEventManager {
@@ -144,6 +145,20 @@ public final class BukkitEventManager {
 	 */
 	public static boolean callPlayerChatEvent(boolean async, EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
 		AsyncPlayerChatEvent event = BukkitEventFactory.newPlayerChatEvent(sender, message, recipients);
+		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Событие стрижки моба
+	 * @param player Игрок
+	 * @param entity Моб, которого стригут
+	 * @return Разрешено ли выполнение действия (false - если событие было отменено)
+	 */
+	public static boolean callPlayerShearEntityEvent(net.minecraft.entity.player.EntityPlayer player, net.minecraft.entity.Entity entity) {
+		if(player == null) throw new IllegalArgumentException("player is null!");
+		if(entity == null) throw new IllegalArgumentException("entity is null!");
+		PlayerShearEntityEvent event = new PlayerShearEntityEvent(BukkitEventUtils.getPlayer(player), BukkitEventUtils.getBukkitEntity(entity));
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
