@@ -32,7 +32,7 @@
 			<arg value="-jref" />
 			<arg value="../lib/mods 1.4.7/" />
 			<arg value="-ref" />
-			<arg value="${mcp.folder}/bin/minecraft" />
+			<arg value="${file.reference.1.4.7.jar}" />
 			<arg value="-in" />
 			<arg file="${dist.jar}" />
 			<arg value="-out" />
