@@ -20,6 +20,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 
@@ -106,11 +107,6 @@ public final class BukkitEventManager {
 		return !event.isCancelled();
 	}
 
-	@Deprecated
-	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
-		return callEntityDamageByEntityEvent(attacker, damagee, cause, (double)damage);
-	}
-
 	/**
 	 * Кидает эвент установки блока
 	 * @param player Игрок
@@ -176,6 +172,20 @@ public final class BukkitEventManager {
 	}
 
 	/**
+	 * Событие стрижки моба
+	 * @param player Игрок
+	 * @param entity Моб, которого стригут
+	 * @return Разрешено ли выполнение действия (false - если событие было отменено)
+	 */
+	public static boolean callPlayerShearEntityEvent(net.minecraft.entity.player.EntityPlayer player, net.minecraft.entity.Entity entity) {
+		if(player == null) throw new IllegalArgumentException("player is null!");
+		if(entity == null) throw new IllegalArgumentException("entity is null!");
+		PlayerShearEntityEvent event = new PlayerShearEntityEvent(BukkitEventUtils.getPlayer(player), BukkitEventUtils.getBukkitEntity(entity));
+		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
 	 * Отправляет эвент чата
 	 * @param sender Игрок-отправитель сообщения
 	 * @param message Сообщение
@@ -206,6 +216,11 @@ public final class BukkitEventManager {
 	@Deprecated
 	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
 		return callBucketFillEvent(player, stack, x, y, z);
+	}
+
+	@Deprecated
+	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
+		return callEntityDamageByEntityEvent(attacker, damagee, cause, (double)damage);
 	}
 
 }
