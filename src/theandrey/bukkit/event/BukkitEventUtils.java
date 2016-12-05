@@ -184,6 +184,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit ItemStack
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
+		if(stack == null) return null;
 		if(asCraftMirrorMethod != null) {
 			try {
 				return (ItemStack)asCraftMirrorMethod.invoke(null, stack);

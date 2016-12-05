@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
+import theandrey.bukkit.util.FakeBlockImpl;
 
 public final class BukkitEventManager {
 
@@ -108,14 +109,16 @@ public final class BukkitEventManager {
 	}
 
 	/**
-	 * Кидает эвент установки блока
+	 * Устаревший метод. Используйте новый.
 	 * @param player Игрок
 	 * @param x
 	 * @param y
 	 * @param z
 	 * @param stack Предмет в руке (блок)
 	 * @return true если эвент не был отменен.
+	 * @see BukkitEventManager#callBlockPlaceEvent(net.minecraft.entity.player.EntityPlayer, int, int, int, net.minecraft.block.Block, int, int, net.minecraft.item.ItemStack)
 	 */
+	@Deprecated
 	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
 		if(player == null || stack == null) return false;
 		BlockState replacedBlockState = BukkitEventUtils.getBlockState(player.worldObj, x, y, z);
@@ -129,6 +132,32 @@ public final class BukkitEventManager {
 		);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
+	}
+
+	/**
+	 * Бросает событие установки блока игроком.
+	 * @param player Игрок
+	 * @param x Координата X, куда будет установлен блок
+	 * @param y Координата Y, куда будет установлен блок
+	 * @param z Координата Z, куда будет установлен блок
+	 * @param blockPlaced Устанавливаемый блок
+	 * @param metadata meta устанавливаемого блока
+	 * @param side Сторона блока, по которому кликнули (в этом направление относительно него будет установлен новый блок). Укажите -1 если сторона неизвестна
+	 * @param stackInHand Предмет в руке игрока. Может быть null
+	 * @return true если событие не было отменено.
+	 */
+	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.block.Block blockPlaced, int metadata, int side, net.minecraft.item.ItemStack stackInHand) {
+		if(player == null || blockPlaced == null) return false;
+
+		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
+		Block bukkitBlock = BukkitEventUtils.getBlock(player.worldObj, x, y, z);
+		FakeBlockImpl placed = new FakeBlockImpl(bukkitBlock, BukkitEventUtils.getMaterial(blockPlaced), (byte)metadata);
+		ItemStack item = BukkitEventUtils.getItemStack(stackInHand);
+		BlockFace face = (side == -1) ? BlockFace.SELF : BukkitEventUtils.getBlockFace(side).getOppositeFace();
+
+		BlockPlaceEvent event = new BlockPlaceEvent(placed, bukkitBlock.getState(), bukkitBlock.getRelative(face), item, bukkitPlayer, true);
+		pluginManager.callEvent(event);
+		return (!event.isCancelled() && event.canBuild());
 	}
 
 	/**
