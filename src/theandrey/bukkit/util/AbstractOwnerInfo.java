@@ -1,6 +1,7 @@
 package theandrey.bukkit.util;
 
 import com.mojang.authlib.GameProfile;
+import java.lang.ref.WeakReference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -8,6 +9,7 @@ import net.minecraft.world.World;
 public abstract class AbstractOwnerInfo {
 
 	protected GameProfile ownerProfile;
+	protected WeakReference<EntityPlayer> playerEntity;
 
 	protected AbstractOwnerInfo() {
 	}
@@ -18,6 +20,7 @@ public abstract class AbstractOwnerInfo {
 	 */
 	public final void setOwner(GameProfile profile) {
 		ownerProfile = profile;
+		if(playerEntity != null) playerEntity.clear();
 	}
 
 	/**
@@ -33,8 +36,12 @@ public abstract class AbstractOwnerInfo {
 	 * @return Игрок или null если не найден
 	 */
 	public final EntityPlayer getPlayer() {
-		if(ownerProfile != null) return getWorld().getPlayerEntityByName(ownerProfile.getName());
-		return null;
+		EntityPlayer player = (playerEntity != null) ? playerEntity.get() : null;
+		if(player == null && ownerProfile != null) {
+			player = getWorld().getPlayerEntityByName(ownerProfile.getName());
+			if(player != null) playerEntity = new WeakReference<>(player);
+		}
+		return player;
 	}
 
 	/**
