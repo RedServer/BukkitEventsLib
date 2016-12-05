@@ -6,6 +6,7 @@ import java.util.Set;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * Простое создание эвентов
@@ -61,6 +63,30 @@ public final class BukkitEventFactory {
 	 */
 	public static final PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(EntityPlayer player, int clickX, int clickY, int clickZ, int clickSide, ItemStack stack) {
 		return (PlayerBucketEmptyEvent)getPlayerBucketEvent(false, player, clickX, clickY, clickZ, clickSide, stack);
+	}
+
+	/**
+	 * Создаёт новое событие телепортации
+	 * @param player Игрок
+	 * @param xfrom Начальная точка
+	 * @param yfrom Начальная точка
+	 * @param zfrom Начальная точка
+	 * @param xto Точка назначения
+	 * @param yto Точка назначения
+	 * @param zto Точка назначения
+	 * @param pitch
+	 * @param yaw
+	 * @param cause
+	 * @return
+	 */
+	public static final PlayerTeleportEvent newPlayerTeleportEvent(EntityPlayer player, double xfrom, double yfrom, double zfrom, double xto, double yto, double zto, float pitch, float yaw, PlayerTeleportEvent.TeleportCause cause) {
+		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
+		return new PlayerTeleportEvent(
+				bukkitPlayer,
+				new Location(bukkitPlayer.getWorld(), xfrom, yfrom, zfrom, yaw, pitch),
+				new Location(bukkitPlayer.getWorld(), xto, yto, zto, yaw, pitch),
+				cause
+		);
 	}
 
 	private static PlayerBucketEvent getPlayerBucketEvent(boolean isFilling, EntityPlayer player, int clickX, int clickY, int clickZ, int side, ItemStack stack) {
