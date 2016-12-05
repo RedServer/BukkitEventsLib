@@ -17,11 +17,7 @@ public abstract class AbstractOwnerInfo {
 	 * @param profile Профиль игрока игрока
 	 */
 	public final void setOwner(GameProfile profile) {
-		if(profile != null) {
-			ownerProfile = new GameProfile(profile.getId(), profile.getName()); // Создаём новый объект, чтобы не копировать лишие свойства
-		} else {
-			ownerProfile = null;
-		}
+		ownerProfile = profile;
 	}
 
 	/**
