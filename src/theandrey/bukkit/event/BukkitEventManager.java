@@ -136,18 +136,20 @@ public final class BukkitEventManager {
 
 	/**
 	 * Бросает событие установки блока игроком.
-	 * @param player Игрок
+	 * @param player Игрок. Если null, метод вернёт false
 	 * @param x Координата X, куда будет установлен блок
 	 * @param y Координата Y, куда будет установлен блок
 	 * @param z Координата Z, куда будет установлен блок
 	 * @param blockPlaced Устанавливаемый блок
 	 * @param metadata meta устанавливаемого блока
 	 * @param side Сторона блока, по которому кликнули (в этом направление относительно него будет установлен новый блок). Укажите -1 если сторона неизвестна
-	 * @param stackInHand Предмет в руке игрока. Может быть null
+	 * @param stackInHand Предмет в руке игрока
 	 * @return true если событие не было отменено.
 	 */
 	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.block.Block blockPlaced, int metadata, int side, net.minecraft.item.ItemStack stackInHand) {
-		if(player == null || blockPlaced == null) return false;
+		if(player == null) return false;
+		if(blockPlaced == null) throw new IllegalArgumentException("blockPlaced is null");
+		if(stackInHand == null) throw new IllegalArgumentException("stackInHand is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		Block bukkitBlock = BukkitEventUtils.getBlock(player.worldObj, x, y, z);
