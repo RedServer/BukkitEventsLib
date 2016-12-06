@@ -34,7 +34,8 @@ public final class EntityOwner extends AbstractOwnerInfo {
 			String name = nbt.getString(TAG_OWNER_NAME);
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный
-			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%.2f, %.2f, %.2f])", entity.getClass().getName(), entity.worldObj.getWorldInfo().getWorldName(), entity.posX, entity.posY, entity.posZ));
+			String worldName = (entity.worldObj != null) ? entity.worldObj.getWorldInfo().getWorldName() : "**null**";
+			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%.2f, %.2f, %.2f])", entity.getClass().getName(), worldName, entity.posX, entity.posY, entity.posZ));
 		}
 	}
 

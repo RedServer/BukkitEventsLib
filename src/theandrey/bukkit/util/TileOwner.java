@@ -34,7 +34,8 @@ public final class TileOwner extends AbstractOwnerInfo {
 			String name = nbt.getString(TAG_OWNER_NAME);
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный
-			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%d, %d, %d])", tile.getClass().getName(), tile.getWorldObj().getWorldInfo().getWorldName(), tile.xCoord, tile.yCoord, tile.zCoord));
+			String worldName = (tile.getWorldObj() != null) ? tile.getWorldObj().getWorldInfo().getWorldName() : "**null**";
+			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%d, %d, %d])", tile.getClass().getName(), worldName, tile.xCoord, tile.yCoord, tile.zCoord));
 		}
 	}
 
