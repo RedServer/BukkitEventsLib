@@ -30,7 +30,9 @@ public final class EntityOwner extends AbstractOwnerInfo {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		try {
-			UUID id = UUID.fromString(nbt.getString(TAG_OWNER_ID));
+			String idstr = nbt.getString(TAG_OWNER_ID);
+			if(idstr == null || idstr.isEmpty()) return;
+			UUID id = UUID.fromString(idstr);
 			String name = nbt.getString(TAG_OWNER_NAME);
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный
