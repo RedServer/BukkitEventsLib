@@ -149,7 +149,6 @@ public final class BukkitEventManager {
 	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.block.Block blockPlaced, int metadata, int side, net.minecraft.item.ItemStack stackInHand) {
 		if(player == null) return false;
 		if(blockPlaced == null) throw new IllegalArgumentException("blockPlaced is null");
-		if(stackInHand == null) throw new IllegalArgumentException("stackInHand is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		Block bukkitBlock = BukkitEventUtils.getBlock(player.worldObj, x, y, z);

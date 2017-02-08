@@ -181,7 +181,7 @@ public final class BukkitEventUtils {
 	/**
 	 * Конвертирует Vanilla ItemStack в Bukkit ItemStack
 	 * @param stack Vanilla ItemStack
-	 * @return Bukkit ItemStack
+	 * @return Bukkit ItemStack. Вернёт null, если в параметре был передан null
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
 		if(stack == null) return null;
