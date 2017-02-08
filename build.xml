@@ -11,9 +11,9 @@
 	<property name="release.file.normal" value="BukkitEventsLib-1.7.10-server.jar" />
 
 	<target name="-post-jar">
-		<antcall target="copydev" />
+		<antcall target="dev-build" />
 		<antcall target="obfuscate" />
-		<antcall target="copylib" />
+		<antcall target="release" />
 	</target>
 
 	<target name="obfuscate">
@@ -34,18 +34,20 @@
 			<arg value="-in" />
 			<arg file="${dist.jar}" />
 			<arg value="-out" />
-			<arg file="${dist.jar}" />
+			<arg file="${dist.dir}/${release.file.normal}" />
 		</exec>
+		<delete file="${dist.jar}" failonerror="true" />
 	</target>
 
-	<target name="copydev">
-		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.dev}" overwrite="true" failonerror="true" />
-		<zip destfile="${dist.dir}/src.zip" basedir="src" update="false" encoding="UTF-8" />
-		<move file="${dist.dir}/src.zip" tofile="${release.folder}/${release.file.source}" overwrite="true" failonerror="true" />
+	<target name="dev-build">
+		<copy file="${dist.jar}" tofile="${dist.dir}/${release.file.dev}" overwrite="true" failonerror="true" />
+		<zip destfile="${dist.dir}/${release.file.source}" basedir="src" update="false" encoding="UTF-8" />
 	</target>
 
-	<target name="copylib">
-		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.normal}" overwrite="true" failonerror="true" />
+	<target name="release">
+		<copy file="${dist.dir}/${release.file.dev}" tofile="${release.folder}/${release.file.dev}" overwrite="true" failonerror="true" />
+		<copy file="${dist.dir}/${release.file.source}" tofile="${release.folder}/${release.file.source}" overwrite="true" failonerror="true" />
+		<copy file="${dist.dir}/${release.file.normal}" tofile="${release.folder}/${release.file.normal}" overwrite="true" failonerror="true" />
 	</target>
 
 </project>
