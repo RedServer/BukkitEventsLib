@@ -15,31 +15,25 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import theandrey.bukkit.util.asm.ASMAccessor;
+import theandrey.bukkit.util.asm.CraftItemStackAccessor;
+import theandrey.bukkit.util.asm.EntityAccessor;
+import theandrey.bukkit.util.asm.WorldAccessor;
 
 public final class BukkitEventUtils {
 
-	private static Method asCraftMirrorMethod;
-	private static Method getBukkitEntityMethod;
-	private static Method getBlockStateMethod;
+	private static final Method getBlockStateMethod;
+	private static final EntityAccessor entityAccessor = ASMAccessor.instance().createEntityAccessor();
+	private static final WorldAccessor worldAccessor = ASMAccessor.instance().createWorldAccessor();
+	private static final CraftItemStackAccessor craftItemStackAccessor = ASMAccessor.instance().createCraftItemStackAccessor();
 
 	static {
 		try {
 			String packageName = Bukkit.getServer().getClass().getPackage().getName();
 			String nmsPackageVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
-
-			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".inventory.CraftItemStack");
-			for(Method method : craftItem.getMethods()) {
-				if(method.getName().equals("asCraftMirror")) {
-					asCraftMirrorMethod = method;
-					break;
-				}
-			}
-
 			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".block.CraftBlockState");
 			getBlockStateMethod = сraftBlockState.getMethod("getBlockState", new Class[]{net.minecraft.world.World.class, int.class, int.class, int.class});
-
-			getBukkitEntityMethod = net.minecraft.entity.Entity.class.getMethod("getBukkitEntity");
-		} catch (Throwable ex) {
+		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("[BukkitEventUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
 		}
 	}
@@ -73,7 +67,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit World
 	 */
 	public static World getWorld(net.minecraft.world.World world) {
-		return Bukkit.getWorld(world.getWorldInfo().getWorldName());
+		return worldAccessor.getBukkitWorld(world);
 	}
 
 	/**
@@ -97,9 +91,7 @@ public final class BukkitEventUtils {
 	 */
 	public static Block getBlock(net.minecraft.world.World world, int x, int y, int z) {
 		World bworld = getWorld(world);
-		if(bworld != null) {
-			return bworld.getBlockAt(x, y, z);
-		}
+		if(bworld != null) return bworld.getBlockAt(x, y, z);
 		return null;
 	}
 
@@ -118,7 +110,8 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Player
 	 */
 	public static Player getPlayer(net.minecraft.entity.player.EntityPlayer player) {
-		return (Player)getBukkitEntity(player);
+		if(player == null) return null;
+		return (Player)entityAccessor.getBukkitEntity(player);
 	}
 
 	/**
@@ -127,14 +120,8 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Entity
 	 */
 	public static Entity getBukkitEntity(net.minecraft.entity.Entity entity) {
-		if(entity != null) {
-			try {
-				return (Entity)getBukkitEntityMethod.invoke(entity);
-			} catch (Throwable ex) {
-				FMLLog.log(Level.ERROR, ex, "[BukkitEventUtils] Не удалось получить Bukkit Entity.");
-			}
-		}
-		return null;
+		if(entity == null) return null;
+		return entityAccessor.getBukkitEntity(entity);
 	}
 
 	/**
@@ -185,25 +172,21 @@ public final class BukkitEventUtils {
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
 		if(stack == null) return null;
-		if(asCraftMirrorMethod != null) {
-			try {
-				return (ItemStack)asCraftMirrorMethod.invoke(null, stack);
-			} catch (Throwable ex) {
-				FMLLog.log(Level.ERROR, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
-			}
-		}
-		return null;
+		return craftItemStackAccessor.asCraftMirror(stack);
 	}
 
 	/**
-	 * Получает BlockState
+	 * Получить BlockState
+	 * @param world Мир
+	 * @param x X координана
+	 * @param y Y координана
+	 * @param z Z координана
+	 * @return Снимок блока
 	 */
 	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
 		try {
-			if(getBlockStateMethod != null && world != null) {
-				return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
-			}
-		} catch (Exception ex) {
+			return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
+		} catch (ReflectiveOperationException ex) {
 			FMLLog.log("BukkitUtils", Level.ERROR, ex, "Не удалось получить BlockState.");
 		}
 		return null;
