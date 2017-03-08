@@ -44,7 +44,7 @@ public final class ASMAccessor {
 			mv.visitEnd();
 
 			cw.visitEnd();
-			saveDump(implName, cw.toByteArray());
+			//saveDump(implName, cw.toByteArray());
 			Class<?> clazz = CLASS_LOADER.defineClass(implName, cw.toByteArray());
 			return (EntityAccessor)clazz.newInstance();
 		} catch (ReflectiveOperationException ex) {
@@ -68,7 +68,7 @@ public final class ASMAccessor {
 			mv.visitEnd();
 
 			cw.visitEnd();
-			saveDump(implName, cw.toByteArray());
+			//saveDump(implName, cw.toByteArray());
 			Class<?> clazz = CLASS_LOADER.defineClass(implName, cw.toByteArray());
 			return (WorldAccessor)clazz.newInstance();
 		} catch (ReflectiveOperationException ex) {
@@ -93,7 +93,7 @@ public final class ASMAccessor {
 			mv.visitEnd();
 
 			cw.visitEnd();
-			saveDump(implName, cw.toByteArray());
+			//saveDump(implName, cw.toByteArray());
 			Class<?> clazz = CLASS_LOADER.defineClass(implName, cw.toByteArray());
 			return (CraftItemStackAccessor)clazz.newInstance();
 		} catch (ReflectiveOperationException ex) {
