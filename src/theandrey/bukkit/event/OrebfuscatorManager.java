@@ -3,6 +3,7 @@ package theandrey.bukkit.event;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import net.minecraft.world.World;
+import theandrey.bukkit.util.asm.ASMAccessor;
 
 public final class OrebfuscatorManager {
 
@@ -10,7 +11,7 @@ public final class OrebfuscatorManager {
 
 	static {
 		try {
-			updateNearbyBlocksMethod = Class.forName("org.bukkit.craftbukkit." + BukkitEventUtils.NMS_PACKAGE_VERSION + ".OrebfuscatorManager").getMethod("updateNearbyBlocks", World.class, int.class, int.class, int.class);
+			updateNearbyBlocksMethod = Class.forName("org.bukkit.craftbukkit." + ASMAccessor.getNmsVersion() + ".OrebfuscatorManager").getMethod("updateNearbyBlocks", World.class, int.class, int.class, int.class);
 		} catch (NoSuchMethodException | SecurityException | ClassNotFoundException ex) {
 			throw new RuntimeException("[OrebfuscatorManager] Произошла ошибка при инициализации методов", ex);
 		}

@@ -1,12 +1,8 @@
 package theandrey.bukkit.event;
 
-import cpw.mods.fml.common.FMLLog;
-import java.lang.reflect.Method;
-import java.util.logging.Level;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.ForgeDirection;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -14,33 +10,14 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import theandrey.bukkit.util.asm.ASMAccessor;
+import theandrey.bukkit.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
 
-	public static final int API_VERSION = 1; // TODO: Версия API
-	public static final String NMS_PACKAGE_VERSION;
-	private static Method asCraftMirrorMethod;
-	private static Method asNMSCopyMethod;
-	private static Method getBukkitEntityMethod;
-	private static Method getBlockStateMethod;
+	private static final CraftBukkitAccessor craftBukkitAccessor = ASMAccessor.instance().createAccessor();
 
-	static {
-		String packageName = Bukkit.getServer().getClass().getPackage().getName();
-		NMS_PACKAGE_VERSION = packageName.substring(packageName.lastIndexOf('.') + 1);
-		try {
-			Class<?> craftItem = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".inventory.CraftItemStack");
-			for(Method method : craftItem.getMethods()) {
-				if(method.getName().equals("asCraftMirror")) asCraftMirrorMethod = method;
-				if(method.getName().equalsIgnoreCase("asNMSCopy")) asNMSCopyMethod = method;
-				if(asCraftMirrorMethod != null && asNMSCopyMethod != null) break;
-			}
-
-			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + NMS_PACKAGE_VERSION + ".block.CraftBlockState");
-			getBlockStateMethod = сraftBlockState.getMethod("getBlockState", new Class[]{net.minecraft.world.World.class, int.class, int.class, int.class});
-			getBukkitEntityMethod = net.minecraft.entity.Entity.class.getMethod("getBukkitEntity");
-		} catch (Throwable ex) {
-			throw new RuntimeException("[BukkitUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
-		}
+	private BukkitEventUtils() {
 	}
 
 	/**
@@ -49,8 +26,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit World
 	 */
 	public static World getWorld(net.minecraft.world.World world) {
-		if(world == null) throw new IllegalArgumentException("world");
-		return Bukkit.getWorld(world.getWorldInfo().getWorldName());
+		return craftBukkitAccessor.getBukkitWorld(world);
 	}
 
 	/**
@@ -74,7 +50,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Block
 	 */
 	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
-		if(coord == null) throw new IllegalArgumentException("coord");
+		if(coord == null) throw new IllegalArgumentException("coord is null");
 		return getBlock(world, coord.posX, coord.posY, coord.posZ);
 	}
 
@@ -84,7 +60,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Block
 	 */
 	public static Block getBlock(TileEntity tile) {
-		if(tile == null) throw new IllegalArgumentException("tile");
+		if(tile == null) throw new IllegalArgumentException("tile is null");
 		return getBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 
@@ -94,7 +70,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Player
 	 */
 	public static Player getPlayer(net.minecraft.entity.player.EntityPlayer player) {
-		if(player == null) throw new IllegalArgumentException("player");
+		if(player == null) throw new IllegalArgumentException("player is null");
 		return (Player)getBukkitEntity(player);
 	}
 
@@ -104,14 +80,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Entity
 	 */
 	public static Entity getBukkitEntity(net.minecraft.entity.Entity entity) {
-		if(entity != null) {
-			try {
-				return (Entity)getBukkitEntityMethod.invoke(entity);
-			} catch (Throwable ex) {
-				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Bukkit Entity.");
-			}
-		}
-		return null;
+		return craftBukkitAccessor.getBukkitEntity(entity);
 	}
 
 	/**
@@ -161,14 +130,8 @@ public final class BukkitEventUtils {
 	 * @return Bukkit ItemStack
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
-		if(stack != null) {
-			try {
-				return (ItemStack)asCraftMirrorMethod.invoke(null, stack);
-			} catch (Throwable ex) {
-				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Bukkit ItemStack.");
-			}
-		}
-		return null;
+		if(stack == null) return null;
+		return craftBukkitAccessor.asCraftMirror(stack);
 	}
 
 	/**
@@ -176,15 +139,9 @@ public final class BukkitEventUtils {
 	 * @param stack Bukkit ItemStack
 	 * @return Vanilla ItemStack
 	 */
+	@Deprecated
 	public static net.minecraft.item.ItemStack getVanillaItemStack(ItemStack stack) {
-		if(stack != null) {
-			try {
-				return (net.minecraft.item.ItemStack)asNMSCopyMethod.invoke(null, stack);
-			} catch (Throwable ex) {
-				FMLLog.log(Level.SEVERE, ex, "[BukkitUtils] Не удалось получить Vanilla ItemStack.");
-			}
-		}
-		return null;
+		throw new UnsupportedOperationException("This method was removed");
 	}
 
 	/**
@@ -196,13 +153,8 @@ public final class BukkitEventUtils {
 	 * @return BlockState
 	 */
 	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
-		if(world == null) throw new IllegalArgumentException("world");
-		try {
-			return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
-		} catch (Exception ex) {
-			FMLLog.log("BukkitUtils", Level.SEVERE, ex, "Не удалось получить BlockState.");
-		}
-		return null;
+		if(world == null) throw new IllegalArgumentException("world is null");
+		return craftBukkitAccessor.getBlockState(world, x, y, z);
 	}
 
 }
