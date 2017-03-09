@@ -14,4 +14,13 @@ public interface CraftBukkitAccessor {
 
 	public org.bukkit.block.BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z);
 
+	/**
+	 * Orebfuscator: Обновить ближайшие блоки
+	 * @param world Мир
+	 * @param x Координата
+	 * @param y Координата
+	 * @param z Координата
+	 */
+	public void ofc_updateNearbyBlocks(net.minecraft.world.World world, int x, int y, int z);
+
 }

@@ -15,7 +15,7 @@ import theandrey.bukkit.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
 
-	private static final CraftBukkitAccessor craftBukkitAccessor = ASMAccessor.instance().createAccessor();
+	static final CraftBukkitAccessor craftBukkitAccessor = ASMAccessor.instance().createAccessor();
 
 	private BukkitEventUtils() {
 	}

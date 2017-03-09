@@ -90,6 +90,19 @@ public final class ASMAccessor {
 			mv.visitMaxs(5, 5);
 			mv.visitEnd();
 
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "ofc_updateNearbyBlocks");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			String ofcManager = "org/bukkit/craftbukkit/" + nmsVersion + "/OrebfuscatorManager";
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitVarInsn(Opcodes.ILOAD, 2); // 2 параметр (int)
+			mv.visitVarInsn(Opcodes.ILOAD, 3); // 3 параметр (int)
+			mv.visitVarInsn(Opcodes.ILOAD, 4); // 4 параметр (int)
+			mv.visitMethodInsn(Opcodes.INVOKESTATIC, ofcManager, "updateNearbyBlocks", "(" + Type.getType(net.minecraft.world.World.class) + "III)V", false);
+			mv.visitInsn(Opcodes.RETURN);
+			mv.visitMaxs(5, 5);
+			mv.visitEnd();
+
 			cw.visitEnd();
 			//saveDump(className, cw.toByteArray());
 			Class<?> clazz = CLASS_LOADER.defineClass(className, cw.toByteArray());
