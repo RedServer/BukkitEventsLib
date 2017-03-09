@@ -16,16 +16,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import theandrey.bukkit.util.asm.ASMAccessor;
-import theandrey.bukkit.util.asm.CraftItemStackAccessor;
-import theandrey.bukkit.util.asm.EntityAccessor;
-import theandrey.bukkit.util.asm.WorldAccessor;
+import theandrey.bukkit.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
 
 	private static final Method getBlockStateMethod;
-	private static final EntityAccessor entityAccessor = ASMAccessor.instance().createEntityAccessor();
-	private static final WorldAccessor worldAccessor = ASMAccessor.instance().createWorldAccessor();
-	private static final CraftItemStackAccessor craftItemStackAccessor = ASMAccessor.instance().createCraftItemStackAccessor();
+	private static final CraftBukkitAccessor craftBukkitAccessor = ASMAccessor.instance().createAccessor();
 
 	static {
 		try {
@@ -67,7 +63,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit World
 	 */
 	public static World getWorld(net.minecraft.world.World world) {
-		return worldAccessor.getBukkitWorld(world);
+		return craftBukkitAccessor.getBukkitWorld(world);
 	}
 
 	/**
@@ -111,7 +107,7 @@ public final class BukkitEventUtils {
 	 */
 	public static Player getPlayer(net.minecraft.entity.player.EntityPlayer player) {
 		if(player == null) return null;
-		return (Player)entityAccessor.getBukkitEntity(player);
+		return (Player)craftBukkitAccessor.getBukkitEntity(player);
 	}
 
 	/**
@@ -121,7 +117,7 @@ public final class BukkitEventUtils {
 	 */
 	public static Entity getBukkitEntity(net.minecraft.entity.Entity entity) {
 		if(entity == null) return null;
-		return entityAccessor.getBukkitEntity(entity);
+		return craftBukkitAccessor.getBukkitEntity(entity);
 	}
 
 	/**
@@ -172,7 +168,7 @@ public final class BukkitEventUtils {
 	 */
 	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
 		if(stack == null) return null;
-		return craftItemStackAccessor.asCraftMirror(stack);
+		return craftBukkitAccessor.asCraftMirror(stack);
 	}
 
 	/**
