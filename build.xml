@@ -11,16 +11,13 @@
 	<property name="release.file.normal" value="BukkitEventsLib-1.4.7-server.jar" />
 
 	<target name="-post-jar">
-		<antcall target="copydev" />
+		<antcall target="dev-build" />
 		<antcall target="obfuscate" />
-		<antcall target="copylib" />
+		<antcall target="release" />
 	</target>
 
 	<target name="obfuscate">
-		<exec executable="java">
-			<arg value="-Xmx1G" />
-			<arg value="-jar" />
-			<arg value="${bon.path}" />
+		<java jar="${bon.path}" failonerror="true">
 			<arg value="-mcp" />
 			<arg value="${mcp.folder}" />
 			<arg value="-from" />
@@ -29,25 +26,25 @@
 			<arg value="OBF" />
 			<arg value="-side" />
 			<arg value="UNIVERSAL" />
-			<arg value="-jref" />
-			<arg value="../lib/mods 1.4.7/" />
 			<arg value="-ref" />
 			<arg value="${file.reference.1.4.7.jar}" />
 			<arg value="-in" />
 			<arg file="${dist.jar}" />
 			<arg value="-out" />
-			<arg file="${dist.jar}" />
-		</exec>
+			<arg file="${dist.dir}/${release.file.normal}" />
+		</java>
+		<delete file="${dist.jar}" failonerror="true" />
 	</target>
 
-	<target name="copydev">
-		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.dev}" overwrite="true" failonerror="true" />
-		<zip destfile="${dist.dir}/src.zip" basedir="src" update="false" encoding="UTF-8" />
-		<move file="${dist.dir}/src.zip" tofile="${release.folder}/${release.file.source}" overwrite="true" failonerror="true" />
+	<target name="dev-build">
+		<copy file="${dist.jar}" tofile="${dist.dir}/${release.file.dev}" overwrite="true" failonerror="true" />
+		<zip destfile="${dist.dir}/${release.file.source}" basedir="src" update="false" encoding="UTF-8" />
 	</target>
 
-	<target name="copylib">
-		<copy file="${dist.jar}" tofile="${release.folder}/${release.file.normal}" overwrite="true" failonerror="true" />
+	<target name="release">
+		<copy file="${dist.dir}/${release.file.dev}" tofile="${release.folder}/${release.file.dev}" overwrite="true" failonerror="true" />
+		<copy file="${dist.dir}/${release.file.source}" tofile="${release.folder}/${release.file.source}" overwrite="true" failonerror="true" />
+		<copy file="${dist.dir}/${release.file.normal}" tofile="${release.folder}/${release.file.normal}" overwrite="true" failonerror="true" />
 	</target>
 
 </project>
