@@ -2,6 +2,7 @@ package theandrey.bukkit.event;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
+import net.minecraft.world.ChunkPosition;
 import net.minecraftforge.common.ForgeDirection;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -52,6 +53,17 @@ public final class BukkitEventUtils {
 	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
 		if(coord == null) throw new IllegalArgumentException("coord is null");
 		return getBlock(world, coord.posX, coord.posY, coord.posZ);
+	}
+
+	/**
+	 * Получение Bukkit Block по ChunkPosition
+	 * @param world Vanilla World
+	 * @param pos ChunkPosition
+	 * @return Bukkit Block
+	 */
+	public static Block getBlock(net.minecraft.world.World world, ChunkPosition pos) {
+		if(pos == null) throw new IllegalArgumentException("pos is null");
+		return getBlock(world, pos.x, pos.y, pos.z);
 	}
 
 	/**
