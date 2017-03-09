@@ -77,6 +77,19 @@ public final class ASMAccessor {
 			mv.visitMaxs(2, 2);
 			mv.visitEnd();
 
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getBlockState");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			String craftBlockStateClass = "org/bukkit/craftbukkit/" + nmsVersion + "/block/CraftBlockState";
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitVarInsn(Opcodes.ILOAD, 2); // 2 параметр (int)
+			mv.visitVarInsn(Opcodes.ILOAD, 3); // 3 параметр (int)
+			mv.visitVarInsn(Opcodes.ILOAD, 4); // 4 параметр (int)
+			mv.visitMethodInsn(Opcodes.INVOKESTATIC, craftBlockStateClass, "getBlockState", "(" + Type.getType(net.minecraft.world.World.class) + "III)L" + craftBlockStateClass + ";", false);
+			mv.visitInsn(Opcodes.ARETURN);
+			mv.visitMaxs(5, 5);
+			mv.visitEnd();
+
 			cw.visitEnd();
 			//saveDump(className, cw.toByteArray());
 			Class<?> clazz = CLASS_LOADER.defineClass(className, cw.toByteArray());

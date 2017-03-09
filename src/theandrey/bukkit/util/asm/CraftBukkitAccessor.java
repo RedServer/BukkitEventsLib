@@ -12,4 +12,6 @@ public interface CraftBukkitAccessor {
 
 	public org.bukkit.inventory.ItemStack asCraftMirror(net.minecraft.item.ItemStack original);
 
+	public org.bukkit.block.BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z);
+
 }

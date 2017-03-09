@@ -1,12 +1,8 @@
 package theandrey.bukkit.event;
 
-import cpw.mods.fml.common.FMLLog;
-import java.lang.reflect.Method;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.apache.logging.log4j.Level;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -20,19 +16,7 @@ import theandrey.bukkit.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
 
-	private static final Method getBlockStateMethod;
 	private static final CraftBukkitAccessor craftBukkitAccessor = ASMAccessor.instance().createAccessor();
-
-	static {
-		try {
-			String packageName = Bukkit.getServer().getClass().getPackage().getName();
-			String nmsPackageVersion = packageName.substring(packageName.lastIndexOf('.') + 1);
-			Class<?> сraftBlockState = Class.forName("org.bukkit.craftbukkit." + nmsPackageVersion + ".block.CraftBlockState");
-			getBlockStateMethod = сraftBlockState.getMethod("getBlockState", new Class[]{net.minecraft.world.World.class, int.class, int.class, int.class});
-		} catch (ReflectiveOperationException ex) {
-			throw new RuntimeException("[BukkitEventUtils] Произошла ошибка при инициализации методов", ex); // Крашим сервер, если эвенты настроить не удалось
-		}
-	}
 
 	private BukkitEventUtils() {
 	}
@@ -172,7 +156,7 @@ public final class BukkitEventUtils {
 	}
 
 	/**
-	 * Получить BlockState
+	 * Получить снимок блока
 	 * @param world Мир
 	 * @param x X координана
 	 * @param y Y координана
@@ -180,12 +164,7 @@ public final class BukkitEventUtils {
 	 * @return Снимок блока
 	 */
 	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
-		try {
-			return (BlockState)getBlockStateMethod.invoke(null, new Object[]{world, x, y, z});
-		} catch (ReflectiveOperationException ex) {
-			FMLLog.log("BukkitUtils", Level.ERROR, ex, "Не удалось получить BlockState.");
-		}
-		return null;
+		return craftBukkitAccessor.getBlockState(world, x, y, z);
 	}
 
 }
