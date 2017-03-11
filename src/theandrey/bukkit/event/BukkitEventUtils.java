@@ -27,6 +27,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit World
 	 */
 	public static World getWorld(net.minecraft.world.World world) {
+		if(world == null) return null;
 		return craftBukkitAccessor.getBukkitWorld(world);
 	}
 
@@ -92,6 +93,7 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Entity
 	 */
 	public static Entity getBukkitEntity(net.minecraft.entity.Entity entity) {
+		if(entity == null) return null;
 		return craftBukkitAccessor.getBukkitEntity(entity);
 	}
 
