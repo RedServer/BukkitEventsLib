@@ -18,17 +18,16 @@ import theandrey.bukkit.event.util.ReflectionHelper;
  */
 public final class ASMAccessor {
 
-	private static final ASMAccessor INSTANCE = new ASMAccessor();
 	private static final ASMClassLoader CLASS_LOADER = new ASMClassLoader();
 
 	private ASMAccessor() {
 	}
 
-	public static ASMAccessor instance() {
-		return INSTANCE;
-	}
-
-	public CraftBukkitAccessor createAccessor() {
+	/**
+	 * Создаёт класс доступа к методам CraftBukkit
+	 * @return Класс
+	 */
+	public static Class<? extends CraftBukkitAccessor> makeAccessorClass() {
 		try {
 			String className = ASMAccessor.class.getName() + "_" + CraftBukkitAccessor.class.getSimpleName() + "Impl";
 			ClassWriter cw = new ClassWriter(0);
@@ -93,8 +92,7 @@ public final class ASMAccessor {
 
 			cw.visitEnd();
 			//saveDump(className, cw.toByteArray());
-			Class<?> clazz = CLASS_LOADER.defineClass(className, cw.toByteArray());
-			return (CraftBukkitAccessor)clazz.newInstance();
+			return (Class<? extends CraftBukkitAccessor>)CLASS_LOADER.defineClass(className, cw.toByteArray());
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Error creating accessor", ex);
 		}
