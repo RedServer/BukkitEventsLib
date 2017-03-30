@@ -1,4 +1,4 @@
-package theandrey.bukkit.util;
+package theandrey.bukkit.event.util;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;

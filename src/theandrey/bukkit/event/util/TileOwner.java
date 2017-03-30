@@ -1,4 +1,4 @@
-package theandrey.bukkit.util;
+package theandrey.bukkit.event.util;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
