@@ -23,7 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
-import theandrey.bukkit.util.FakeBlockImpl;
+import theandrey.bukkit.event.util.FakeBlockImpl;
 
 public final class BukkitEventManager {
 

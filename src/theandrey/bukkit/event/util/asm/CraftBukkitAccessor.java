@@ -1,4 +1,4 @@
-package theandrey.bukkit.util.asm;
+package theandrey.bukkit.event.util.asm;
 
 /**
  * Предоставляет доступ к методам CraftBukkit

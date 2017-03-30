@@ -12,8 +12,8 @@ import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import theandrey.bukkit.util.asm.ASMAccessor;
-import theandrey.bukkit.util.asm.CraftBukkitAccessor;
+import theandrey.bukkit.event.util.asm.ASMAccessor;
+import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
 

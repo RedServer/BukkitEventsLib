@@ -1,4 +1,4 @@
-package theandrey.bukkit.util.asm;
+package theandrey.bukkit.event.util.asm;
 
 public final class ASMClassLoader extends ClassLoader {
 

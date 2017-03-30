@@ -1,4 +1,4 @@
-package theandrey.bukkit.util.asm;
+package theandrey.bukkit.event.util.asm;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -9,7 +9,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import theandrey.bukkit.util.ReflectionHelper;
+import theandrey.bukkit.event.util.ReflectionHelper;
 
 /**
  * Фабрика ASMAccessor

@@ -1,4 +1,4 @@
-package theandrey.bukkit.util;
+package theandrey.bukkit.event.util;
 
 import com.mojang.authlib.GameProfile;
 import java.lang.ref.WeakReference;

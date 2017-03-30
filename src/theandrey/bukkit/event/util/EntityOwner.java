@@ -1,30 +1,30 @@
-package theandrey.bukkit.util;
+package theandrey.bukkit.event.util;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLLog;
 import java.util.UUID;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 
 /**
- * Используется для хранения информации о владельце TileEntity
+ * Хранит информацию о владельце Entity
  * @author Andrey
  */
-public final class TileOwner extends AbstractOwnerInfo {
+public final class EntityOwner extends AbstractOwnerInfo {
 
-	public static final String TAG_OWNER_NAME = "CustomOwnerName";
-	public static final String TAG_OWNER_ID = "CustomOwnerId";
+	public static final String TAG_OWNER_NAME = "CustomEntityOwnerName";
+	public static final String TAG_OWNER_ID = "CustomEntityOwnerId";
 
-	private final TileEntity tile;
+	private final Entity entity;
 
 	/**
 	 * Конструктор
-	 * @param tile TileEntity, в котором будет будет хранится информация
+	 * @param entity Entity, в котором будет будет хранится информация
 	 */
-	public TileOwner(TileEntity tile) {
-		this.tile = tile;
+	public EntityOwner(Entity entity) {
+		this.entity = entity;
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public final class TileOwner extends AbstractOwnerInfo {
 			String name = nbt.getString(TAG_OWNER_NAME);
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный
-			String worldName = (tile.getWorldObj() != null) ? tile.getWorldObj().getWorldInfo().getWorldName() : "**null**";
-			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%d, %d, %d])", tile.getClass().getName(), worldName, tile.xCoord, tile.yCoord, tile.zCoord));
+			String worldName = (entity.worldObj != null) ? entity.worldObj.getWorldInfo().getWorldName() : "**null**";
+			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%.2f, %.2f, %.2f])", entity.getClass().getName(), worldName, entity.posX, entity.posY, entity.posZ));
 		}
 	}
 
@@ -51,7 +51,7 @@ public final class TileOwner extends AbstractOwnerInfo {
 
 	@Override
 	protected World getWorld() {
-		return tile.getWorldObj();
+		return entity.worldObj;
 	}
 
 }
