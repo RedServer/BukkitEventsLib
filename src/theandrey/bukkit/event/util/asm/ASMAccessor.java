@@ -46,14 +46,15 @@ public final class ASMAccessor {
 			mv.visitMaxs(1, 1);
 			mv.visitEnd();
 
-			String nmsVersion = getNmsVersion();
+			// org/bukkit/craftbukkit/V_*_*
+			final String nmsPackage = Bukkit.getServer().getClass().getPackage().getName().replace(".", "/");
 
 			// Методы
 			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getBukkitEntity");
 			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
 			mv.visitCode();
 			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
-			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.entity.Entity.class), "getBukkitEntity", "()Lorg/bukkit/craftbukkit/" + nmsVersion + "/entity/CraftEntity;", false);
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.entity.Entity.class), "getBukkitEntity", "()L" + nmsPackage + "/entity/CraftEntity;", false);
 			mv.visitInsn(Opcodes.ARETURN);
 			mv.visitMaxs(2, 2);
 			mv.visitEnd();
@@ -62,14 +63,14 @@ public final class ASMAccessor {
 			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
 			mv.visitCode();
 			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
-			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.world.World.class), "getWorld", "()Lorg/bukkit/craftbukkit/" + nmsVersion + "/CraftWorld;", false);
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.world.World.class), "getWorld", "()L" + nmsPackage + "/CraftWorld;", false);
 			mv.visitInsn(Opcodes.ARETURN);
 			mv.visitMaxs(2, 2);
 			mv.visitEnd();
 
 			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "asCraftMirror");
 			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
-			String craftItemClass = "org/bukkit/craftbukkit/" + nmsVersion + "/inventory/CraftItemStack";
+			String craftItemClass = nmsPackage + "/inventory/CraftItemStack";
 			mv.visitCode();
 			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
 			mv.visitMethodInsn(Opcodes.INVOKESTATIC, craftItemClass, "asCraftMirror", "(" + Type.getType(net.minecraft.item.ItemStack.class) + ")L" + craftItemClass + ";", false);
@@ -79,7 +80,7 @@ public final class ASMAccessor {
 
 			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getBlockState");
 			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
-			String craftBlockStateClass = "org/bukkit/craftbukkit/" + nmsVersion + "/block/CraftBlockState";
+			String craftBlockStateClass = nmsPackage + "/block/CraftBlockState";
 			mv.visitCode();
 			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
 			mv.visitVarInsn(Opcodes.ILOAD, 2); // 2 параметр (int)
@@ -96,15 +97,6 @@ public final class ASMAccessor {
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Error creating accessor", ex);
 		}
-	}
-
-	/**
-	 * Получить версию пакета CraftBukkit
-	 * @return v1_4_R1 или другая
-	 */
-	public static String getNmsVersion() {
-		String packageName = Bukkit.getServer().getClass().getPackage().getName();
-		return packageName.substring(packageName.lastIndexOf('.') + 1);
 	}
 
 	private static void saveDump(String classname, byte[] data) {
