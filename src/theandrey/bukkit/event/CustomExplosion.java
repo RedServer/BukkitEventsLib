@@ -222,7 +222,6 @@ public abstract class CustomExplosion {
 				int j = chunkposition.y;
 				int k = chunkposition.z;
 				int l = this.worldObj.getBlockId(i, j, k);
-				OrebfuscatorManager.updateNearbyBlocks(this.worldObj, i, j, k);
 				if(par1) {
 					double d0 = (double)((float)i + this.worldObj.rand.nextFloat());
 					double d1 = (double)((float)j + this.worldObj.rand.nextFloat());
