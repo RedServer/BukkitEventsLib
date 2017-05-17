@@ -42,10 +42,10 @@ public final class BukkitGameProfile {
 	/**
 	 * Создать объект из Mojang GameProfile
 	 * @param profile Ванильный профиль
-	 * @return
+	 * @return Вернёт null, если в качестве параметра получит null
 	 */
 	public static BukkitGameProfile create(GameProfile profile) {
-		if(profile == null) throw new IllegalArgumentException("profile is null");
+		if(profile == null) return null;
 		return new BukkitGameProfile(profile.getId(), profile.getName());
 	}
 
