@@ -18,7 +18,7 @@ public abstract class AbstractOwnerInfo {
 	 * Установить владельца
 	 * @param profile Профиль игрока игрока
 	 */
-	public final void setOwner(GameProfile profile) {
+	public final void setProfile(GameProfile profile) {
 		ownerProfile = profile;
 		if(playerEntity != null) playerEntity.clear();
 	}
@@ -27,7 +27,7 @@ public abstract class AbstractOwnerInfo {
 	 * Получить владельца. Может вернуть null, если владелец не установлен
 	 * @return Профиль игрока
 	 */
-	public final GameProfile getOwner() {
+	public final GameProfile getProfile() {
 		return ownerProfile;
 	}
 
@@ -42,6 +42,22 @@ public abstract class AbstractOwnerInfo {
 			if(player != null) playerEntity = new WeakReference<>(player);
 		}
 		return player;
+	}
+
+	/**
+	 * @see AbstractOwnerInfo#setProfile(com.mojang.authlib.GameProfile)
+	 */
+	@Deprecated
+	public final void setOwner(GameProfile profile) {
+		setProfile(profile);
+	}
+
+	/**
+	 * @see AbstractOwnerInfo#getProfile()
+	 */
+	@Deprecated
+	public final GameProfile getOwner() {
+		return getProfile();
 	}
 
 	/**
