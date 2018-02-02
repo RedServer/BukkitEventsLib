@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -109,32 +108,6 @@ public final class BukkitEventManager {
 	}
 
 	/**
-	 * Устаревший метод. Используйте новый.
-	 * @param player Игрок
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param stack Предмет в руке (блок)
-	 * @return true если эвент не был отменен.
-	 * @see BukkitEventManager#callBlockPlaceEvent(net.minecraft.entity.player.EntityPlayer, int, int, int, net.minecraft.block.Block, int, int, net.minecraft.item.ItemStack)
-	 */
-	@Deprecated
-	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
-		if(player == null || stack == null) return false;
-		BlockState replacedBlockState = BukkitEventUtils.getBlockState(player.worldObj, x, y, z);
-		BlockPlaceEvent event = new BlockPlaceEvent(
-				replacedBlockState.getBlock(),
-				replacedBlockState,
-				BukkitEventUtils.getBlock(player.worldObj, x, y, z),
-				BukkitEventUtils.getItemStack(stack),
-				BukkitEventUtils.getPlayer(player),
-				true
-		);
-		pluginManager.callEvent(event);
-		return !event.isCancelled();
-	}
-
-	/**
 	 * Бросает событие установки блока игроком.
 	 * @param player Игрок. Если null, метод вернёт false
 	 * @param x Координата X, куда будет установлен блок
@@ -226,31 +199,6 @@ public final class BukkitEventManager {
 		AsyncPlayerChatEvent event = BukkitEventFactory.newPlayerChatEvent(sender, message, recipients);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
-	}
-
-	@Deprecated
-	public static boolean callBlockBreak(EntityPlayer player, int x, int y, int z) {
-		return callBlockBreakEvent(player, x, y, z);
-	}
-
-	@Deprecated
-	public static boolean callBlockPlace(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stack) {
-		return callBlockPlaceEvent(player, x, y, z, stack);
-	}
-
-	@Deprecated
-	public static boolean callPlayerInteract(net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, Action action, BlockFace face, net.minecraft.item.ItemStack stack) {
-		return callPlayerInteractEvent(player, x, y, z, action, face, stack);
-	}
-
-	@Deprecated
-	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		return callBucketFillEvent(player, stack, x, y, z);
-	}
-
-	@Deprecated
-	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
-		return callEntityDamageByEntityEvent(attacker, damagee, cause, (double)damage);
 	}
 
 }

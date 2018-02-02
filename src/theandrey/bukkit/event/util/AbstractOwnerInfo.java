@@ -45,22 +45,6 @@ public abstract class AbstractOwnerInfo {
 	}
 
 	/**
-	 * @see AbstractOwnerInfo#setProfile(com.mojang.authlib.GameProfile)
-	 */
-	@Deprecated
-	public final void setOwner(GameProfile profile) {
-		setProfile(profile);
-	}
-
-	/**
-	 * @see AbstractOwnerInfo#getProfile()
-	 */
-	@Deprecated
-	public final GameProfile getOwner() {
-		return getProfile();
-	}
-
-	/**
 	 * Считать данные из NBT
 	 * @param nbt
 	 */

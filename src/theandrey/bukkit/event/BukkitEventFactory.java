@@ -93,6 +93,7 @@ public final class BukkitEventFactory {
 		Player bplayer = BukkitEventUtils.getPlayer(player);
 		org.bukkit.inventory.ItemStack bitem = BukkitEventUtils.getItemStack(stack);
 		Block blockClicked = bplayer.getWorld().getBlockAt(clickX, clickY, clickZ);
+
 		if(isFilling) {
 			return new PlayerBucketFillEvent(bplayer, blockClicked, BlockFace.SELF, bitem.getType(), bitem);
 		} else {
