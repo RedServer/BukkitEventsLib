@@ -5,6 +5,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MovingObjectPosition;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -13,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -197,6 +199,28 @@ public final class BukkitEventManager {
 	 */
 	public static boolean callPlayerChatEvent(EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
 		AsyncPlayerChatEvent event = BukkitEventFactory.newPlayerChatEvent(sender, message, recipients);
+		pluginManager.callEvent(event);
+		return !event.isCancelled();
+	}
+
+	/**
+	 * Событие изменения блока мобом
+	 * @param entity Моб
+	 * @param x Координата блока
+	 * @param y Координата блока
+	 * @param z Координата блока
+	 * @param newBlock Новый блок или null, если блок сломан
+	 * @return Разрешено ли выполнение действия (false - если событие было отменено)
+	 */
+	public static boolean callEntityChangeBlockEvent(Entity entity, int x, int y, int z, BlockStateData newBlock) {
+		if(entity == null) throw new IllegalArgumentException("entity is null!");
+
+		EntityChangeBlockEvent event = new EntityChangeBlockEvent(
+				BukkitEventUtils.getBukkitEntity(entity),
+				BukkitEventUtils.getBlock(entity.worldObj, x, y, z),
+				(newBlock != null) ? newBlock.getType() : Material.AIR,
+				(newBlock != null) ? (byte)newBlock.getData() : 0
+		);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
