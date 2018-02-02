@@ -148,16 +148,6 @@ public final class BukkitEventUtils {
 	}
 
 	/**
-	 * Конвертирует Bukkit ItemStack в Vanilla ItemStack (используется asNMSCopy)
-	 * @param stack Bukkit ItemStack
-	 * @return Vanilla ItemStack
-	 */
-	@Deprecated
-	public static net.minecraft.item.ItemStack getVanillaItemStack(ItemStack stack) {
-		throw new UnsupportedOperationException("This method was removed");
-	}
-
-	/**
 	 * Получает BlockState
 	 * @param world
 	 * @param x X блока

@@ -163,9 +163,4 @@ public final class BukkitEventManager {
 		return !event.isCancelled();
 	}
 
-	@Deprecated
-	public static boolean callBucketFillEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int x, int y, int z, int side) {
-		return callBucketFillEvent(player, stack, x, y, z);
-	}
-
 }

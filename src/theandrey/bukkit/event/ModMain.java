@@ -18,7 +18,7 @@ public final class ModMain {
 
 	public static final String MOD_ID = "BukkitEventsLib";
 	public static final String MOD_NAME = "Bukkit Events Lib";
-	public static final String MOD_VERSION = "1.1-legacy";
+	public static final String MOD_VERSION = "1.2-legacy";
 	public static Logger logger;
 
 	@Mod.PreInit
