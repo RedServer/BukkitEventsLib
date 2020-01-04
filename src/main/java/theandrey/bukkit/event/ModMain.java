@@ -18,7 +18,7 @@ public final class ModMain {
 
 	public static final String MOD_ID = "BukkitEventsLib";
 	public static final String MOD_NAME = "Bukkit Events Lib";
-	public static final String MOD_VERSION = "1.3";
+	public static final String MOD_VERSION = "1.4";
 	public static Logger logger;
 
 	@Mod.EventHandler
