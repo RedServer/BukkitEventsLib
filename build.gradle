@@ -1,0 +1,76 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		maven {
+			name = "forge"
+			url = "https://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "sonatype"
+			url = "https://oss.sonatype.org/content/repositories/snapshots/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+	}
+}
+
+repositories {
+	flatDir {
+		dirs System.getenv('GRADLE_FLATDIR_PATH'), System.getenv('MC_LIBRARY_PATH')
+	}
+}
+
+apply plugin: 'forge'
+
+// Project settings
+archivesBaseName = 'BukkitEventsLib'
+group = 'theandrey'
+version = '1.4'
+
+compileJava {
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+minecraft {
+	version = "1.7.10-10.13.4.1614-1.7.10"
+	runDir = "eclipse"
+}
+
+dependencies {
+	compile name: 'servers/spigot-1.7.10-R0.1'
+}
+
+jar {
+	version = '1.7.10'
+}
+
+task devJar(type: Jar) {
+	classifier = 'dev'
+	version = '1.7.10'
+	from sourceSets.main.output
+}
+
+task sourcesJar(type: Jar) {
+	classifier = 'dev-sources'
+	version = '1.7.10'
+	from sourceSets.main.allSource
+}
+
+artifacts {
+	archives devJar
+	archives sourcesJar
+}
+
+// Release mod
+task release(type: Copy) {
+	dependsOn build
+	from devJar
+	from sourcesJar
+	into System.getenv('MC_LIBRARY_PATH') + '/release/mods-1.7.10'
+}
