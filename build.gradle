@@ -1,0 +1,101 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = "forge"
+            url = "https://files.minecraftforge.net/maven"
+        }
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        }
+    }
+}
+
+repositories {
+    jcenter()
+    flatDir {
+        dirs System.getenv('GRADLE_FLATDIR_PATH'), System.getenv('MC_LIBRARY_PATH')
+    }
+}
+
+apply plugin: 'java'
+
+archivesBaseName = 'BukkitEventsLib'
+group = 'theandrey'
+version = '1.2-legacy'
+String gameVersion = '1.4.7'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+dependencies {
+    // Minecraft
+    compile name: 'versions/1.4.7-dev'
+    compile name: 'versions/libraries-1.4.7'
+    // Libraries
+    compile group: 'org.ow2.asm', name: 'asm-all', version: '5.0.4'
+    compile name: 'servers/bukkit-1.4.7-R1.0'
+}
+
+jar {
+    version = gameVersion
+}
+
+task devJar(type: Jar) {
+    classifier = 'dev'
+    version = gameVersion
+    from sourceSets.main.output
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'dev-sources'
+    version = gameVersion
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives devJar
+    archives sourcesJar
+}
+
+// Reobf task
+task reobf() {
+    String mcpPath = System.getenv('MCP_PATH');
+    String bonPath = mcpPath + '/runtime/BON.jar';
+    String mcpFolder = mcpPath + '/1.4.7-forge';
+
+    doLast {
+        def runArgs = [
+                '-jar', bonPath, '-m', '-mcp', mcpFolder, '-from', 'MCP', '-to', 'OBF',
+                '-side', 'UNIVERSAL', '-in', jar.archivePath, '-out', jar.archivePath
+        ]
+
+        // Add library path for correct obfuscation
+        for (entry in configurations.runtime.resolve()) {
+            if (entry.getName().contains('-dev')) {
+                runArgs.addAll('-ref', entry.getAbsolutePath());
+            }
+        }
+
+        exec {
+            executable 'java'
+            args runArgs
+        }
+    }
+}
+
+// Release mod
+task release(type: Copy) {
+    dependsOn build
+    from devJar
+    from sourcesJar
+    into System.getenv('MC_LIBRARY_PATH') + "/release/mods-${gameVersion}"
+}
+
+assemble.dependsOn.add(reobf)
