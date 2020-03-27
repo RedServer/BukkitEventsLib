@@ -1,7 +1,7 @@
 package theandrey.bukkit.event.util;
 
-import com.mojang.authlib.GameProfile;
 import java.lang.ref.WeakReference;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -46,13 +46,13 @@ public abstract class AbstractOwnerInfo {
 
 	/**
 	 * Считать данные из NBT
-	 * @param nbt
+	 * @param nbt Источник
 	 */
 	public abstract void readFromNBT(NBTTagCompound nbt);
 
 	/**
 	 * Сохранить данные в NBT
-	 * @param nbt
+	 * @param nbt Цель
 	 */
 	public abstract void writeToNBT(NBTTagCompound nbt);
 

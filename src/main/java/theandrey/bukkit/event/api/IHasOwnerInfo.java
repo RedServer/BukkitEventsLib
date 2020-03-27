@@ -9,8 +9,7 @@ public interface IHasOwnerInfo {
 
 	/**
 	 * Получить блок механизма
-	 * @return
 	 */
-	public BukkitGameProfile getOwnerProfile();
+	BukkitGameProfile getOwnerProfile();
 
 }

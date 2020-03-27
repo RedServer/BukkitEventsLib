@@ -30,9 +30,9 @@ public final class TileOwner extends AbstractOwnerInfo {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		try {
-			String idstr = nbt.getString(TAG_OWNER_ID);
-			if(idstr == null || idstr.isEmpty()) return;
-			UUID id = UUID.fromString(idstr);
+			String idStr = nbt.getString(TAG_OWNER_ID);
+			if(idStr == null || idStr.isEmpty()) return;
+			UUID id = UUID.fromString(idStr);
 			String name = nbt.getString(TAG_OWNER_NAME);
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный

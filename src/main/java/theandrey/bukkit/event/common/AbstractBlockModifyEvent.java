@@ -36,7 +36,6 @@ public abstract class AbstractBlockModifyEvent extends CancellableEvent {
 
 	/**
 	 * Изменяемый блок
-	 * @return
 	 */
 	public Block getBlock() {
 		return block;
@@ -44,7 +43,6 @@ public abstract class AbstractBlockModifyEvent extends CancellableEvent {
 
 	/**
 	 * ID владельца. Может быть null если неизвестен
-	 * @return
 	 */
 	public UUID getOwnerId() {
 		return ownerId;
@@ -52,7 +50,6 @@ public abstract class AbstractBlockModifyEvent extends CancellableEvent {
 
 	/**
 	 * Действие с блоком, совершаемое механизмом
-	 * @return
 	 */
 	public MachineAction getAction() {
 		return action;
@@ -60,7 +57,6 @@ public abstract class AbstractBlockModifyEvent extends CancellableEvent {
 
 	/**
 	 * Тип механизма из мода (enum)
-	 * @return
 	 */
 	public IMachineType getMachineType() {
 		return machineType;
@@ -68,7 +64,6 @@ public abstract class AbstractBlockModifyEvent extends CancellableEvent {
 
 	/**
 	 * Тип нового блока. Может быть null
-	 * @return
 	 */
 	public BlockStateData getBlockPlaced() {
 		return placed;

@@ -10,6 +10,6 @@ public enum MachineAction {
 	REPLACE_BLOCK,
 	USE_ITEM,
 	ATTACK_ENTITY,
-	UNKNOWN;
+	UNKNOWN
 
 }

@@ -47,6 +47,7 @@ public final class FakeBlockImpl implements Block {
 	}
 
 	// Переопределённые методы
+	@SuppressWarnings("deprecation")
 	@Override
 	public byte getData() {
 		return metadata;
@@ -70,6 +71,7 @@ public final class FakeBlockImpl implements Block {
 		metadata = data;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void setData(byte data, boolean applyPhysics) {
 		block.setData(data, applyPhysics);

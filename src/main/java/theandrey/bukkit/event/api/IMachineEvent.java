@@ -5,26 +5,23 @@ import theandrey.bukkit.event.BlockStateData;
 import theandrey.bukkit.event.MachineAction;
 
 /**
- * Реализуется эвентами, которые вызываются механизмами
+ * Реализуется ивентами, которые вызываются механизмами
  */
 public interface IMachineEvent {
 
 	/**
 	 * Действие, которое совершает механизм
-	 * @return
 	 */
-	public MachineAction getAction();
+	MachineAction getAction();
 
 	/**
 	 * Блок, который изменяет механизм
-	 * @return
 	 */
-	public Block getBlock();
+	Block getBlock();
 
 	/**
 	 * Блок, который устанавливает механизм
-	 * @return
 	 */
-	public BlockStateData getBlockPlaced();
+	BlockStateData getBlockPlaced();
 
 }

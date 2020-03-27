@@ -33,7 +33,7 @@ public final class ModMain {
 			logger.info("Creating ASMAccessor class...");
 			Class<? extends CraftBukkitAccessor> clazz = ASMAccessor.makeAccessorClass();
 			BukkitEventUtils.craftBukkitAccessor = clazz.newInstance();
-			logger.info("Class succefully created.");
+			logger.info("Class successfully created.");
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Error creating accessor class", ex);
 		}

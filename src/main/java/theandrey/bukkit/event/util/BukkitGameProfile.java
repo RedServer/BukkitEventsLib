@@ -25,7 +25,6 @@ public final class BukkitGameProfile {
 
 	/**
 	 * Получить ID игрока
-	 * @return
 	 */
 	public UUID getId() {
 		return id;

@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
- * Простое создание эвентов
+ * Простое создание ивентов
  */
 public final class BukkitEventFactory {
 
@@ -25,79 +25,66 @@ public final class BukkitEventFactory {
 	}
 
 	/**
-	 * Создаёт эвент чата, но не вызывает его. Этот эвент может быть вызван из любого потока.
+	 * Ивент чата. Может быть вызван из любого потока.
 	 * @param sender Отправитель сообщения
 	 * @param message Сообщение
 	 * @param recipients Получатели
-	 * @return
 	 */
-	public static final AsyncPlayerChatEvent newPlayerChatEvent(EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
-		Player bsender = BukkitEventUtils.getPlayer(sender);
-		Set<Player> brecipients = new HashSet<>();
-		for(EntityPlayer r : recipients) brecipients.add(BukkitEventUtils.getPlayer(r));
-		return new AsyncPlayerChatEvent(!Bukkit.isPrimaryThread(), bsender, message, brecipients);
+	public static AsyncPlayerChatEvent newPlayerChatEvent(EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
+		Player bukkitSender = BukkitEventUtils.getPlayer(sender);
+		Set<Player> bukkitRecipients = new HashSet<>();
+		for(EntityPlayer player : recipients) bukkitRecipients.add(BukkitEventUtils.getPlayer(player));
+		return new AsyncPlayerChatEvent(!Bukkit.isPrimaryThread(), bukkitSender, message, bukkitRecipients);
 	}
 
 	/**
-	 * Эвент выливания жидкости из ведра
+	 * Ивент выливания жидкости из ведра
 	 * @param player Игрок
-	 * @param clickX
-	 * @param clickY
-	 * @param clickZ
 	 * @param stack Предмет в руке (ведро)
-	 * @return Эвент
 	 */
-	public static final PlayerBucketFillEvent newPlayerBucketFillEvent(EntityPlayer player, int clickX, int clickY, int clickZ, ItemStack stack) {
+	public static PlayerBucketFillEvent newPlayerBucketFillEvent(EntityPlayer player, int clickX, int clickY, int clickZ, ItemStack stack) {
 		return (PlayerBucketFillEvent)getPlayerBucketEvent(true, player, clickX, clickY, clickZ, -1, stack);
 	}
 
 	/**
-	 * Эвент наполнения ведра
+	 * Ивент наполнения ведра
 	 * @param player Игрок
-	 * @param clickX
-	 * @param clickY
-	 * @param clickZ
 	 * @param clickSide Индекс стороны блока по которой был сделан клик
 	 * @param stack Предмет в руке (ведро)
-	 * @return Эвент
 	 */
-	public static final PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(EntityPlayer player, int clickX, int clickY, int clickZ, int clickSide, ItemStack stack) {
+	public static PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(EntityPlayer player, int clickX, int clickY, int clickZ, int clickSide, ItemStack stack) {
 		return (PlayerBucketEmptyEvent)getPlayerBucketEvent(false, player, clickX, clickY, clickZ, clickSide, stack);
 	}
 
 	/**
-	 * Создаёт новое событие телепортации
+	 * Ивент телепортации
 	 * @param player Игрок
-	 * @param xfrom Начальная точка
-	 * @param yfrom Начальная точка
-	 * @param zfrom Начальная точка
-	 * @param xto Точка назначения
-	 * @param yto Точка назначения
-	 * @param zto Точка назначения
-	 * @param pitch
-	 * @param yaw
-	 * @param cause
-	 * @return
+	 * @param xFrom Начальная точка
+	 * @param yFrom Начальная точка
+	 * @param zFrom Начальная точка
+	 * @param xTo Точка назначения
+	 * @param yTo Точка назначения
+	 * @param zTo Точка назначения
 	 */
-	public static final PlayerTeleportEvent newPlayerTeleportEvent(EntityPlayer player, double xfrom, double yfrom, double zfrom, double xto, double yto, double zto, float pitch, float yaw, PlayerTeleportEvent.TeleportCause cause) {
+	public static PlayerTeleportEvent newPlayerTeleportEvent(EntityPlayer player, double xFrom, double yFrom, double zFrom, double xTo, double yTo, double zTo, float pitch, float yaw, PlayerTeleportEvent.TeleportCause cause) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		return new PlayerTeleportEvent(
 				bukkitPlayer,
-				new Location(bukkitPlayer.getWorld(), xfrom, yfrom, zfrom, yaw, pitch),
-				new Location(bukkitPlayer.getWorld(), xto, yto, zto, yaw, pitch),
+				new Location(bukkitPlayer.getWorld(), xFrom, yFrom, zFrom, yaw, pitch),
+				new Location(bukkitPlayer.getWorld(), xTo, yTo, zTo, yaw, pitch),
 				cause
 		);
 	}
 
 	private static PlayerBucketEvent getPlayerBucketEvent(boolean isFilling, EntityPlayer player, int clickX, int clickY, int clickZ, int side, ItemStack stack) {
-		Player bplayer = BukkitEventUtils.getPlayer(player);
-		org.bukkit.inventory.ItemStack bitem = BukkitEventUtils.getItemStack(stack);
-		Block blockClicked = bplayer.getWorld().getBlockAt(clickX, clickY, clickZ);
+		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
+		org.bukkit.inventory.ItemStack bukkitItem = BukkitEventUtils.getItemStack(stack);
+		Block blockClicked = bukkitPlayer.getWorld().getBlockAt(clickX, clickY, clickZ);
 
 		if(isFilling) {
-			return new PlayerBucketFillEvent(bplayer, blockClicked, BlockFace.SELF, bitem.getType(), bitem);
+			return new PlayerBucketFillEvent(bukkitPlayer, blockClicked, BlockFace.SELF, bukkitItem.getType(), bukkitItem);
 		} else {
-			return new PlayerBucketEmptyEvent(bplayer, blockClicked, BukkitEventUtils.getBlockFace(side), bitem.getType(), bitem);
+			return new PlayerBucketEmptyEvent(bukkitPlayer, blockClicked, BukkitEventUtils.getBlockFace(side), bukkitItem.getType(), bukkitItem);
 		}
 	}
 

@@ -26,17 +26,16 @@ public final class BlockStateData {
 		this(type, 0);
 	}
 
-	public static final BlockStateData create(net.minecraft.block.Block block, int metadata) {
+	public static BlockStateData create(net.minecraft.block.Block block, int metadata) {
 		return new BlockStateData(BukkitEventUtils.getMaterial(block), metadata);
 	}
 
-	public static final BlockStateData create(net.minecraft.block.Block block) {
+	public static BlockStateData create(net.minecraft.block.Block block) {
 		return create(block, 0);
 	}
 
 	/**
 	 * Material блока
-	 * @return
 	 */
 	public Material getType() {
 		return type;
@@ -44,7 +43,6 @@ public final class BlockStateData {
 
 	/**
 	 * Meta блока
-	 * @return
 	 */
 	public int getData() {
 		return data;
