@@ -1,10 +1,6 @@
 package theandrey.bukkit.event.util.asm;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import org.bukkit.Bukkit;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
@@ -27,6 +23,7 @@ public final class ASMAccessor {
 	 * Создаёт класс доступа к методам CraftBukkit
 	 * @return Класс
 	 */
+	@SuppressWarnings("unchecked")
 	public static Class<? extends CraftBukkitAccessor> makeAccessorClass() {
 		try {
 			String className = ASMAccessor.class.getName() + "_" + CraftBukkitAccessor.class.getSimpleName() + "Impl";
@@ -92,20 +89,9 @@ public final class ASMAccessor {
 			mv.visitEnd();
 
 			cw.visitEnd();
-			//saveDump(className, cw.toByteArray());
 			return (Class<? extends CraftBukkitAccessor>)CLASS_LOADER.defineClass(className, cw.toByteArray());
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Error creating accessor", ex);
-		}
-	}
-
-	private static void saveDump(String classname, byte[] data) {
-		try {
-			Path path = Paths.get("classdump", classname + ".class");
-			Files.createDirectories(path.getParent());
-			Files.write(path, data);
-		} catch (IOException ex) {
-			ex.printStackTrace();
 		}
 	}
 

@@ -33,26 +33,23 @@ public final class BukkitEventUtils {
 	/**
 	 * Получение Bukkit Block
 	 * @param world Vanilla World
-	 * @param x X блока
-	 * @param y Y блока
-	 * @param z Z блока
 	 * @return Bukkit Block
 	 */
 	public static Block getBlock(net.minecraft.world.World world, int x, int y, int z) {
-		World bworld = getWorld(world);
-		if(bworld != null) return bworld.getBlockAt(x, y, z);
+		World bukkitWorld = getWorld(world);
+		if(bukkitWorld != null) return bukkitWorld.getBlockAt(x, y, z);
 		return null;
 	}
 
 	/**
 	 * Получение Bukkit Block по ChunkCoordinates
 	 * @param world Vanilla World
-	 * @param coord ChunkCoordinates
+	 * @param cord ChunkCoordinates
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
-		if(coord == null) throw new IllegalArgumentException("coord is null");
-		return getBlock(world, coord.posX, coord.posY, coord.posZ);
+	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates cord) {
+		if(cord == null) throw new IllegalArgumentException("coord is null");
+		return getBlock(world, cord.posX, cord.posY, cord.posZ);
 	}
 
 	/**
@@ -149,10 +146,6 @@ public final class BukkitEventUtils {
 
 	/**
 	 * Получает BlockState
-	 * @param world
-	 * @param x X блока
-	 * @param y Y блока
-	 * @param z Z блока
 	 * @return BlockState
 	 */
 	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {

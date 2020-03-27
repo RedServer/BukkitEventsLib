@@ -1,20 +1,19 @@
 package theandrey.bukkit.event.api;
 
 /**
- * Реализуется эвентами чата
+ * Реализуется ивентами чата
  */
 public interface IPlayerChatEvent extends IPlayerEvent {
 
 	/**
 	 * Получить текст сообщения
-	 * @return
 	 */
-	public String getMessage();
+	String getMessage();
 
 	/**
 	 * Изменить текст сообщения
-	 * @param newmessage Новое сообщение
+	 * @param message Новое сообщение
 	 */
-	public void setMessage(String newmessage);
+	void setMessage(String message);
 
 }

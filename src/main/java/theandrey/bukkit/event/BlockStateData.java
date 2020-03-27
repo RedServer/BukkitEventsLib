@@ -32,7 +32,6 @@ public final class BlockStateData {
 
 	/**
 	 * ID блока
-	 * @return
 	 */
 	public int getTypeId() {
 		return id;
@@ -40,7 +39,6 @@ public final class BlockStateData {
 
 	/**
 	 * Material блока
-	 * @return
 	 */
 	public Material getType() {
 		return type;
@@ -48,7 +46,6 @@ public final class BlockStateData {
 
 	/**
 	 * Meta блока
-	 * @return
 	 */
 	public int getData() {
 		return data;
@@ -56,10 +53,8 @@ public final class BlockStateData {
 
 	/**
 	 * Получает информацию о блоке из ItemStack
-	 * @param stack
-	 * @return
 	 */
-	public static final BlockStateData fromItemStack(ItemStack stack) {
+	public static BlockStateData fromItemStack(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemBlock)) return null;
 		ItemBlock item = (ItemBlock)stack.getItem();
 		return new BlockStateData(stack.itemID, item.getHasSubtypes() ? item.getMetadata(stack.getItemDamage()) : 0);

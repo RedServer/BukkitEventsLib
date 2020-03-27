@@ -46,10 +46,6 @@ public final class BukkitEventManager {
 	 * Вызывает событие опустошения ведра
 	 * @param player Игрок
 	 * @param stack Предмет в руке (ведро)
-	 * @param clickX x
-	 * @param clickY y
-	 * @param clickZ z
-	 * @param clickSide
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, int clickX, int clickY, int clickZ, int clickSide) {
@@ -62,7 +58,6 @@ public final class BukkitEventManager {
 	 * Вызывает событие опустошения ведра
 	 * @param player Игрок
 	 * @param stack Предмет (ведро)
-	 * @param mop
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketEmptyEvent(EntityPlayer player, net.minecraft.item.ItemStack stack, MovingObjectPosition mop) {
@@ -71,12 +66,8 @@ public final class BukkitEventManager {
 	}
 
 	/**
-	 * Кидает эвент разрушения блока
-	 * @param player
-	 * @param z
-	 * @param x
-	 * @param y
-	 * @return true если эвент не был отменен.
+	 * Отправляет ивент разрушения блока
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callBlockBreakEvent(EntityPlayer player, int x, int y, int z) {
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
@@ -88,28 +79,23 @@ public final class BukkitEventManager {
 	}
 
 	/**
-	 * Вызов эвента нанесения урона одним существом другому
+	 * Отпроавляет ивент нанесения урона одним существом другому
 	 * @param attacker Атакующий
-	 * @param damagee Пострадавший
+	 * @param target Пострадавший
 	 * @param cause Причина
 	 * @param damage Урон
-	 * @return true, если эвет не был отменён
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
-	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity damagee, EntityDamageEvent.DamageCause cause, int damage) {
-		if(attacker == null || damagee == null) return false;
-		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(damagee), cause, damage);
+	public static boolean callEntityDamageByEntityEvent(Entity attacker, Entity target, EntityDamageEvent.DamageCause cause, int damage) {
+		if(attacker == null || target == null) return false;
+		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(target), cause, damage);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
 
 	/**
-	 * Кидает эвент установки блока
-	 * @param player
-	 * @param x
-	 * @param stackBlock
-	 * @param z
-	 * @param y
-	 * @return true если эвент не был отменен.
+	 * Отправляет ивент установки блока
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callBlockPlaceEvent(EntityPlayer player, int x, int y, int z, net.minecraft.item.ItemStack stackBlock) {
 		if(player == null || stackBlock == null) return false;
@@ -120,30 +106,23 @@ public final class BukkitEventManager {
 	}
 
 	/**
-	 * Кидает эвент перемещения блока (используется для жидкостей)
-	 * @param worldObj
-	 * @param zto
-	 * @param x
-	 * @param yto
-	 * @param z
-	 * @param y
-	 * @param xto
-	 * @return true если эвент не был отменен.
+	 * Отправлянт ивент формирования одного блока другим. Используется в основном жидкостями.
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callBlockFromToEvent(net.minecraft.world.World worldObj, int x, int y, int z, int xto, int yto, int zto) {
-		World bworld = BukkitEventUtils.getWorld(worldObj);
-		BlockFromToEvent event = new BlockFromToEvent(bworld.getBlockAt(x, y, z), bworld.getBlockAt(xto, yto, zto));
+		World bukkitWorld = BukkitEventUtils.getWorld(worldObj);
+		BlockFromToEvent event = new BlockFromToEvent(bukkitWorld.getBlockAt(x, y, z), bukkitWorld.getBlockAt(xto, yto, zto));
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
 
 	/**
-	 * Отправляет эвент чата
+	 * Отправляет ивент чата
 	 * @param async Асинхронный? (отправлен не из главного потока)
 	 * @param sender Игрок-отправитель сообщения
 	 * @param message Сообщение
 	 * @param recipients Список получателей сообщения
-	 * @return true, если эвент не был отменён
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callPlayerChatEvent(boolean async, EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
 		AsyncPlayerChatEvent event = BukkitEventFactory.newPlayerChatEvent(sender, message, recipients);
@@ -152,10 +131,10 @@ public final class BukkitEventManager {
 	}
 
 	/**
-	 * Событие стрижки моба
+	 * Отправляет ивент стрижки моба
 	 * @param player Игрок
 	 * @param entity Моб, которого стригут
-	 * @return Разрешено ли выполнение действия (false - если событие было отменено)
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callPlayerShearEntityEvent(net.minecraft.entity.player.EntityPlayer player, net.minecraft.entity.Entity entity) {
 		if(player == null) throw new IllegalArgumentException("player is null!");
@@ -172,7 +151,7 @@ public final class BukkitEventManager {
 	 * @param y Координата блока
 	 * @param z Координата блока
 	 * @param newBlock Новый блок или null, если блок сломан
-	 * @return Разрешено ли выполнение действия (false - если событие было отменено)
+	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callEntityChangeBlockEvent(Entity entity, int x, int y, int z, BlockStateData newBlock) {
 		if(entity == null) throw new IllegalArgumentException("entity is null!");

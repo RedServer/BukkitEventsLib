@@ -38,13 +38,13 @@ public abstract class AbstractOwnerInfo {
 
 	/**
 	 * Считать данные из NBT
-	 * @param nbt
+	 * @param nbt Источник
 	 */
 	public abstract void readFromNBT(NBTTagCompound nbt);
 
 	/**
 	 * Сохранить данные в NBT
-	 * @param nbt
+	 * @param nbt Цель
 	 */
 	public abstract void writeToNBT(NBTTagCompound nbt);
 

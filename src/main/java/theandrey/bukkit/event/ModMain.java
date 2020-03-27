@@ -1,11 +1,11 @@
 package theandrey.bukkit.event;
 
+import java.util.logging.Logger;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
-import java.util.logging.Logger;
 import theandrey.bukkit.event.util.asm.ASMAccessor;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
@@ -33,7 +33,7 @@ public final class ModMain {
 			logger.info("Creating ASMAccessor class...");
 			Class<? extends CraftBukkitAccessor> clazz = ASMAccessor.makeAccessorClass();
 			BukkitEventUtils.craftBukkitAccessor = clazz.newInstance();
-			logger.info("Class succefully created.");
+			logger.info("Class successfully created.");
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Error creating accessor class", ex);
 		}
