@@ -88,6 +88,17 @@ public final class ASMAccessor {
 			mv.visitMaxs(5, 5);
 			mv.visitEnd();
 
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "spawnEntityInWorld");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // param: world
+			mv.visitVarInsn(Opcodes.ALOAD, 2); // param: entity
+			mv.visitVarInsn(Opcodes.ALOAD, 3); // param: reason
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.world.World.class), "addEntity", "(" + Type.getType(net.minecraft.entity.Entity.class) + "Lorg/bukkit/event/entity/CreatureSpawnEvent$SpawnReason;)Z", false);
+			mv.visitInsn(Opcodes.IRETURN);
+			mv.visitMaxs(4, 4);
+			mv.visitEnd();
+
 			cw.visitEnd();
 			return (Class<? extends CraftBukkitAccessor>)CLASS_LOADER.defineClass(className, cw.toByteArray());
 		} catch (ReflectiveOperationException ex) {

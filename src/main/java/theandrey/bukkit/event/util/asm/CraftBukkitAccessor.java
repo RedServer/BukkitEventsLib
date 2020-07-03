@@ -1,5 +1,7 @@
 package theandrey.bukkit.event.util.asm;
 
+import org.bukkit.event.entity.CreatureSpawnEvent;
+
 /**
  * Предоставляет доступ к методам CraftBukkit
  * @author TheAndrey
@@ -14,4 +16,5 @@ public interface CraftBukkitAccessor {
 
 	org.bukkit.block.BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z);
 
+	boolean spawnEntityInWorld(net.minecraft.world.World world, net.minecraft.entity.Entity entity, CreatureSpawnEvent.SpawnReason reason);
 }

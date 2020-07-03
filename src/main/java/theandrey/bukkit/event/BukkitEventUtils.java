@@ -10,6 +10,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
@@ -151,6 +152,20 @@ public final class BukkitEventUtils {
 	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
 		if(world == null) throw new IllegalArgumentException("world is null");
 		return craftBukkitAccessor.getBlockState(world, x, y, z);
+	}
+
+	/**
+	 * Спавнит существо в мире с указанием причины для CreatureSpawnEvent
+	 * @param world Мир
+	 * @param entity Существо
+	 * @param reason Причина
+	 * @return Успешный спавн
+	 */
+	public static boolean spawnEntityInWorld(net.minecraft.world.World world, net.minecraft.entity.Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+		if(world == null) throw new IllegalArgumentException("world is null!");
+		if(entity == null) throw new IllegalArgumentException("entity is null!");
+
+		return craftBukkitAccessor.spawnEntityInWorld(world, entity, reason);
 	}
 
 }
