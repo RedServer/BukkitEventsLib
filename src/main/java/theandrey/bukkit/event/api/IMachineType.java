@@ -6,4 +6,8 @@ package theandrey.bukkit.event.api;
  */
 public interface IMachineType {
 
+	/**
+	 * Возвращает имя enum константы
+	 */
+	String name();
 }

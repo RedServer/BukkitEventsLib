@@ -5,6 +5,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import theandrey.bukkit.event.util.asm.ASMAccessor;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
@@ -19,12 +20,13 @@ public final class ModMain {
 	public static final String MOD_ID = "BukkitEventsLib";
 	public static final String MOD_NAME = "Bukkit Events Lib";
 	public static final String MOD_VERSION = "1.4";
-	public static Logger logger;
+	public static final Logger logger = LogManager.getLogger("BukkitEventsLib");
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		if(FMLCommonHandler.instance().getSide() == Side.CLIENT) throw new RuntimeException("This is server mod!");
-		logger = event.getModLog();
+		if(FMLCommonHandler.instance().getSide() != Side.SERVER) {
+			throw new RuntimeException("This is server mod!");
+		}
 	}
 
 	@Mod.EventHandler
