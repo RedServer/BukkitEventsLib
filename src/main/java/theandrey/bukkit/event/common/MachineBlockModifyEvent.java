@@ -13,7 +13,7 @@ import theandrey.bukkit.event.api.ITileMachineEvent;
  * Ивент изменения блока механизмом
  * @author TheAndrey
  */
-public class TileBlockModifyEvent extends AbstractBlockModifyEvent implements ITileMachineEvent {
+public class MachineBlockModifyEvent extends BlockModifyEvent implements ITileMachineEvent {
 
 	private static final HandlerList handlers = new HandlerList();
 
@@ -27,7 +27,7 @@ public class TileBlockModifyEvent extends AbstractBlockModifyEvent implements IT
 	 * @param placed Размещаемый блок (может быть null)
 	 * @param machineType Тип механизма из мода
 	 */
-	public TileBlockModifyEvent(Block machine, Block block, UUID ownerId, MachineAction action, BlockStateData placed, IMachineType machineType) {
+	public MachineBlockModifyEvent(Block machine, Block block, UUID ownerId, MachineAction action, BlockStateData placed, IMachineType machineType) {
 		super(block, ownerId, action, placed, machineType);
 		this.machine = Objects.requireNonNull(machine, "machine is null");
 	}

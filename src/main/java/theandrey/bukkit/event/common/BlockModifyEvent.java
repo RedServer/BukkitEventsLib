@@ -11,7 +11,7 @@ import theandrey.bukkit.event.api.IMachineType;
  * Базовый ивент изменения блока
  * @author TheAndrey
  */
-public abstract class AbstractBlockModifyEvent extends CancellableEvent {
+public abstract class BlockModifyEvent extends CancellableEvent {
 
 	protected final Block block;
 	protected final UUID ownerId;
@@ -26,7 +26,7 @@ public abstract class AbstractBlockModifyEvent extends CancellableEvent {
 	 * @param placed Размещаемый блок (может быть null)
 	 * @param machineType Тип механизма из мода
 	 */
-	public AbstractBlockModifyEvent(Block block, UUID ownerId, MachineAction action, BlockStateData placed, IMachineType machineType) {
+	public BlockModifyEvent(Block block, UUID ownerId, MachineAction action, BlockStateData placed, IMachineType machineType) {
 		this.block = Objects.requireNonNull(block, "block is null");
 		this.ownerId = ownerId;
 		this.action = Objects.requireNonNull(action, "action is null");

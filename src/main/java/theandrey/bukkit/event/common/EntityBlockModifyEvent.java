@@ -14,7 +14,7 @@ import theandrey.bukkit.event.api.IMachineType;
  * Ивент изменения блока существом
  * @author TheAndrey
  */
-public class EntityBlockModifyEvent extends AbstractBlockModifyEvent implements IEntityMachineEvent {
+public class EntityBlockModifyEvent extends BlockModifyEvent implements IEntityMachineEvent {
 
 	private static final HandlerList handlers = new HandlerList();
 
