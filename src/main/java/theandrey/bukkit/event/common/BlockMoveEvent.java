@@ -14,6 +14,12 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 	protected final Block destinationBlock;
 	protected final BlockStateData placedData;
 
+	/**
+	 * @param action Действие (режим)
+	 * @param sourceBlock Исходный блок (для Action = TAKE,MOVE,SWAP)
+	 * @param destBlock Новое местоположение (для Action = PLACE,MOVE,SWAP)
+	 * @param placedData Тип устанавливаемого блока (для Action = PLACE)
+	 */
 	public BlockMoveEvent(Action action, Block sourceBlock, Block destBlock, BlockStateData placedData) {
 		this.action = Objects.requireNonNull(action, "action is null");
 		this.sourceBlock = sourceBlock;
@@ -29,16 +35,16 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 	}
 
 	/**
-	 * Исходная позиция блока
-	 * @return Доступа только для TAKE & MOVE, иначе - null
+	 * Исходная позиция блока A
+	 * @return Доступа только для TAKE|MOVE|SWAP, иначе - null
 	 */
 	public Block getSourceBlock() {
 		return sourceBlock;
 	}
 
 	/**
-	 * Новая позиция блока
-	 * @return Доступа только для PLACE & MOVE, иначе - null
+	 * Новая позиция блока B
+	 * @return Доступа только для PLACE|MOVE|SWAP, иначе - null
 	 */
 	public Block getDestinationBlock() {
 		return destinationBlock;
@@ -46,7 +52,7 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 
 	/**
 	 * Material и meta размещаемого блока
-	 * @return Доступен только для PLACE & MOVE, иначе - null
+	 * @return Доступен только для PLACE
 	 */
 	public BlockStateData getPlacedData() {
 		return placedData;
@@ -62,8 +68,12 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 		 */
 		PLACE,
 		/**
-		 * Прямое переменение блока из точки A в B
+		 * Прямое переменение блока из точки A -> B
 		 */
-		MOVE
+		MOVE,
+		/**
+		 * Обмен блоков местами A <-> B
+		 */
+		SWAP
 	}
 }

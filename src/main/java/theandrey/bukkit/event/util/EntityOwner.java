@@ -1,12 +1,12 @@
 package theandrey.bukkit.event.util;
 
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLLog;
 import java.util.UUID;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
+import theandrey.bukkit.event.ModMain;
 
 /**
  * Хранит информацию о владельце Entity
@@ -37,7 +37,7 @@ public final class EntityOwner extends AbstractOwnerInfo {
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный
 			String worldName = (entity.worldObj != null) ? entity.worldObj.getWorldInfo().getWorldName() : "**null**";
-			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%.2f, %.2f, %.2f])", entity.getClass().getName(), worldName, entity.posX, entity.posY, entity.posZ));
+			ModMain.logger.log(Level.ERROR, String.format("Error reading owner GameProfile (%s - %s [%.2f, %.2f, %.2f])", entity.getClass().getName(), worldName, entity.posX, entity.posY, entity.posZ), ex);
 		}
 	}
 

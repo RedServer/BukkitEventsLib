@@ -1,12 +1,12 @@
 package theandrey.bukkit.event.util;
 
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLLog;
 import java.util.UUID;
+import com.mojang.authlib.GameProfile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
+import theandrey.bukkit.event.ModMain;
 
 /**
  * Используется для хранения информации о владельце TileEntity
@@ -37,7 +37,7 @@ public final class TileOwner extends AbstractOwnerInfo {
 			ownerProfile = new GameProfile(id, name);
 		} catch (IllegalArgumentException ex) { // если UUID невалидный
 			String worldName = (tile.getWorldObj() != null) ? tile.getWorldObj().getWorldInfo().getWorldName() : "**null**";
-			FMLLog.log(Level.ERROR, ex, String.format("Error reading owner GameProfile (%s - %s [%d, %d, %d])", tile.getClass().getName(), worldName, tile.xCoord, tile.yCoord, tile.zCoord));
+			ModMain.logger.log(Level.ERROR, String.format("Error reading owner GameProfile (%s - %s [%d, %d, %d])", tile.getClass().getName(), worldName, tile.xCoord, tile.yCoord, tile.zCoord), ex);
 		}
 	}
 
