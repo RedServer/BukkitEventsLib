@@ -5,8 +5,10 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import theandrey.bukkit.event.listener.WorldEventHooks;
 import theandrey.bukkit.event.util.asm.ASMAccessor;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
@@ -39,6 +41,8 @@ public final class ModMain {
 		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Error creating accessor class", ex);
 		}
+
+		MinecraftForge.EVENT_BUS.register(new WorldEventHooks());
 	}
 
 }
