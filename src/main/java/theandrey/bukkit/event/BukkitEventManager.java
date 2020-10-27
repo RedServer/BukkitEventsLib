@@ -212,7 +212,7 @@ public final class BukkitEventManager {
 				BukkitEventUtils.getBukkitEntity(entity),
 				BukkitEventUtils.getBlock(entity.worldObj, x, y, z),
 				(newBlock != null) ? newBlock.getType() : Material.AIR,
-				(newBlock != null) ? (byte)newBlock.getData() : 0
+				(newBlock != null) ? (byte)newBlock.getMeta() : 0
 		);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();

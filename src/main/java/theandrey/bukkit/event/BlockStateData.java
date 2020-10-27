@@ -8,15 +8,15 @@ import org.bukkit.Material;
 public final class BlockStateData {
 
 	private final Material type;
-	private final int data;
+	private final int meta;
 
 	/**
 	 * @param type Material блока
-	 * @param data Meta блока
+	 * @param meta Meta блока
 	 */
-	public BlockStateData(Material type, int data) {
+	public BlockStateData(Material type, int meta) {
 		this.type = type;
-		this.data = data;
+		this.meta = meta;
 	}
 
 	/**
@@ -26,8 +26,8 @@ public final class BlockStateData {
 		this(type, 0);
 	}
 
-	public static BlockStateData create(net.minecraft.block.Block block, int metadata) {
-		return new BlockStateData(BukkitEventUtils.getMaterial(block), metadata);
+	public static BlockStateData create(net.minecraft.block.Block block, int meta) {
+		return new BlockStateData(BukkitEventUtils.getMaterial(block), meta);
 	}
 
 	public static BlockStateData create(net.minecraft.block.Block block) {
@@ -44,8 +44,8 @@ public final class BlockStateData {
 	/**
 	 * Meta блока
 	 */
-	public int getData() {
-		return data;
+	public int getMeta() {
+		return meta;
 	}
 
 }
