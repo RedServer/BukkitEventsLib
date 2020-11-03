@@ -99,6 +99,26 @@ public final class ASMAccessor {
 			mv.visitMaxs(4, 4);
 			mv.visitEnd();
 
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getWorldHandle");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitTypeInsn(Opcodes.CHECKCAST, nmsPackage + "/CraftWorld");
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, nmsPackage + "/CraftWorld", "getHandle", "()Lnet/minecraft/world/WorldServer;", false);
+			mv.visitInsn(Opcodes.ARETURN);
+			mv.visitMaxs(2, 2);
+			mv.visitEnd();
+
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getEntityHandle");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitTypeInsn(Opcodes.CHECKCAST, nmsPackage + "/entity/CraftEntity");
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, nmsPackage + "/entity/CraftEntity", "getHandle", "()Lnet/minecraft/entity/Entity;", false);
+			mv.visitInsn(Opcodes.ARETURN);
+			mv.visitMaxs(2, 2);
+			mv.visitEnd();
+
 			cw.visitEnd();
 			return (Class<? extends CraftBukkitAccessor>)CLASS_LOADER.defineClass(className, cw.toByteArray());
 		} catch (ReflectiveOperationException ex) {

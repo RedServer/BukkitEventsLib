@@ -194,4 +194,20 @@ public final class BukkitEventUtils {
 		return craftBukkitAccessor.spawnEntityInWorld(world, entity, reason);
 	}
 
+	/**
+	 * Преобразует Bukkit World обратно
+	 * @return Vanilla World
+	 */
+	public static World toVanillaWorld(org.bukkit.World world) {
+		return craftBukkitAccessor.getWorldHandle(world);
+	}
+
+	/**
+	 * Преобразует Bukkit Entity обратно
+	 * @return Vanilla Entity
+	 */
+	public static Entity toVanillaEntity(org.bukkit.entity.Entity entity) {
+		return craftBukkitAccessor.getEntityHandle(entity);
+	}
+
 }
