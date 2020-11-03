@@ -1,5 +1,9 @@
 package theandrey.bukkit.event.util.asm;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 /**
@@ -8,13 +12,13 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
  */
 public interface CraftBukkitAccessor {
 
-	org.bukkit.World getBukkitWorld(net.minecraft.world.World world);
+	org.bukkit.World getBukkitWorld(World world);
 
-	org.bukkit.entity.Entity getBukkitEntity(net.minecraft.entity.Entity entity);
+	org.bukkit.entity.Entity getBukkitEntity(Entity entity);
 
-	org.bukkit.inventory.ItemStack asCraftMirror(net.minecraft.item.ItemStack original);
+	org.bukkit.inventory.ItemStack asCraftMirror(ItemStack original);
 
-	org.bukkit.block.BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z);
+	BlockState getBlockState(World world, int x, int y, int z);
 
-	boolean spawnEntityInWorld(net.minecraft.world.World world, net.minecraft.entity.Entity entity, CreatureSpawnEvent.SpawnReason reason);
+	boolean spawnEntityInWorld(World world, Entity entity, CreatureSpawnEvent.SpawnReason reason);
 }

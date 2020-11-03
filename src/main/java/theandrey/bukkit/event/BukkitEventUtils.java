@@ -1,18 +1,19 @@
 package theandrey.bukkit.event;
 
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.inventory.ItemStack;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
@@ -28,8 +29,8 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Material
 	 */
 	@SuppressWarnings("deprecation")
-	public static Material getMaterial(net.minecraft.block.Block block) {
-		return Material.getMaterial(net.minecraft.block.Block.getIdFromBlock(block));
+	public static org.bukkit.Material getMaterial(Block block) {
+		return org.bukkit.Material.getMaterial(Block.getIdFromBlock(block));
 	}
 
 	/**
@@ -38,8 +39,8 @@ public final class BukkitEventUtils {
 	 * @return Bukkit Material
 	 */
 	@SuppressWarnings("deprecation")
-	public static Material getMaterial(net.minecraft.item.Item item) {
-		return Material.getMaterial(net.minecraft.item.Item.getIdFromItem(item));
+	public static org.bukkit.Material getMaterial(Item item) {
+		return org.bukkit.Material.getMaterial(Item.getIdFromItem(item));
 	}
 
 	/**
@@ -47,7 +48,7 @@ public final class BukkitEventUtils {
 	 * @param world Vanilla World
 	 * @return Bukkit World
 	 */
-	public static World getWorld(net.minecraft.world.World world) {
+	public static org.bukkit.World getWorld(World world) {
 		return craftBukkitAccessor.getBukkitWorld(world);
 	}
 
@@ -57,7 +58,7 @@ public final class BukkitEventUtils {
 	 * @param coord ChunkCoordinates
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates coord) {
+	public static org.bukkit.block.Block getBlock(World world, ChunkCoordinates coord) {
 		if(coord == null) return null;
 		return getBlock(world, coord.posX, coord.posY, coord.posZ);
 	}
@@ -68,7 +69,7 @@ public final class BukkitEventUtils {
 	 * @param pos ChunkPosition
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, ChunkPosition pos) {
+	public static org.bukkit.block.Block getBlock(World world, ChunkPosition pos) {
 		if(pos == null) return null;
 		return getBlock(world, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
 	}
@@ -81,9 +82,9 @@ public final class BukkitEventUtils {
 	 * @param z Z блока
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, int x, int y, int z) {
-		World bworld = getWorld(world);
-		if(bworld != null) return bworld.getBlockAt(x, y, z);
+	public static org.bukkit.block.Block getBlock(World world, int x, int y, int z) {
+		org.bukkit.World bWorld = getWorld(world);
+		if(bWorld != null) return bWorld.getBlockAt(x, y, z);
 		return null;
 	}
 
@@ -92,7 +93,7 @@ public final class BukkitEventUtils {
 	 * @param te TileEntity
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(TileEntity te) {
+	public static org.bukkit.block.Block getBlock(TileEntity te) {
 		return getBlock(te.getWorldObj(), te.xCoord, te.yCoord, te.zCoord);
 	}
 
@@ -101,7 +102,7 @@ public final class BukkitEventUtils {
 	 * @param player Vanilla Player
 	 * @return Bukkit Player
 	 */
-	public static Player getPlayer(net.minecraft.entity.player.EntityPlayer player) {
+	public static Player getPlayer(EntityPlayer player) {
 		if(player == null) return null;
 		return (Player)craftBukkitAccessor.getBukkitEntity(player);
 	}
@@ -111,7 +112,7 @@ public final class BukkitEventUtils {
 	 * @param entity Vanilla Entity
 	 * @return Bukkit Entity
 	 */
-	public static Entity getBukkitEntity(net.minecraft.entity.Entity entity) {
+	public static org.bukkit.entity.Entity getBukkitEntity(Entity entity) {
 		if(entity == null) return null;
 		return craftBukkitAccessor.getBukkitEntity(entity);
 	}
@@ -162,7 +163,7 @@ public final class BukkitEventUtils {
 	 * @param stack Vanilla ItemStack
 	 * @return Bukkit ItemStack. Вернёт null, если в параметре был передан null
 	 */
-	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
+	public static org.bukkit.inventory.ItemStack getItemStack(ItemStack stack) {
 		if(stack == null) return null;
 		return craftBukkitAccessor.asCraftMirror(stack);
 	}
@@ -175,7 +176,7 @@ public final class BukkitEventUtils {
 	 * @param z Z координана
 	 * @return Снимок блока
 	 */
-	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
+	public static BlockState getBlockState(World world, int x, int y, int z) {
 		return craftBukkitAccessor.getBlockState(world, x, y, z);
 	}
 
@@ -186,7 +187,7 @@ public final class BukkitEventUtils {
 	 * @param reason Причина
 	 * @return Успешный спавн
 	 */
-	public static boolean spawnEntityInWorld(net.minecraft.world.World world, net.minecraft.entity.Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+	public static boolean spawnEntityInWorld(World world, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
 		if(world == null) throw new IllegalArgumentException("world is null!");
 		if(entity == null) throw new IllegalArgumentException("entity is null!");
 
