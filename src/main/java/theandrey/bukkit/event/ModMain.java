@@ -19,7 +19,7 @@ public final class ModMain {
 
 	public static final String MOD_ID = "BukkitEventsLib";
 	public static final String MOD_NAME = "Bukkit Events Lib";
-	public static final String MOD_VERSION = "1.2-legacy";
+	public static final String MOD_VERSION = "1.4-legacy";
 	public static final Logger logger = Logger.getLogger("BukkitEventsLib");
 
 	static {

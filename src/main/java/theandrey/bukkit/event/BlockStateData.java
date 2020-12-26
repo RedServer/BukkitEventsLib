@@ -10,16 +10,16 @@ import org.bukkit.Material;
 public final class BlockStateData {
 
 	private final int id;
-	private final int data;
+	private final int meta;
 	private final Material type;
 
 	/**
 	 * @param id ID блока
-	 * @param data Meta блока
+	 * @param meta Meta блока
 	 */
-	public BlockStateData(int id, int data) {
+	public BlockStateData(int id, int meta) {
 		this.id = id;
-		this.data = data;
+		this.meta = meta;
 		type = Material.getMaterial(id);
 	}
 
@@ -47,8 +47,8 @@ public final class BlockStateData {
 	/**
 	 * Meta блока
 	 */
-	public int getData() {
-		return data;
+	public int getMeta() {
+		return meta;
 	}
 
 	/**
