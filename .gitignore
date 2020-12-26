@@ -1,8 +1,12 @@
-/.idea
+# Gradle
 /.gradle
 /build
 
-# Windows image file caches
+# IDEA
+/.idea
+/out
+
+# OS
 Thumbs.db
 ehthumbs.db
 Desktop.ini

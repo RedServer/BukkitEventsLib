@@ -20,19 +20,17 @@ archivesBaseName = 'BukkitEventsLib'
 group = 'theandrey'
 version = '1.4.7'
 
-compileJava {
-	sourceCompatibility = JavaVersion.VERSION_1_8
-	targetCompatibility = JavaVersion.VERSION_1_8
-}
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
 dependencies {
-	compile 'net.minecraftforge:forgeSrc:1.4.7-6.6.2.534'
-	compile 'org.ow2.asm:asm-all:5.0.4'
-	compile 'org.bukkit:bukkit:1.4.7-R1.0'
+	compile group: 'net.minecraftforge', name: 'forgeSrc', version: '1.4.7-6.6.2.534'
+	compile group: 'org.ow2.asm', name: 'asm-debug-all', version: '5.0.4'
+	compile group: 'org.bukkit', name: 'bukkit', version: '1.4.7-R1.0'
 }
 
 task devJar(type: Jar) {
@@ -50,29 +48,12 @@ artifacts {
 	archives sourcesJar
 }
 
-/* Reobfuscate task */
-task reobf(type: JavaExec, dependsOn: jar) {
-	ext.runArgs = {
-		String mcpFolder = getProperty('minecraft.mcp.dir') + '/1.4.7-forge';
-
-		def runArgs = [
-			'-m', '-mcp', mcpFolder, '-from', 'MCP', '-to', 'OBF',
-			'-side', 'UNIVERSAL', '-in', jar.archivePath, '-out', jar.archivePath
-		]
-
-		// Add library path for correct obfuscation
-		for (entry in configurations.runtime.resolve()) {
-			if (entry.getName().contains('-dev') || entry.getName().contains('forgeSrc')) {
-				runArgs.addAll('-ref', entry.getAbsolutePath());
-			}
-		}
-
-		return runArgs
-	}
-
-	classpath = buildscript.configurations.classpath
-	main = 'immibis.bon.cui.MCPRemap'
-	args = ext.runArgs()
+task reobf(type: BON, dependsOn: jar) {
+	mcpFolder = getProperty('minecraft.mcp.dir') + '/1.4.7-forge'
+	from = 'MCP'
+	to = 'OBF'
+	input = jar.archivePath
+	output = jar.archivePath
 }
 
 // Release mod
@@ -83,3 +64,43 @@ task release(type: Copy, dependsOn: build) {
 }
 
 tasks.assemble.dependsOn tasks.reobf
+
+class BON extends JavaExec {
+
+	String mcpFolder
+	String input
+	String output
+	String from
+	String to
+
+	@TaskAction
+	@Override
+	void exec() {
+		this.setClasspath(project.files(findBON()))
+		this.setMain('immibis.bon.cui.MCPRemap')
+		this.setArgs(buildArguments())
+		super.exec()
+	}
+
+	private File findBON() {
+		for (entry in project.buildscript.configurations.classpath) {
+			if (entry.getName().contains("BON")) {
+				return entry
+			}
+		}
+		throw new StopExecutionException('Unable to find BON')
+	}
+
+	private List<String> buildArguments() {
+		def args = [
+			'-q', '-m', '-mcp', this.mcpFolder, '-from', this.from, '-to', this.to,
+			'-side', 'UNIVERSAL', '-in', this.input, '-out', this.output
+		]
+		for (dep in project.configurations.getByName('runtime').resolve()) {
+			if (dep.getName().contains('-dev') || dep.getName().contains('forgeSrc')) {
+				args.addAll('-ref', dep.toString())
+			}
+		}
+		return args
+	}
+}
