@@ -22,20 +22,20 @@ archivesBaseName = 'BukkitEventsLib'
 group = 'theandrey'
 version = '1.7.10'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
 minecraft {
-	version = "1.7.10-10.13.4.1614-1.7.10"
-	runDir = "eclipse"
+	version = '1.7.10-10.13.4.1614-1.7.10'
+	runDir = 'eclipse'
 }
 
 dependencies {
-	compile 'org.bukkit:bukkit:1.7.10-R0.1'
+	compile group: 'org.bukkit', name: 'bukkit', version: '1.7.10-R0.1'
 }
 
 task devJar(type: Jar) {
