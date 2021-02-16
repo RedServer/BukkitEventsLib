@@ -44,7 +44,7 @@ task devJar(type: Jar) {
 }
 
 task sourcesJar(type: Jar) {
-	classifier = 'dev-sources'
+	classifier = 'sources'
 	from sourceSets.main.allSource
 }
 
