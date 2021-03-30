@@ -5,7 +5,7 @@ buildscript {
 	}
 
 	dependencies {
-		classpath 'immibis.bon:BON:2.0@jar'
+		classpath 'immibis.bon:BON:2.2@jar'
 	}
 }
 
