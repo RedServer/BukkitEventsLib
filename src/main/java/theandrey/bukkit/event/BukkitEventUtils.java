@@ -168,4 +168,19 @@ public final class BukkitEventUtils {
 		return craftBukkitAccessor.spawnEntityInWorld(world, entity, reason);
 	}
 
+	/**
+	 * Преобразует Bukkit World обратно
+	 * @return Vanilla World
+	 */
+	public static net.minecraft.world.World toVanillaWorld(World world) {
+		return craftBukkitAccessor.getWorldHandle(world);
+	}
+
+	/**
+	 * Преобразует Bukkit Entity обратно
+	 * @return Vanilla Entity
+	 */
+	public static net.minecraft.entity.Entity toVanillaEntity(Entity entity) {
+		return craftBukkitAccessor.getEntityHandle(entity);
+	}
 }

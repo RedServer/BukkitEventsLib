@@ -17,4 +17,14 @@ public interface CraftBukkitAccessor {
 	org.bukkit.block.BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z);
 
 	boolean spawnEntityInWorld(net.minecraft.world.World world, net.minecraft.entity.Entity entity, CreatureSpawnEvent.SpawnReason reason);
+
+	/**
+	 * Bukkit -> Vanilla World
+	 */
+	net.minecraft.world.World getWorldHandle(org.bukkit.World world);
+
+	/**
+	 * Bukkit -> Vanilla Entity
+	 */
+	net.minecraft.entity.Entity getEntityHandle(org.bukkit.entity.Entity entity);
 }

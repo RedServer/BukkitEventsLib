@@ -2,6 +2,7 @@ package theandrey.bukkit.event.util.asm;
 
 import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -94,9 +95,32 @@ public final class ASMAccessor {
 			mv.visitVarInsn(Opcodes.ALOAD, 1); // param: world
 			mv.visitVarInsn(Opcodes.ALOAD, 2); // param: entity
 			mv.visitVarInsn(Opcodes.ALOAD, 3); // param: reason
-			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.world.World.class), "addEntity", "(" + Type.getType(net.minecraft.entity.Entity.class) + "Lorg/bukkit/event/entity/CreatureSpawnEvent$SpawnReason;)Z", false);
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, Type.getInternalName(net.minecraft.world.World.class), "addEntity",
+					Type.getMethodDescriptor(Type.BOOLEAN_TYPE, Type.getType(net.minecraft.entity.Entity.class), Type.getType(CreatureSpawnEvent.SpawnReason.class)), false);
 			mv.visitInsn(Opcodes.IRETURN);
 			mv.visitMaxs(4, 4);
+			mv.visitEnd();
+
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getWorldHandle");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitTypeInsn(Opcodes.CHECKCAST, nmsPackage + "/CraftWorld");
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, nmsPackage + "/CraftWorld", "getHandle",
+					Type.getMethodDescriptor(Type.getType(net.minecraft.world.WorldServer.class)), false);
+			mv.visitInsn(Opcodes.ARETURN);
+			mv.visitMaxs(2, 2);
+			mv.visitEnd();
+
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getEntityHandle");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitTypeInsn(Opcodes.CHECKCAST, nmsPackage + "/entity/CraftEntity");
+			mv.visitMethodInsn(Opcodes.INVOKEVIRTUAL, nmsPackage + "/entity/CraftEntity", "getHandle",
+					Type.getMethodDescriptor(Type.getType(net.minecraft.entity.Entity.class)), false);
+			mv.visitInsn(Opcodes.ARETURN);
+			mv.visitMaxs(2, 2);
 			mv.visitEnd();
 
 			cw.visitEnd();
