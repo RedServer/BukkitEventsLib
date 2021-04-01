@@ -119,7 +119,7 @@ public class CustomExplosion extends Explosion {
 		int z1 = MathHelper.floor_double(explosionZ - (double)explosionSize - 1.0D);
 		int z2 = MathHelper.floor_double(explosionZ + (double)explosionSize + 1.0D);
 
-		entities = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2));
+		entities = new ArrayList<Entity>(worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2)));
 		explosionSizeEnt = explosionSize; // Сохраняем, чтобы использовать в дальнейшем
 
 		explosionSize = size;
