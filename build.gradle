@@ -15,9 +15,10 @@ repositories {
 }
 
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 archivesBaseName = 'BukkitEventsLib'
-group = 'theandrey'
+group = 'me.theandrey'
 version = '1.4.7'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -56,11 +57,23 @@ task reobf(type: BON, dependsOn: jar) {
 	output = jar.archivePath
 }
 
-// Release mod
-task release(type: Copy, dependsOn: build) {
-	from devJar
-	from sourcesJar
-	into getProperty('minecraft.library.dir') + '/release/mods-1.4.7'
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from components.java
+			artifact devJar
+			artifact sourcesJar
+
+			pom.withXml {
+				Node pomNode = asNode()
+				pomNode.dependencies.'*'.findAll() {
+					it.artifactId.text() != 'bukkit'
+				}.each() {
+					it.parent().remove(it)
+				}
+			}
+		}
+	}
 }
 
 tasks.assemble.dependsOn tasks.reobf
