@@ -37,7 +37,7 @@ public class CustomExplosion extends Explosion {
 	/**
 	 * Список существ затронутых взрывом
 	 */
-	public List<Entity> entities;
+	public final List<Entity> entities = new ArrayList<>();
 
 	/**
 	 * Причина взрыва. Это поле должно быть обязательно заполнено
@@ -124,7 +124,8 @@ public class CustomExplosion extends Explosion {
 		int z1 = MathHelper.floor_double(explosionZ - (double)explosionSize - 1.0D);
 		int z2 = MathHelper.floor_double(explosionZ + (double)explosionSize + 1.0D);
 
-		entities = worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2));
+		entities.clear();
+		entities.addAll(worldObj.getEntitiesWithinAABBExcludingEntity(exploder, AxisAlignedBB.getBoundingBox(x1, y1, z1, x2, y2, z2)));
 		ForgeEventFactory.onExplosionDetonate(worldObj, this, entities, explosionSize);
 		explosionSizeEnt = explosionSize; // Сохраняем, чтобы использовать в дальнейшем
 
@@ -271,6 +272,8 @@ public class CustomExplosion extends Explosion {
 				}
 			}
 		}
+
+		entities.clear();
 	}
 
 	/**
@@ -301,6 +304,6 @@ public class CustomExplosion extends Explosion {
 	}
 
 	private static org.bukkit.block.Block toBukkitBlock(org.bukkit.World world, ChunkPosition pos) {
-		return world.getBlockAt(pos.chunkPosX,pos.chunkPosY,pos.chunkPosZ);
+		return world.getBlockAt(pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
 	}
 }
