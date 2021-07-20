@@ -48,4 +48,8 @@ public final class BlockStateData {
 		return meta;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{type=" + type + ", meta=" + meta + "}";
+	}
 }

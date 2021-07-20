@@ -44,4 +44,9 @@ public class BlockExplosionCause implements ExplosionCause {
 	public IMachineType getMachineType() {
 		return machineType;
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{block=" + block + ", ownerId=" + ownerId + ", machineType=" + machineType + '}';
+	}
 }

@@ -36,4 +36,9 @@ public class PlayerExplosionCause implements ExplosionCause {
 	public IMachineType getMachineType() {
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{player=" + player + '}';
+	}
 }

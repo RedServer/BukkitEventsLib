@@ -45,4 +45,9 @@ public class EntityExplosionCause implements ExplosionCause {
 	public IMachineType getMachineType() {
 		return machineType;
 	}
+
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{entity=" + entity + ", ownerId=" + ownerId + ", machineType=" + machineType + '}';
+	}
 }

@@ -1,7 +1,7 @@
 package theandrey.bukkit.event.util;
 
-import com.mojang.authlib.GameProfile;
 import java.util.UUID;
+import com.mojang.authlib.GameProfile;
 
 /**
  * Альтернатива GameProfile для Bukkit. Чисто для того чтобы не подключать authlib к проектам :)
@@ -48,4 +48,8 @@ public final class BukkitGameProfile {
 		return new BukkitGameProfile(profile.getId(), profile.getName());
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + "{id=" + id + ", name=" + name + '}';
+	}
 }
