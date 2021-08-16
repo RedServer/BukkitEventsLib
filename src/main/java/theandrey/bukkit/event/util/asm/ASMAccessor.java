@@ -6,7 +6,7 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import theandrey.bukkit.event.util.ReflectionHelper;
+import theandrey.bukkit.event.helper.ReflectionHelper;
 
 /**
  * Фабрика ASMAccessor
