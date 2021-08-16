@@ -1,4 +1,4 @@
-package theandrey.bukkit.event.util;
+package theandrey.bukkit.event.helper;
 
 import java.lang.reflect.Method;
 
@@ -10,7 +10,7 @@ public final class ReflectionHelper {
 	/**
 	 * Найти метод в классе по названию.
 	 * @param clazz Класс
-	 * @param name Имя метода. Чуствительно к регистру.
+	 * @param name Имя метода. Чувствительно к регистру.
 	 * @return Первый подходящий по названию метод (так как не учитывает сигнатуру).
 	 * @throws NoSuchMethodException Если указанный метод не найден.
 	 */
