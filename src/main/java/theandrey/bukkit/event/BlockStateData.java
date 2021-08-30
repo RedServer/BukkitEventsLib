@@ -1,5 +1,7 @@
 package theandrey.bukkit.event;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import org.bukkit.Material;
@@ -40,6 +42,7 @@ public final class BlockStateData {
 	/**
 	 * Material блока
 	 */
+	@Nonnull
 	public Material getType() {
 		return type;
 	}
@@ -54,7 +57,7 @@ public final class BlockStateData {
 	/**
 	 * Получает информацию о блоке из ItemStack
 	 */
-	public static BlockStateData fromItemStack(ItemStack stack) {
+	public static BlockStateData fromItemStack(@Nullable ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemBlock)) return null;
 		ItemBlock item = (ItemBlock)stack.getItem();
 		return new BlockStateData(stack.itemID, item.getHasSubtypes() ? item.getMetadata(stack.getItemDamage()) : 0);

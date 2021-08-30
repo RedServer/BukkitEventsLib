@@ -1,6 +1,7 @@
 package theandrey.bukkit.event.helper;
 
 import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
 
 /**
  * @author TheAndrey
@@ -14,7 +15,8 @@ public final class ReflectionHelper {
 	 * @return Первый подходящий по названию метод (так как не учитывает сигнатуру).
 	 * @throws NoSuchMethodException Если указанный метод не найден.
 	 */
-	public static Method getMethodByName(Class<?> clazz, String name) throws NoSuchMethodException {
+	@Nonnull
+	public static Method getMethodByName(@Nonnull Class<?> clazz, @Nonnull String name) throws NoSuchMethodException {
 		if(clazz == null) throw new IllegalArgumentException("clazz is null!");
 		if(name == null || name.isEmpty()) throw new IllegalArgumentException("name is null or empty!");
 

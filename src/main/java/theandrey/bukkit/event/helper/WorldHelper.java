@@ -2,6 +2,8 @@ package theandrey.bukkit.event.helper;
 
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet60Explosion;
@@ -19,7 +21,8 @@ public final class WorldHelper {
 	 * Создаёт CustomExplosion и отсылает пакеты клиентам.
 	 * Является аналогом {@link WorldServer#createExplosion(Entity, double, double, double, float, boolean)}
 	 */
-	public static CustomExplosion createExplosion(World world, Entity exploder, double x, double y, double z, float size, boolean isFlaming, boolean isSmoking, ExplosionCause cause) {
+	@Nonnull
+	public static CustomExplosion createExplosion(@Nonnull World world, @Nullable Entity exploder, double x, double y, double z, float size, boolean isFlaming, boolean isSmoking, @Nonnull ExplosionCause cause) {
 		CustomExplosion explosion = new CustomExplosion(world, exploder, x, y, z, size);
 		explosion.isFlaming = isFlaming;
 		explosion.isSmoking = isSmoking;

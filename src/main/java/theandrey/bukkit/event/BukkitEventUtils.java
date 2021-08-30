@@ -1,17 +1,18 @@
 package theandrey.bukkit.event;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.world.ChunkPosition;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeDirection;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.inventory.ItemStack;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
@@ -26,8 +27,9 @@ public final class BukkitEventUtils {
 	 * @param world Vanilla World
 	 * @return Bukkit World
 	 */
-	public static World getWorld(net.minecraft.world.World world) {
-		if(world == null) return null;
+	@Nonnull
+	public static org.bukkit.World getWorld(@Nonnull World world) {
+		if(world == null) throw new IllegalArgumentException("world is null");
 		return craftBukkitAccessor.getBukkitWorld(world);
 	}
 
@@ -36,10 +38,9 @@ public final class BukkitEventUtils {
 	 * @param world Vanilla World
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, int x, int y, int z) {
-		World bukkitWorld = getWorld(world);
-		if(bukkitWorld != null) return bukkitWorld.getBlockAt(x, y, z);
-		return null;
+	@Nonnull
+	public static org.bukkit.block.Block getBlock(@Nonnull World world, int x, int y, int z) {
+		return getWorld(world).getBlockAt(x, y, z);
 	}
 
 	/**
@@ -48,7 +49,8 @@ public final class BukkitEventUtils {
 	 * @param cord ChunkCoordinates
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, ChunkCoordinates cord) {
+	@Nonnull
+	public static org.bukkit.block.Block getBlock(@Nonnull World world, @Nonnull ChunkCoordinates cord) {
 		if(cord == null) throw new IllegalArgumentException("coord is null");
 		return getBlock(world, cord.posX, cord.posY, cord.posZ);
 	}
@@ -59,7 +61,8 @@ public final class BukkitEventUtils {
 	 * @param pos ChunkPosition
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(net.minecraft.world.World world, ChunkPosition pos) {
+	@Nonnull
+	public static org.bukkit.block.Block getBlock(@Nonnull World world, @Nonnull ChunkPosition pos) {
 		if(pos == null) throw new IllegalArgumentException("pos is null");
 		return getBlock(world, pos.x, pos.y, pos.z);
 	}
@@ -69,27 +72,30 @@ public final class BukkitEventUtils {
 	 * @param tile TileEntity
 	 * @return Bukkit Block
 	 */
-	public static Block getBlock(TileEntity tile) {
+	@Nonnull
+	public static org.bukkit.block.Block getBlock(@Nonnull TileEntity tile) {
 		if(tile == null) throw new IllegalArgumentException("tile is null");
 		return getBlock(tile.worldObj, tile.xCoord, tile.yCoord, tile.zCoord);
 	}
 
 	/**
-	 * Возвращает Bukkit Player
+	 * Возвращает Bukkit Player. Возвращает null на null.
 	 * @param player Vanilla Player
 	 * @return Bukkit Player
 	 */
-	public static Player getPlayer(net.minecraft.entity.player.EntityPlayer player) {
-		if(player == null) throw new IllegalArgumentException("player is null");
+	@Nullable
+	public static Player getPlayer(@Nullable net.minecraft.entity.player.EntityPlayer player) {
+		if(player == null) return null;
 		return (Player)getBukkitEntity(player);
 	}
 
 	/**
-	 * Получает Bukkit Entity
+	 * Получает Bukkit Entity. Возвращает null на null.
 	 * @param entity Vanilla Entity
 	 * @return Bukkit Entity
 	 */
-	public static Entity getBukkitEntity(net.minecraft.entity.Entity entity) {
+	@Nullable
+	public static org.bukkit.entity.Entity getBukkitEntity(@Nullable Entity entity) {
 		if(entity == null) return null;
 		return craftBukkitAccessor.getBukkitEntity(entity);
 	}
@@ -99,6 +105,7 @@ public final class BukkitEventUtils {
 	 * @param side Номер стороны
 	 * @return BlockFace. Если определить не удалось, вернёт SELF
 	 */
+	@Nonnull
 	public static BlockFace getBlockFace(int side) {
 		switch(side) {
 			case 0:
@@ -140,7 +147,8 @@ public final class BukkitEventUtils {
 	 * @param stack Vanilla ItemStack
 	 * @return Bukkit ItemStack
 	 */
-	public static ItemStack getItemStack(net.minecraft.item.ItemStack stack) {
+	@Nullable
+	public static org.bukkit.inventory.ItemStack getItemStack(@Nullable ItemStack stack) {
 		if(stack == null) return null;
 		return craftBukkitAccessor.asCraftMirror(stack);
 	}
@@ -149,21 +157,20 @@ public final class BukkitEventUtils {
 	 * Получает BlockState
 	 * @return BlockState
 	 */
-	public static BlockState getBlockState(net.minecraft.world.World world, int x, int y, int z) {
+	@Nonnull
+	public static BlockState getBlockState(@Nonnull World world, int x, int y, int z) {
 		if(world == null) throw new IllegalArgumentException("world is null");
 		return craftBukkitAccessor.getBlockState(world, x, y, z);
 	}
 
 	/**
 	 * Спавнит существо в мире с указанием причины для CreatureSpawnEvent
-	 * @param world Мир
-	 * @param entity Существо
-	 * @param reason Причина
 	 * @return Успешный спавн
 	 */
-	public static boolean spawnEntityInWorld(net.minecraft.world.World world, net.minecraft.entity.Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+	public static boolean spawnEntityInWorld(@Nonnull World world, @Nonnull Entity entity, @Nonnull CreatureSpawnEvent.SpawnReason reason) {
 		if(world == null) throw new IllegalArgumentException("world is null!");
 		if(entity == null) throw new IllegalArgumentException("entity is null!");
+		if(reason == null) throw new IllegalArgumentException("reason is null");
 
 		return craftBukkitAccessor.spawnEntityInWorld(world, entity, reason);
 	}
@@ -172,7 +179,9 @@ public final class BukkitEventUtils {
 	 * Преобразует Bukkit World обратно
 	 * @return Vanilla World
 	 */
-	public static net.minecraft.world.World toVanillaWorld(World world) {
+	@Nonnull
+	public static World toVanillaWorld(@Nonnull org.bukkit.World world) {
+		if(world == null) throw new IllegalArgumentException("world is null");
 		return craftBukkitAccessor.getWorldHandle(world);
 	}
 
@@ -180,7 +189,9 @@ public final class BukkitEventUtils {
 	 * Преобразует Bukkit Entity обратно
 	 * @return Vanilla Entity
 	 */
-	public static net.minecraft.entity.Entity toVanillaEntity(Entity entity) {
+	@Nullable
+	public static Entity toVanillaEntity(@Nullable org.bukkit.entity.Entity entity) {
+		if(entity == null) return null;
 		return craftBukkitAccessor.getEntityHandle(entity);
 	}
 }
