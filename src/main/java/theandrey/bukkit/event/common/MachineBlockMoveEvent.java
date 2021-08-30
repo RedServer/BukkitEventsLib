@@ -2,6 +2,8 @@ package theandrey.bukkit.event.common;
 
 import java.util.Objects;
 import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
 import theandrey.bukkit.event.BlockStateData;
@@ -18,7 +20,7 @@ public class MachineBlockMoveEvent extends BlockMoveEvent {
 	private final IMachineType machineType;
 	private final UUID ownerId;
 
-	public MachineBlockMoveEvent(Action action, Block source, Block destination, BlockStateData placedData, Block machine, IMachineType machineType, UUID ownerId) {
+	public MachineBlockMoveEvent(@Nonnull Action action, @Nullable Block source, @Nullable Block destination, @Nullable BlockStateData placedData, @Nonnull Block machine, @Nonnull IMachineType machineType, @Nullable UUID ownerId) {
 		super(action, source, destination, placedData);
 		this.machine = Objects.requireNonNull(machine, "machine");
 		this.machineType = Objects.requireNonNull(machineType, "machineType");
@@ -28,6 +30,7 @@ public class MachineBlockMoveEvent extends BlockMoveEvent {
 	/**
 	 * Возвращает блок самого механизма, который совершает действие
 	 */
+	@Nonnull
 	public Block getMachineBlock() {
 		return machine;
 	}
@@ -35,6 +38,7 @@ public class MachineBlockMoveEvent extends BlockMoveEvent {
 	/**
 	 * ID владельца. Может быть null если неизвестен
 	 */
+	@Nullable
 	public UUID getOwnerId() {
 		return ownerId;
 	}
@@ -42,6 +46,7 @@ public class MachineBlockMoveEvent extends BlockMoveEvent {
 	/**
 	 * Тип механизма из мода (enum)
 	 */
+	@Nonnull
 	public IMachineType getMachineType() {
 		return machineType;
 	}

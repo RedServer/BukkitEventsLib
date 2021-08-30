@@ -1,6 +1,8 @@
 package theandrey.bukkit.event.common;
 
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -18,7 +20,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	protected final Block targetBlock;
 	protected final Entity targetEntity;
 
-	public ItemUseEvent(ItemStack item, ClickType click, BlockFace blockFace, Block targetBlock, Entity targetEntity) {
+	public ItemUseEvent(@Nullable ItemStack item, @Nonnull ClickType click, @Nonnull BlockFace blockFace, @Nullable Block targetBlock, @Nullable Entity targetEntity) {
 		this.item = item;
 		this.click = Objects.requireNonNull(click, "click");
 		this.blockFace = Objects.requireNonNull(blockFace, "blockFace");
@@ -30,6 +32,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	 * Возвращает используемый предмет
 	 * @return Может возвращать null, если предмет отсутствует (при взаимодействии с блоками)
 	 */
+	@Nullable
 	public ItemStack getItem() {
 		return item;
 	}
@@ -37,6 +40,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	/**
 	 * Тип клика (ЛКМ/ПКМ)
 	 */
+	@Nonnull
 	public ClickType getClick() {
 		return click;
 	}
@@ -44,6 +48,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	/**
 	 * Сторона блока по которой будет совершён клик
 	 */
+	@Nonnull
 	public BlockFace getBlockFace() {
 		return blockFace;
 	}
@@ -52,6 +57,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	 * Блок по которому будет совершён клик
 	 * @return null при отсутствии
 	 */
+	@Nullable
 	public Block getTargetBlock() {
 		return targetBlock;
 	}
@@ -60,6 +66,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	 * Существо по которому будет совершён клик
 	 * @return null при отсутствии
 	 */
+	@Nullable
 	public Entity getTargetEntity() {
 		return targetEntity;
 	}

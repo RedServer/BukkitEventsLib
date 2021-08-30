@@ -3,6 +3,8 @@ package theandrey.bukkit.event.common;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -30,7 +32,7 @@ public class MachineItemUseEvent extends ItemUseEvent {
 	 * @param targetBlock Блок по которому совершён клик. (Допускается использование null)
 	 * @param targetEntity Существо по которому совершён клик. (Допускается использование null)
 	 */
-	public MachineItemUseEvent(Block machine, IMachineType machineType, UUID ownerId, ItemStack item, ClickType click, BlockFace blockFace, Block targetBlock, Entity targetEntity) {
+	public MachineItemUseEvent(@Nonnull Block machine, @Nonnull IMachineType machineType, @Nullable UUID ownerId, @Nullable ItemStack item, @Nonnull ClickType click, @Nonnull BlockFace blockFace, @Nullable Block targetBlock, @Nullable Entity targetEntity) {
 		super(item, click, blockFace, targetBlock, targetEntity);
 		this.machine = Objects.requireNonNull(machine, "machine");
 		this.machineType = Objects.requireNonNull(machineType, "machineType");
@@ -41,6 +43,7 @@ public class MachineItemUseEvent extends ItemUseEvent {
 	 * Возвращает ID владельца механизма
 	 * @return null если неизвестен
 	 */
+	@Nullable
 	public UUID getOwnerId() {
 		return ownerId;
 	}
@@ -48,6 +51,7 @@ public class MachineItemUseEvent extends ItemUseEvent {
 	/**
 	 * Возвращает блок механизма. Используется для определения местоположения.
 	 */
+	@Nonnull
 	public Block getMachineBlock() {
 		return machine;
 	}
@@ -55,6 +59,7 @@ public class MachineItemUseEvent extends ItemUseEvent {
 	/**
 	 * Тип механизма из мода (enum)
 	 */
+	@Nonnull
 	public IMachineType getMachineType() {
 		return machineType;
 	}

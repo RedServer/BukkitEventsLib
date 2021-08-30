@@ -2,6 +2,8 @@ package theandrey.bukkit.event.common;
 
 import java.util.Objects;
 import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.event.HandlerList;
 import theandrey.bukkit.event.BlockStateData;
@@ -27,11 +29,12 @@ public class MachineBlockModifyEvent extends BlockModifyEvent implements ITileMa
 	 * @param placed Размещаемый блок (может быть null)
 	 * @param machineType Тип механизма из мода
 	 */
-	public MachineBlockModifyEvent(Block machine, Block block, UUID ownerId, MachineAction action, BlockStateData placed, IMachineType machineType) {
+	public MachineBlockModifyEvent(@Nonnull Block machine, @Nonnull Block block, @Nullable UUID ownerId, @Nonnull MachineAction action, @Nullable BlockStateData placed, @Nonnull IMachineType machineType) {
 		super(block, ownerId, action, placed, machineType);
 		this.machine = Objects.requireNonNull(machine, "machine is null");
 	}
 
+	@Nonnull
 	@Override
 	public Block getMachineBlock() {
 		return machine;

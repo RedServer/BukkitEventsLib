@@ -1,5 +1,7 @@
 package theandrey.bukkit.event;
 
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.bukkit.Material;
 
 /**
@@ -14,15 +16,15 @@ public final class BlockStateData {
 	 * @param type Material блока
 	 * @param meta Meta блока
 	 */
-	public BlockStateData(Material type, int meta) {
-		this.type = type;
+	public BlockStateData(@Nonnull Material type, int meta) {
+		this.type = Objects.requireNonNull(type, "type");
 		this.meta = meta;
 	}
 
 	/**
 	 * @param type ID блока
 	 */
-	public BlockStateData(Material type) {
+	public BlockStateData(@Nonnull Material type) {
 		this(type, 0);
 	}
 
@@ -37,6 +39,7 @@ public final class BlockStateData {
 	/**
 	 * Material блока
 	 */
+	@Nonnull
 	public Material getType() {
 		return type;
 	}

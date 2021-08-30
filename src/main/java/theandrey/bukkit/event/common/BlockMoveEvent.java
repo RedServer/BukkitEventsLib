@@ -1,6 +1,8 @@
 package theandrey.bukkit.event.common;
 
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import theandrey.bukkit.event.BlockStateData;
 
@@ -16,11 +18,11 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 
 	/**
 	 * @param action Действие (режим)
-	 * @param sourceBlock Исходный блок (для Action = TAKE,MOVE,SWAP)
-	 * @param destBlock Новое местоположение (для Action = PLACE,MOVE,SWAP)
-	 * @param placedData Тип устанавливаемого блока (для Action = PLACE)
+	 * @param sourceBlock Исходный блок (для Action = {@link Action#TAKE}, {@link Action#MOVE}, {@link Action#SWAP})
+	 * @param destBlock Новое местоположение (для Action = {@link Action#PLACE}, {@link Action#MOVE}, {@link Action#SWAP})
+	 * @param placedData Тип устанавливаемого блока (для Action = {@link Action#PLACE})
 	 */
-	public BlockMoveEvent(Action action, Block sourceBlock, Block destBlock, BlockStateData placedData) {
+	public BlockMoveEvent(@Nonnull Action action, @Nullable Block sourceBlock, @Nullable Block destBlock, @Nullable BlockStateData placedData) {
 		this.action = Objects.requireNonNull(action, "action is null");
 		this.sourceBlock = sourceBlock;
 		this.destinationBlock = destBlock;
@@ -30,50 +32,46 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 	/**
 	 * Действие (вид перемещения)
 	 */
+	@Nonnull
 	public Action getAction() {
 		return action;
 	}
 
 	/**
 	 * Исходная позиция блока A
-	 * @return Доступа только для TAKE|MOVE|SWAP, иначе - null
+	 * @return Доступен только для {@link Action#TAKE}, {@link Action#MOVE}, {@link Action#SWAP}
 	 */
+	@Nullable
 	public Block getSourceBlock() {
 		return sourceBlock;
 	}
 
 	/**
 	 * Новая позиция блока B
-	 * @return Доступа только для PLACE|MOVE|SWAP, иначе - null
+	 * @return Доступен только для {@link Action#PLACE}, {@link Action#MOVE}, {@link Action#SWAP}
 	 */
+	@Nullable
 	public Block getDestinationBlock() {
 		return destinationBlock;
 	}
 
 	/**
 	 * Material и meta размещаемого блока
-	 * @return Доступен только для PLACE
+	 * @return Доступен только для {@link Action#PLACE}
 	 */
+	@Nullable
 	public BlockStateData getPlacedData() {
 		return placedData;
 	}
 
 	public enum Action {
-		/**
-		 * Взятие блока и сохранение его состояния (обычно в предмет)
-		 */
+		/** Взятие блока и сохранение его состояния (обычно в предмет) */
 		TAKE,
-		/**
-		 * Установка ранее сохранённого блока
-		 */
+		/** Установка ранее сохранённого блока */
 		PLACE,
-		/**
-		 * Прямое переменение блока из точки A -> B
-		 */
+		/** Прямое перемещение блока из точки A -> B */
 		MOVE,
-		/**
-		 * Обмен блоков местами A <-> B
-		 */
+		/** Обмен блоков местами A <-> B */
 		SWAP
 	}
 }

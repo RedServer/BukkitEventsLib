@@ -2,6 +2,8 @@ package theandrey.bukkit.event.util;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import javax.annotation.Nonnull;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,7 +32,7 @@ public final class FakeBlockImpl implements Block {
 	 * @param block Блок
 	 * @param material Новый материал блока
 	 */
-	public FakeBlockImpl(Block block, Material material) {
+	public FakeBlockImpl(@Nonnull Block block, @Nonnull Material material) {
 		this(block, material, (byte)0);
 	}
 
@@ -40,9 +42,9 @@ public final class FakeBlockImpl implements Block {
 	 * @param material Новый материал блока
 	 * @param metadata Новая meta блока
 	 */
-	public FakeBlockImpl(Block block, Material material, byte metadata) {
-		this.block = block;
-		this.material = material;
+	public FakeBlockImpl(@Nonnull Block block, @Nonnull Material material, byte metadata) {
+		this.block = Objects.requireNonNull(block, "block");
+		this.material = Objects.requireNonNull(material, "material");
 		this.metadata = metadata;
 	}
 

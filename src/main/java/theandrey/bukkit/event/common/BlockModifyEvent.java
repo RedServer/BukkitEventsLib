@@ -2,6 +2,8 @@ package theandrey.bukkit.event.common;
 
 import java.util.Objects;
 import java.util.UUID;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import theandrey.bukkit.event.BlockStateData;
 import theandrey.bukkit.event.MachineAction;
@@ -26,7 +28,7 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	 * @param placed Размещаемый блок (может быть null)
 	 * @param machineType Тип механизма из мода
 	 */
-	public BlockModifyEvent(Block block, UUID ownerId, MachineAction action, BlockStateData placed, IMachineType machineType) {
+	public BlockModifyEvent(@Nonnull Block block, @Nullable UUID ownerId, @Nonnull MachineAction action, @Nullable BlockStateData placed, @Nonnull IMachineType machineType) {
 		this.block = Objects.requireNonNull(block, "block is null");
 		this.ownerId = ownerId;
 		this.action = Objects.requireNonNull(action, "action is null");
@@ -37,13 +39,16 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	/**
 	 * Изменяемый блок
 	 */
+	@Nonnull
 	public Block getBlock() {
 		return block;
 	}
 
 	/**
-	 * ID владельца. Может быть null если неизвестен
+	 * ID владельца
+	 * @return null, если неизвестен
 	 */
+	@Nullable
 	public UUID getOwnerId() {
 		return ownerId;
 	}
@@ -51,6 +56,7 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	/**
 	 * Действие с блоком, совершаемое механизмом
 	 */
+	@Nonnull
 	public MachineAction getAction() {
 		return action;
 	}
@@ -58,13 +64,16 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	/**
 	 * Тип механизма из мода (enum)
 	 */
+	@Nonnull
 	public IMachineType getMachineType() {
 		return machineType;
 	}
 
 	/**
-	 * Тип нового блока. Может быть null
+	 * Тип нового блока
+	 * @return null, если событие не связано с установкой блока
 	 */
+	@Nullable
 	public BlockStateData getBlockPlaced() {
 		return placed;
 	}

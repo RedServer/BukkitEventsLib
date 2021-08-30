@@ -3,6 +3,7 @@ package theandrey.bukkit.event.common;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.UUID;
+import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
@@ -30,7 +31,7 @@ public class EntityItemUseEvent extends ItemUseEvent {
 	 * @param targetBlock Блок по которому совершён клик. (Допускается использование null)
 	 * @param targetEntity Существо по которому совершён клик. (Допускается использование null)
 	 */
-	public EntityItemUseEvent(Entity entity, IMachineType machineType, UUID ownerId, ItemStack item, ClickType click, BlockFace blockFace, Block targetBlock, Entity targetEntity) {
+	public EntityItemUseEvent(Entity entity, IMachineType machineType, @Nullable UUID ownerId, ItemStack item, ClickType click, BlockFace blockFace, Block targetBlock, Entity targetEntity) {
 		super(item, click, blockFace, targetBlock, targetEntity);
 		this.entity = Objects.requireNonNull(entity, "entity");
 		this.machineType = Objects.requireNonNull(machineType, "machineType");

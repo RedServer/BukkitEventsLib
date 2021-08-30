@@ -2,6 +2,8 @@ package theandrey.bukkit.event.helper;
 
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,7 +26,7 @@ public final class WorldHelper {
 	 * @return true если позволяет mobility flag блока и не имеет TileEntity
 	 */
 	@SuppressWarnings("deprecation")
-	public static boolean isBlockMovable(org.bukkit.block.Block block) {
+	public static boolean isBlockMovable(@Nonnull org.bukkit.block.Block block) {
 		if(block == null) throw new IllegalArgumentException("block is null");
 
 		Block theBlock = Block.getBlockById(block.getTypeId());
@@ -38,7 +40,8 @@ public final class WorldHelper {
 	 * Создаёт CustomExplosion и отсылает пакеты клиентам.
 	 * Является аналогом {@link WorldServer#createExplosion(Entity, double, double, double, float, boolean)}
 	 */
-	public static CustomExplosion createExplosion(World world, Entity exploder, double x, double y, double z, float size, boolean isFlaming, boolean isSmoking, ExplosionCause cause) {
+	@Nonnull
+	public static CustomExplosion createExplosion(@Nonnull World world, @Nullable Entity exploder, double x, double y, double z, float size, boolean isFlaming, boolean isSmoking, @Nonnull ExplosionCause cause) {
 		CustomExplosion explosion = new CustomExplosion(world, exploder, x, y, z, size);
 		explosion.isFlaming = isFlaming;
 		explosion.isSmoking = isSmoking;

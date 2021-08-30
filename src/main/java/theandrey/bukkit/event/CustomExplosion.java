@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentProtection;
@@ -57,7 +59,7 @@ public class CustomExplosion extends Explosion {
 	 * @param z Точка эпицентра
 	 * @param size Мощность взрыва
 	 */
-	public CustomExplosion(World world, Entity exploder, double x, double y, double z, float size) {
+	public CustomExplosion(@Nonnull World world, @Nullable Entity exploder, double x, double y, double z, float size) {
 		super(world, exploder, x, y, z, size);
 		this.worldObj = Objects.requireNonNull(world, "world");
 		this.bWorld = BukkitEventUtils.getWorld(worldObj);
