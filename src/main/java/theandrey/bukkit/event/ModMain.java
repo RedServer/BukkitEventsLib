@@ -26,7 +26,7 @@ public final class ModMain {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		if(FMLCommonHandler.instance().getSide() != Side.SERVER) {
+		if (FMLCommonHandler.instance().getSide() != Side.SERVER) {
 			throw new RuntimeException("This is server mod!");
 		}
 	}

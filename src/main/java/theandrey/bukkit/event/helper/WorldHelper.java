@@ -27,10 +27,10 @@ public final class WorldHelper {
 	 */
 	@SuppressWarnings("deprecation")
 	public static boolean isBlockMovable(@Nonnull org.bukkit.block.Block block) {
-		if(block == null) throw new IllegalArgumentException("block is null");
+		if (block == null) throw new IllegalArgumentException("block is null");
 
 		Block theBlock = Block.getBlockById(block.getTypeId());
-		if(theBlock.getMobilityFlag() == 2) return false;
+		if (theBlock.getMobilityFlag() == 2) return false;
 
 		TileEntity tileentity = BukkitEventUtils.toVanillaWorld(block.getWorld()).getTileEntity(block.getX(), block.getY(), block.getZ());
 		return tileentity == null;
@@ -47,19 +47,19 @@ public final class WorldHelper {
 		explosion.isSmoking = isSmoking;
 		explosion.cause = Objects.requireNonNull(cause, "Explosion cause is null");
 
-		if(ForgeEventFactory.onExplosionStart(world, explosion)) return explosion;
+		if (ForgeEventFactory.onExplosionStart(world, explosion)) return explosion;
 
 		explosion.doExplosionA();
 		explosion.doExplosionB(false);
-		if(explosion.wasCanceled) return explosion;
+		if (explosion.wasCanceled) return explosion;
 
-		if(!isSmoking) {
+		if (!isSmoking) {
 			explosion.affectedBlockPositions.clear();
 		}
 
 		@SuppressWarnings("unchecked") List<EntityPlayerMP> playerList = world.playerEntities;
-		for(EntityPlayerMP player : playerList) {
-			if(!player.isDead && player.getDistanceSq(x, y, z) < 4096D) {
+		for (EntityPlayerMP player : playerList) {
+			if (!player.isDead && player.getDistanceSq(x, y, z) < 4096D) {
 				player.playerNetServerHandler.sendPacket(new S27PacketExplosion(x, y, z, size, explosion.affectedBlockPositions,
 						explosion.getAffectedPlayers().get(player)));
 			}

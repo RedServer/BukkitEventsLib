@@ -17,11 +17,11 @@ public final class ReflectionHelper {
 	 */
 	@Nonnull
 	public static Method getMethodByName(@Nonnull Class<?> clazz, @Nonnull String name) throws NoSuchMethodException {
-		if(clazz == null) throw new IllegalArgumentException("clazz is null!");
-		if(name == null || name.isEmpty()) throw new IllegalArgumentException("name is null or empty!");
+		if (clazz == null) throw new IllegalArgumentException("clazz is null!");
+		if (name == null || name.isEmpty()) throw new IllegalArgumentException("name is null or empty!");
 
-		for(Method method : clazz.getDeclaredMethods()) {
-			if(method.getName().equals(name)) return method;
+		for (Method method : clazz.getDeclaredMethods()) {
+			if (method.getName().equals(name)) return method;
 		}
 		throw new NoSuchMethodException(name);
 	}

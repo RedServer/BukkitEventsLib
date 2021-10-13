@@ -65,8 +65,8 @@ public final class BukkitEventManager {
 	 * @return true если событие не было отменено
 	 */
 	public static boolean callBucketEmptyEvent(@Nonnull EntityPlayer player, @Nullable net.minecraft.item.ItemStack stack, @Nonnull MovingObjectPosition mop) {
-		if(player == null) throw new IllegalArgumentException("player is null");
-		if(mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) throw new IllegalArgumentException("MovingObjectPosition.typeOfHit must be a BLOCK, given: " + mop.typeOfHit);
+		if (player == null) throw new IllegalArgumentException("player is null");
+		if (mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) throw new IllegalArgumentException("MovingObjectPosition.typeOfHit must be a BLOCK, given: " + mop.typeOfHit);
 
 		return callBucketEmptyEvent(player, stack, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit);
 	}
@@ -77,7 +77,7 @@ public final class BukkitEventManager {
 	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callBlockBreakEvent(@Nonnull EntityPlayer player, int x, int y, int z) {
-		if(player == null) throw new IllegalArgumentException("player is null");
+		if (player == null) throw new IllegalArgumentException("player is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		Block block = bukkitPlayer.getWorld().getBlockAt(x, y, z);
@@ -97,10 +97,10 @@ public final class BukkitEventManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static boolean callEntityDamageByEntityEvent(@Nonnull Entity attacker, @Nonnull Entity target, @Nonnull EntityDamageEvent.DamageCause cause, double damage) {
-		if(attacker == null) throw new IllegalArgumentException("attacker is null");
-		if(target == null) throw new IllegalArgumentException("target is null");
-		if(cause == null) throw new IllegalArgumentException("cause is null");
-		if(damage < 0) throw new IllegalArgumentException("Invalid damage: " + damage);
+		if (attacker == null) throw new IllegalArgumentException("attacker is null");
+		if (target == null) throw new IllegalArgumentException("target is null");
+		if (cause == null) throw new IllegalArgumentException("cause is null");
+		if (damage < 0) throw new IllegalArgumentException("Invalid damage: " + damage);
 
 		EntityDamageByEntityEvent event = new EntityDamageByEntityEvent(BukkitEventUtils.getBukkitEntity(attacker), BukkitEventUtils.getBukkitEntity(target), cause, damage);
 		pluginManager.callEvent(event);
@@ -120,8 +120,8 @@ public final class BukkitEventManager {
 	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callBlockPlaceEvent(@Nonnull EntityPlayer player, int x, int y, int z, @Nonnull net.minecraft.block.Block blockPlaced, int metadata, int side, @Nullable net.minecraft.item.ItemStack stackInHand) {
-		if(player == null) throw new IllegalArgumentException("player is null");
-		if(blockPlaced == null) throw new IllegalArgumentException("blockPlaced is null");
+		if (player == null) throw new IllegalArgumentException("player is null");
+		if (blockPlaced == null) throw new IllegalArgumentException("blockPlaced is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		Block bukkitBlock = BukkitEventUtils.getBlock(player.worldObj, x, y, z);
@@ -148,9 +148,9 @@ public final class BukkitEventManager {
 	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callPlayerInteractEvent(@Nonnull net.minecraft.entity.player.EntityPlayer player, int x, int y, int z, @Nonnull Action action, @Nonnull BlockFace blockFace, @Nullable net.minecraft.item.ItemStack stack) {
-		if(player == null) throw new IllegalArgumentException("player is null");
-		if(action == null) throw new IllegalArgumentException("action is null");
-		if(blockFace == null) throw new IllegalArgumentException("blockFace is null");
+		if (player == null) throw new IllegalArgumentException("player is null");
+		if (action == null) throw new IllegalArgumentException("action is null");
+		if (blockFace == null) throw new IllegalArgumentException("blockFace is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		Block bukkitBlock = bukkitPlayer.getWorld().getBlockAt(x, y, z);
@@ -185,8 +185,8 @@ public final class BukkitEventManager {
 	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
 	public static boolean callPlayerShearEntityEvent(@Nonnull net.minecraft.entity.player.EntityPlayer player, @Nonnull net.minecraft.entity.Entity entity) {
-		if(player == null) throw new IllegalArgumentException("player is null!");
-		if(entity == null) throw new IllegalArgumentException("entity is null!");
+		if (player == null) throw new IllegalArgumentException("player is null!");
+		if (entity == null) throw new IllegalArgumentException("entity is null!");
 
 		PlayerShearEntityEvent event = new PlayerShearEntityEvent(BukkitEventUtils.getPlayer(player), BukkitEventUtils.getBukkitEntity(entity));
 		pluginManager.callEvent(event);
@@ -217,7 +217,7 @@ public final class BukkitEventManager {
 	 */
 	@SuppressWarnings("deprecation")
 	public static boolean callEntityChangeBlockEvent(@Nonnull Entity entity, int x, int y, int z, @Nullable BlockStateData newBlock) {
-		if(entity == null) throw new IllegalArgumentException("entity is null!");
+		if (entity == null) throw new IllegalArgumentException("entity is null!");
 
 		EntityChangeBlockEvent event = new EntityChangeBlockEvent(
 				BukkitEventUtils.getBukkitEntity(entity),

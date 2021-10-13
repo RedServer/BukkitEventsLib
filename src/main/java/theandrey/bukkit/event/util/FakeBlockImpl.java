@@ -89,7 +89,7 @@ public final class FakeBlockImpl implements Block {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean setTypeId(int type) {
-		if(block.setTypeId(type)) {
+		if (block.setTypeId(type)) {
 			material = Material.getMaterial(type);
 			return true;
 		}
@@ -99,7 +99,7 @@ public final class FakeBlockImpl implements Block {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean setTypeId(int type, boolean applyPhysics) {
-		if(block.setTypeId(type, applyPhysics)) {
+		if (block.setTypeId(type, applyPhysics)) {
 			material = Material.getMaterial(type);
 			return true;
 		}
@@ -109,7 +109,7 @@ public final class FakeBlockImpl implements Block {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean setTypeIdAndData(int type, byte data, boolean applyPhysics) {
-		if(block.setTypeIdAndData(type, data, applyPhysics)) {
+		if (block.setTypeIdAndData(type, data, applyPhysics)) {
 			material = Material.getMaterial(type);
 			metadata = data;
 			return true;

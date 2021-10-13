@@ -16,11 +16,11 @@ public final class ServerHelper {
 	 * Обнуляет счётчик полёта, чтобы не срабатывал анти-чит на игрока
 	 */
 	public static void resetPlayerInAirTime(@Nonnull EntityPlayerMP player) {
-		if(player == null) throw new IllegalArgumentException("player is null");
-		if(player.capabilities.allowFlying) return; // Фикс не требуется
+		if (player == null) throw new IllegalArgumentException("player is null");
+		if (player.capabilities.allowFlying) return; // Фикс не требуется
 
 		try {
-			if(floatingTickCount == null) {
+			if (floatingTickCount == null) {
 				floatingTickCount = NetHandlerPlayServer.class.getDeclaredField("field_147365_f"); // floatingTickCount
 				floatingTickCount.setAccessible(true);
 			}

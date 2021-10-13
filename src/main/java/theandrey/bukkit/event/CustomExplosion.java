@@ -75,10 +75,10 @@ public class CustomExplosion extends Explosion {
 		HashSet<ChunkPosition> blockPositions = new HashSet<>();
 
 		final int field_77289_h = 16;
-		for(int i = 0; i < field_77289_h; i++) {
-			for(int j = 0; j < field_77289_h; j++) {
-				for(int k = 0; k < field_77289_h; k++) {
-					if(i == 0 || i == field_77289_h - 1 || j == 0 || j == field_77289_h - 1 || k == 0 || k == field_77289_h - 1) {
+		for (int i = 0; i < field_77289_h; i++) {
+			for (int j = 0; j < field_77289_h; j++) {
+				for (int k = 0; k < field_77289_h; k++) {
+					if (i == 0 || i == field_77289_h - 1 || j == 0 || j == field_77289_h - 1 || k == 0 || k == field_77289_h - 1) {
 
 						double d0 = (float)i / ((float)field_77289_h - 1.0F) * 2.0F - 1.0F;
 						double d1 = (float)j / ((float)field_77289_h - 1.0F) * 2.0F - 1.0F;
@@ -92,19 +92,19 @@ public class CustomExplosion extends Explosion {
 						double y = explosionY;
 						double z = explosionZ;
 
-						for(float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
+						for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
 							int blockX = MathHelper.floor_double(x);
 							int blockY = MathHelper.floor_double(y);
 							int blockZ = MathHelper.floor_double(z);
 							Block block = worldObj.getBlock(blockX, blockY, blockZ);
 
-							if(block.getMaterial() != Material.air) {
+							if (block.getMaterial() != Material.air) {
 								float f3 = exploder != null ? exploder.func_145772_a(this, worldObj, blockX, blockY, blockZ, block)
 										: block.getExplosionResistance(exploder, worldObj, blockX, blockY, blockZ, explosionX, explosionY, explosionZ);
 								f1 -= (f3 + 0.3F) * f2;
 							}
 
-							if(f1 > 0.0F && (exploder == null || exploder.func_145774_a(this, worldObj, blockX, blockY, blockZ, block, f1))) {
+							if (f1 > 0.0F && (exploder == null || exploder.func_145774_a(this, worldObj, blockX, blockY, blockZ, block, f1))) {
 								blockPositions.add(new ChunkPosition(blockX, blockY, blockZ));
 							}
 
@@ -173,7 +173,7 @@ public class CustomExplosion extends Explosion {
 				.filter(Objects::nonNull)
 				.collect(Collectors.toList()));
 
-		if(bukkitEvent.isCancelled()) {
+		if (bukkitEvent.isCancelled()) {
 			wasCanceled = true;
 			return;
 		}
@@ -181,20 +181,20 @@ public class CustomExplosion extends Explosion {
 		damageEntities();
 
 		/* Do explosion */
-		if(explosionSize >= 2.0F && isSmoking) {
+		if (explosionSize >= 2.0F && isSmoking) {
 			worldObj.spawnParticle("hugeexplosion", explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D);
 		} else {
 			worldObj.spawnParticle("largeexplode", explosionX, explosionY, explosionZ, 1.0D, 0.0D, 0.0D);
 		}
 
-		if(isSmoking) {
-			for(ChunkPosition chunkposition : affectedBlocks) {
+		if (isSmoking) {
+			for (ChunkPosition chunkposition : affectedBlocks) {
 				int blockX = chunkposition.chunkPosX;
 				int blockY = chunkposition.chunkPosY;
 				int blockZ = chunkposition.chunkPosZ;
 				Block block = worldObj.getBlock(blockX, blockY, blockZ);
 
-				if(particles) {
+				if (particles) {
 					double x = (float)blockX + worldObj.rand.nextFloat();
 					double y = (float)blockY + worldObj.rand.nextFloat();
 					double z = (float)blockZ + worldObj.rand.nextFloat();
@@ -214,8 +214,8 @@ public class CustomExplosion extends Explosion {
 					worldObj.spawnParticle("smoke", x, y, z, d3, d4, d5);
 				}
 
-				if(block.getMaterial() != Material.air) {
-					if(block.canDropFromExplosion(this)) {
+				if (block.getMaterial() != Material.air) {
+					if (block.canDropFromExplosion(this)) {
 						block.dropBlockAsItemWithChance(worldObj, blockX, blockY, blockZ, worldObj.getBlockMetadata(blockX, blockY, blockZ), bukkitEvent.getYield(), 0);
 					}
 
@@ -224,15 +224,15 @@ public class CustomExplosion extends Explosion {
 			}
 		}
 
-		if(bukkitEvent.isFlaming()) {
-			for(ChunkPosition chunkposition : affectedBlocks) {
+		if (bukkitEvent.isFlaming()) {
+			for (ChunkPosition chunkposition : affectedBlocks) {
 				int blockX = chunkposition.chunkPosX;
 				int blockY = chunkposition.chunkPosY;
 				int blockZ = chunkposition.chunkPosZ;
 				Block block = worldObj.getBlock(blockX, blockY, blockZ);
 				Block lowerBlock = worldObj.getBlock(blockX, blockY - 1, blockZ);
 
-				if(block.getMaterial() == Material.air && lowerBlock.func_149730_j() && worldObj.rand.nextInt(3) == 0
+				if (block.getMaterial() == Material.air && lowerBlock.func_149730_j() && worldObj.rand.nextInt(3) == 0
 						&& callBlockIgniteEvent(blockX, blockY, blockZ)) {
 					worldObj.setBlock(blockX, blockY, blockZ, Blocks.fire);
 				}
@@ -246,17 +246,17 @@ public class CustomExplosion extends Explosion {
 	private void damageEntities() {
 		Vec3 vec3 = Vec3.createVectorHelper(explosionX, explosionY, explosionZ);
 
-		for(Entity entity : entities) {
-			if(entity.isDead) continue; // Skip invalid
+		for (Entity entity : entities) {
+			if (entity.isDead) continue; // Skip invalid
 			double distance = entity.getDistance(explosionX, explosionY, explosionZ) / (double)explosionSizeEnt;
 
-			if(distance <= 1.0D) {
+			if (distance <= 1.0D) {
 				double x = entity.posX - explosionX;
 				double y = entity.posY + (double)entity.getEyeHeight() - explosionY;
 				double z = entity.posZ - explosionZ;
 				double d9 = MathHelper.sqrt_double(x * x + y * y + z * z);
 
-				if(d9 != 0.0D) {
+				if (d9 != 0.0D) {
 					x /= d9;
 					y /= d9;
 					z /= d9;
@@ -268,7 +268,7 @@ public class CustomExplosion extends Explosion {
 					entity.motionY += y * protection;
 					entity.motionZ += z * protection;
 
-					if(entity instanceof EntityPlayerMP) {
+					if (entity instanceof EntityPlayerMP) {
 						affectedPlayers.put((EntityPlayerMP)entity, Vec3.createVectorHelper(x * damage, y * damage, z * damage));
 					}
 				}

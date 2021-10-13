@@ -36,9 +36,9 @@ public final class BukkitEventFactory {
 	 */
 	@Nonnull
 	public static AsyncPlayerChatEvent newPlayerChatEvent(@Nonnull EntityPlayer sender, @Nonnull String message, @Nonnull Collection<EntityPlayer> recipients) {
-		if(sender == null) throw new IllegalArgumentException("sender is null");
-		if(message == null) throw new IllegalArgumentException("message is null");
-		if(recipients == null) throw new IllegalArgumentException("recipients is null");
+		if (sender == null) throw new IllegalArgumentException("sender is null");
+		if (message == null) throw new IllegalArgumentException("message is null");
+		if (recipients == null) throw new IllegalArgumentException("recipients is null");
 
 		Player bukkitSender = BukkitEventUtils.getPlayer(sender);
 		Set<Player> bukkitRecipients = recipients.stream()
@@ -81,8 +81,8 @@ public final class BukkitEventFactory {
 	 */
 	@Nonnull
 	public static PlayerTeleportEvent newPlayerTeleportEvent(@Nonnull EntityPlayer player, double xFrom, double yFrom, double zFrom, double xTo, double yTo, double zTo, float pitch, float yaw, @Nonnull PlayerTeleportEvent.TeleportCause cause) {
-		if(player == null) throw new IllegalArgumentException("player is null");
-		if(cause == null) throw new IllegalArgumentException("cause is null");
+		if (player == null) throw new IllegalArgumentException("player is null");
+		if (cause == null) throw new IllegalArgumentException("cause is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		return new PlayerTeleportEvent(bukkitPlayer,
@@ -93,13 +93,13 @@ public final class BukkitEventFactory {
 
 	@Nonnull
 	private static PlayerBucketEvent getPlayerBucketEvent(boolean isFilling, @Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, int side, @Nullable ItemStack stack) {
-		if(player == null) throw new IllegalArgumentException("player is null");
+		if (player == null) throw new IllegalArgumentException("player is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
 		org.bukkit.inventory.ItemStack bukkitItem = BukkitEventUtils.getItemStack(stack);
 		Block blockClicked = bukkitPlayer.getWorld().getBlockAt(clickX, clickY, clickZ);
 
-		if(isFilling) {
+		if (isFilling) {
 			return new PlayerBucketFillEvent(bukkitPlayer, blockClicked, BlockFace.SELF, bukkitItem.getType(), bukkitItem);
 		} else {
 			return new PlayerBucketEmptyEvent(bukkitPlayer, blockClicked, BukkitEventUtils.getBlockFace(side), bukkitItem.getType(), bukkitItem);

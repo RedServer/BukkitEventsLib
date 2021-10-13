@@ -15,7 +15,7 @@ public class WorldEventHooks {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public final void handleEntitySpawn(EntityJoinWorldEvent event) {
-		if(blockItemSpawn && event.entity instanceof EntityItem) {
+		if (blockItemSpawn && event.entity instanceof EntityItem) {
 			event.setCanceled(true);
 			event.setResult(Event.Result.DENY);
 		}
