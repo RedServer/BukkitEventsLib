@@ -1,10 +1,11 @@
 package theandrey.bukkit.event.helper;
 
+import java.util.Optional;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.common.UsernameCache;
 import net.minecraftforge.common.util.FakePlayer;
 
 /**
@@ -23,18 +24,15 @@ public final class FakeHelper {
 	public static GameProfile getPlayerProfile(@Nonnull UUID uuid) {
 		if (uuid == null) throw new IllegalArgumentException("uuid is null");
 
-		// Использует профиль онлайн-игрока
+		// Используем профиль онлайн-игрока
 		for (EntityPlayerMP player : ServerHelper.getOnlinePlayers()) {
 			if (player.getGameProfile().getId().equals(uuid)) {
 				return player.getGameProfile();
 			}
 		}
 
-		// ИЛИ ищем в кеше
-		GameProfile cached = MinecraftServer.getServer().func_152358_ax().func_152652_a(uuid);
-		if (cached != null) return cached;
-
-		// Профиль без ника
-		return new GameProfile(uuid, "uuid:" + uuid);
+		// ИЛИ ищем имя в кеше
+		String name = Optional.ofNullable(UsernameCache.getLastKnownUsername(uuid)).orElse("uuid:" + uuid);
+		return new GameProfile(uuid, name);
 	}
 }
