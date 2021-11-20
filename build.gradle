@@ -40,8 +40,16 @@ dependencies {
 	compile group: 'org.bukkit', name: 'bukkit', version: '1.7.10-R0.1'
 }
 
+jar {
+	manifest {
+		attributes 'FMLCorePluginContainsFMLMod': 'true'
+		attributes 'FMLCorePlugin': 'theandrey.bukkit.asm.LoadingPlugin'
+	}
+}
+
 task devJar(type: Jar) {
 	classifier = 'dev'
+	manifest = jar.manifest
 	from sourceSets.main.output
 }
 
