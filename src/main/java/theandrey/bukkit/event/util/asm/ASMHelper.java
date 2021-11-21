@@ -5,8 +5,10 @@ import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import cpw.mods.fml.relauncher.FMLRelaunchLog;
-import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Type;
@@ -16,7 +18,9 @@ import org.objectweb.asm.tree.MethodNode;
 
 public final class ASMHelper {
 
+	private static Logger logger = LogManager.getLogger();
 	private static Method mDefineClass;
+	private static String cbPackage;
 
 	private ASMHelper() {
 	}
@@ -120,8 +124,21 @@ public final class ASMHelper {
 			Files.createDirectories(path.getParent());
 			Files.write(path, bytes);
 		} catch (IOException e) {
-			FMLRelaunchLog.log(Level.ERROR, e, "Unable to save class: " + name);
+			logger.error("Unable to save class: " + name, e);
 		}
+	}
+
+	/**
+	 * Возвращает имя пакета CraftBukkit
+	 */
+	public static String getCbPackage() {
+		if (cbPackage == null) {
+			Server server = Bukkit.getServer();
+			if (server == null) throw new IllegalStateException("Server is not created");
+			cbPackage = server.getClass().getPackage().getName();
+		}
+
+		return cbPackage;
 	}
 
 	/**

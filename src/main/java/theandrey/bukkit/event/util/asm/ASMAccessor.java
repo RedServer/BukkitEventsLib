@@ -1,7 +1,6 @@
 package theandrey.bukkit.event.util.asm;
 
 import java.lang.reflect.Method;
-import org.bukkit.Bukkit;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -40,7 +39,7 @@ public final class ASMAccessor {
 			mv.visitEnd();
 
 			// org/bukkit/craftbukkit/V_*_*
-			final String nmsPackage = Bukkit.getServer().getClass().getPackage().getName().replace(".", "/");
+			final String nmsPackage = ASMHelper.getCbPackage().replace(".", "/");
 
 			// Методы
 			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "getBukkitEntity");

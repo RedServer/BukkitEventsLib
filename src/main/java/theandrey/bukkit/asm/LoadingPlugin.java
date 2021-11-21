@@ -14,7 +14,7 @@ public final class LoadingPlugin implements IFMLLoadingPlugin {
 
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[]{};
+		return new String[]{"theandrey.bukkit.asm.BukkitInventoryTransformer"};
 	}
 
 	@Override
