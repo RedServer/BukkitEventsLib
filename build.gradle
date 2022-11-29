@@ -2,17 +2,23 @@ buildscript {
 	repositories {
 		mavenCentral()
 		maven {
-			name = "forge"
-			url = "https://files.minecraftforge.net/maven"
+			name = 'forge'
+			url = getProperty('minecraftforge.repository.url')
+		}
+		maven {
+			name = 'jitpack'
+			url = 'https://jitpack.io'
 		}
 	}
 	dependencies {
-		classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+		classpath 'com.github.RedServer:ForgeGradle:1.2.11'
 	}
 }
 
 repositories {
-	redserver()
+	flatDir {
+		dirs 'lib'
+	}
 	mavenCentral()
 }
 
@@ -21,11 +27,7 @@ apply plugin: 'maven-publish'
 
 // Project settings
 archivesBaseName = 'BukkitEventsLib'
-group = 'me.theandrey'
-version = '1.7.10'
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
@@ -33,7 +35,6 @@ tasks.withType(JavaCompile) {
 
 minecraft {
 	version = '1.7.10-10.13.4.1614-1.7.10'
-	runDir = 'eclipse'
 }
 
 dependencies {
