@@ -65,6 +65,17 @@ artifacts {
 }
 
 publishing {
+	repositories {
+		maven {
+			name = 'redserver'
+			url = findProperty('redserver.repository.url')
+			credentials() {
+				username findProperty('redserver.repository.user')
+				password findProperty('redserver.repository.pass')
+			}
+		}
+	}
+
 	publications {
 		maven(MavenPublication) {
 			from components.java
