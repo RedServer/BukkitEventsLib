@@ -262,7 +262,11 @@ public class CustomExplosion extends Explosion {
 					z /= d9;
 					double density = worldObj.getBlockDensity(vec3, entity.boundingBox);
 					double damage = (1.0D - distance) * density;
+
+					BukkitEventUtils.setEntityDamage(exploder);
 					entity.attackEntityFrom(DamageSource.setExplosionSource(this), (float)((int)((damage * damage + damage) / 2.0D * 8.0D * (double)explosionSizeEnt + 1.0D)));
+					BukkitEventUtils.setEntityDamage(null);
+
 					double protection = EnchantmentProtection.func_92092_a(entity, damage);
 					entity.motionX += x * protection;
 					entity.motionY += y * protection;

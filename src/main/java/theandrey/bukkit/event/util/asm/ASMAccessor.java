@@ -114,6 +114,24 @@ public final class ASMAccessor {
 			mv.visitMaxs(2, 2);
 			mv.visitEnd();
 
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "setEntityDamage");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, nmsPackage + "/event/CraftEventFactory", "entityDamage", "Lnet/minecraft/entity/Entity;");
+			mv.visitInsn(Opcodes.RETURN);
+			mv.visitMaxs(2, 2);
+			mv.visitEnd();
+
+			method = ReflectionHelper.getMethodByName(CraftBukkitAccessor.class, "setBlockDamage");
+			mv = cw.visitMethod(Opcodes.ACC_PUBLIC, method.getName(), Type.getMethodDescriptor(method), null, null);
+			mv.visitCode();
+			mv.visitVarInsn(Opcodes.ALOAD, 1); // 1 параметр
+			mv.visitFieldInsn(Opcodes.PUTSTATIC, nmsPackage + "/event/CraftEventFactory", "blockDamage", "Lorg/bukkit/block/Block;");
+			mv.visitInsn(Opcodes.RETURN);
+			mv.visitMaxs(2, 2);
+			mv.visitEnd();
+
 			cw.visitEnd();
 
 			@SuppressWarnings("unchecked")

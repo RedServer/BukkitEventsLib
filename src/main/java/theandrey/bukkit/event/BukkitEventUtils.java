@@ -16,6 +16,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import theandrey.bukkit.event.util.asm.CraftBukkitAccessor;
 
 public final class BukkitEventUtils {
@@ -219,6 +221,22 @@ public final class BukkitEventUtils {
 	public static Entity toVanillaEntity(@Nullable org.bukkit.entity.Entity entity) {
 		if (entity == null) return null;
 		return craftBukkitAccessor.getEntityHandle(entity);
+	}
+
+	/**
+	 * Задаёт сущность, которая будет использоваться в контексте
+	 * {@link EntityDamageByEntityEvent}
+	 */
+	public static void setEntityDamage(@Nullable Entity entity) {
+		craftBukkitAccessor.setEntityDamage(entity);
+	}
+
+	/**
+	 * Задаёт блок, который будет использоваться в контексте
+	 * {@link EntityDamageByBlockEvent}
+	 */
+	public static void setBlockDamage(@Nullable org.bukkit.block.Block block) {
+		craftBukkitAccessor.setBlockDamage(block);
 	}
 
 }
