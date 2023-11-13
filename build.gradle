@@ -23,10 +23,9 @@ repositories {
 apply plugin: 'java'
 apply plugin: 'maven-publish'
 
-archivesBaseName = 'BukkitEventsLib'
 sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
@@ -36,27 +35,28 @@ dependencies {
 	compile group: 'org.bukkit', name: 'bukkit', version: '1.4.7-R1.0'
 }
 
-task devJar(type: Jar) {
-	classifier = 'dev'
+tasks.register('devJar', Jar) {
+	archiveClassifier.set('dev')
 	from sourceSets.main.output
 }
 
-task sourcesJar(type: Jar) {
-	classifier = 'sources'
+tasks.register('sourcesJar', Jar) {
+	archiveClassifier.set('sources')
 	from sourceSets.main.allSource
 }
 
 artifacts {
-	archives devJar
-	archives sourcesJar
+	archives tasks.devJar
+	archives tasks.sourcesJar
 }
 
-task reobf(type: BON, dependsOn: jar) {
-	mcpFolder = getProperty('minecraft.mcp.dir') + '/1.4.7-forge'
+tasks.register('reobf', BON) {
+	dependsOn tasks.jar
+	mcpFolder = file(getProperty('minecraft.mcp.dir') + '/1.4.7-forge')
 	from = 'MCP'
 	to = 'OBF'
-	input = jar.archivePath
-	output = jar.archivePath
+	input = jar.archiveFile.get().asFile
+	output = jar.archiveFile.get().asFile
 }
 
 publishing {
@@ -81,10 +81,16 @@ publishing {
 tasks.assemble.dependsOn tasks.reobf
 
 class BON extends JavaExec {
-	String mcpFolder
-	String input
-	String output
+
+	@Input
+	File mcpFolder
+	@Input
+	File input
+	@Input
+	File output
+	@Input
 	String from = 'MCP'
+	@Input
 	String to = 'OBF'
 
 	@TaskAction
@@ -100,7 +106,7 @@ class BON extends JavaExec {
 		def args = ['-q', '-m', '-mcp', this.mcpFolder, '-from', this.from, '-to', this.to,
 		            '-side', 'UNIVERSAL', '-in', this.input, '-out', this.output]
 
-		for (dep in project.configurations.getByName('compileClasspath').resolve()) {
+		for (dep in project.configurations.named('compileClasspath').get().resolve()) {
 			if (dep.getName().contains('-dev') || dep.getName().contains('forgeSrc')) {
 				args.addAll('-ref', dep.toString())
 			}
