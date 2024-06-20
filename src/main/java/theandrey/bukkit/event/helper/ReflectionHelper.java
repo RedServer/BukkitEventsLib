@@ -2,7 +2,6 @@ package theandrey.bukkit.event.helper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -21,8 +20,7 @@ public final class ReflectionHelper {
 	 * @return Первый подходящий по названию метод (так как не учитывает сигнатуру).
 	 * @throws NoSuchMethodException Если указанный метод не найден.
 	 */
-	@Nonnull
-	public static Method getMethodByName(@Nonnull Class<?> clazz, @Nonnull String name) throws NoSuchMethodException {
+	public static Method getMethodByName(Class<?> clazz, String name) throws NoSuchMethodException {
 		if (clazz == null) throw new IllegalArgumentException("clazz is null!");
 		if (name == null || name.isEmpty()) throw new IllegalArgumentException("name is null or empty!");
 
@@ -43,8 +41,7 @@ public final class ReflectionHelper {
 	 * If the name you are looking for is on a class that is never obfuscated, this should be null.
 	 * @return The field with the specified name in the given class.
 	 */
-	@Nonnull
-	public static Field findField(@Nonnull Class<?> clazz, @Nonnull String fieldName, @Nullable String fieldObfName) throws NoSuchFieldException {
+	public static Field findField(Class<?> clazz, String fieldName, @Nullable String fieldObfName) throws NoSuchFieldException {
 		Preconditions.checkNotNull(clazz);
 		Preconditions.checkArgument(StringUtils.isNotEmpty(fieldName), "Field name cannot be empty");
 

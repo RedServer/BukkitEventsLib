@@ -1,7 +1,6 @@
 package theandrey.bukkit.event.common;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -20,7 +19,7 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	protected final Block targetBlock;
 	protected final Entity targetEntity;
 
-	public ItemUseEvent(@Nullable ItemStack item, @Nonnull ClickType click, @Nonnull BlockFace blockFace, @Nullable Block targetBlock, @Nullable Entity targetEntity) {
+	public ItemUseEvent(@Nullable ItemStack item, ClickType click, BlockFace blockFace, @Nullable Block targetBlock, @Nullable Entity targetEntity) {
 		this.item = item;
 		this.click = Objects.requireNonNull(click, "click");
 		this.blockFace = Objects.requireNonNull(blockFace, "blockFace");
@@ -40,7 +39,6 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	/**
 	 * Тип клика (ЛКМ/ПКМ)
 	 */
-	@Nonnull
 	public ClickType getClick() {
 		return click;
 	}
@@ -48,7 +46,6 @@ public abstract class ItemUseEvent extends CancellableEvent {
 	/**
 	 * Сторона блока по которой будет совершён клик
 	 */
-	@Nonnull
 	public BlockFace getBlockFace() {
 		return blockFace;
 	}

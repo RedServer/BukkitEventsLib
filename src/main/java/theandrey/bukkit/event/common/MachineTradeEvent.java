@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -33,7 +32,7 @@ public class MachineTradeEvent extends CancellableEvent {
 	 * @param offer Предмет, который отдаёт игроку
 	 * @param players Список участвующих игроков
 	 */
-	public MachineTradeEvent(@Nonnull Block machine, @Nonnull IMachineType type, @Nonnull ItemStack want, @Nonnull ItemStack offer, @Nonnull Collection<Player> players) {
+	public MachineTradeEvent(Block machine, IMachineType type, ItemStack want, ItemStack offer, Collection<Player> players) {
 		this.machine = Objects.requireNonNull(machine, "machine");
 		this.machineType = Objects.requireNonNull(type, "type");
 		this.wantItem = Objects.requireNonNull(want, "want");
@@ -41,7 +40,6 @@ public class MachineTradeEvent extends CancellableEvent {
 		this.players.addAll(players);
 	}
 
-	@Nonnull
 	public Block getMachineBlock() {
 		return machine;
 	}
@@ -49,7 +47,6 @@ public class MachineTradeEvent extends CancellableEvent {
 	/**
 	 * Предмет, который отдаёт игрок
 	 */
-	@Nonnull
 	public ItemStack getWantItem() {
 		return wantItem;
 	}
@@ -57,7 +54,6 @@ public class MachineTradeEvent extends CancellableEvent {
 	/**
 	 * Предмет, который покупает игрок
 	 */
-	@Nonnull
 	public ItemStack getOfferItem() {
 		return offerItem;
 	}
@@ -66,7 +62,6 @@ public class MachineTradeEvent extends CancellableEvent {
 	 * Список игроков которые сейчас взаимодействуют с автоматом.
 	 * Может быть пуст. Неизменяемый.
 	 */
-	@Nonnull
 	public List<Player> getPlayers() {
 		return Collections.unmodifiableList(players);
 	}
@@ -74,7 +69,6 @@ public class MachineTradeEvent extends CancellableEvent {
 	/**
 	 * Тип механизма из мода (enum)
 	 */
-	@Nonnull
 	public IMachineType getMachineType() {
 		return machineType;
 	}

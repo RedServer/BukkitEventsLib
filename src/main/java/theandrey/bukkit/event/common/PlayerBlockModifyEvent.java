@@ -1,7 +1,6 @@
 package theandrey.bukkit.event.common;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -18,7 +17,7 @@ public class PlayerBlockModifyEvent extends CancellableEvent implements IPlayerE
 	private final Player player;
 	private final Block block;
 
-	public PlayerBlockModifyEvent(@Nonnull Block block, @Nonnull Player player) {
+	public PlayerBlockModifyEvent(Block block, Player player) {
 		this.player = Objects.requireNonNull(player, "player");
 		this.block = Objects.requireNonNull(block, "block");
 	}
@@ -27,7 +26,6 @@ public class PlayerBlockModifyEvent extends CancellableEvent implements IPlayerE
 	 * Игрок, который совершает действие
 	 */
 	@Override
-	@Nonnull
 	public Player getPlayer() {
 		return player;
 	}
@@ -35,7 +33,6 @@ public class PlayerBlockModifyEvent extends CancellableEvent implements IPlayerE
 	/**
 	 * Изменяемый игроком блок
 	 */
-	@Nonnull
 	public Block getBlock() {
 		return block;
 	}

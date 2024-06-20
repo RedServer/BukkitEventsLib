@@ -2,7 +2,6 @@ package theandrey.bukkit.event.common;
 
 import java.util.Objects;
 import java.util.UUID;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import theandrey.bukkit.event.BlockStateData;
@@ -28,7 +27,7 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	 * @param placed Размещаемый блок (может быть null)
 	 * @param machineType Тип механизма из мода
 	 */
-	public BlockModifyEvent(@Nonnull Block block, @Nullable UUID ownerId, @Nonnull MachineAction action, @Nullable BlockStateData placed, @Nonnull IMachineType machineType) {
+	public BlockModifyEvent(Block block, @Nullable UUID ownerId, MachineAction action, @Nullable BlockStateData placed, IMachineType machineType) {
 		this.block = Objects.requireNonNull(block, "block is null");
 		this.ownerId = ownerId;
 		this.action = Objects.requireNonNull(action, "action is null");
@@ -39,7 +38,6 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	/**
 	 * Изменяемый блок
 	 */
-	@Nonnull
 	public Block getBlock() {
 		return block;
 	}
@@ -56,7 +54,6 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	/**
 	 * Действие с блоком, совершаемое механизмом
 	 */
-	@Nonnull
 	public MachineAction getAction() {
 		return action;
 	}
@@ -64,7 +61,6 @@ public abstract class BlockModifyEvent extends CancellableEvent {
 	/**
 	 * Тип механизма из мода (enum)
 	 */
-	@Nonnull
 	public IMachineType getMachineType() {
 		return machineType;
 	}

@@ -1,7 +1,6 @@
 package theandrey.bukkit.event.helper;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
@@ -25,7 +24,7 @@ public final class WorldHelper {
 	 * Проверяем возможность "легального" перемещения блока, примерно как поршни
 	 * @return true если позволяет mobility flag блока и не имеет TileEntity
 	 */
-	public static boolean isBlockMovable(@Nonnull org.bukkit.block.Block block) {
+	public static boolean isBlockMovable(org.bukkit.block.Block block) {
 		if (block == null) throw new IllegalArgumentException("block is null");
 		IBlockState state = BukkitEventUtils.getBlockState(block);
 		return state.getPushReaction() != EnumPushReaction.BLOCK && !state.getBlock().hasTileEntity(state);
@@ -35,8 +34,7 @@ public final class WorldHelper {
 	 * Создаёт CustomExplosion и отсылает пакеты клиентам.
 	 * Является аналогом {@link WorldServer#createExplosion(Entity, double, double, double, float, boolean)}
 	 */
-	@Nonnull
-	public static CustomExplosion createExplosion(@Nonnull World world, @Nullable Entity exploder, double x, double y, double z, float size, boolean causesFire, boolean damagesTerrain, @Nonnull ExplosionCause cause) {
+	public static CustomExplosion createExplosion(World world, @Nullable Entity exploder, double x, double y, double z, float size, boolean causesFire, boolean damagesTerrain, ExplosionCause cause) {
 		CustomExplosion explosion = new CustomExplosion(world, exploder, x, y, z, size, causesFire, damagesTerrain);
 		explosion.cause = Objects.requireNonNull(cause, "Explosion cause is null");
 

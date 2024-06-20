@@ -2,7 +2,6 @@ package theandrey.bukkit.event.util;
 
 import java.util.Objects;
 import java.util.UUID;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -19,17 +18,16 @@ public class EntityExplosionCause implements ExplosionCause {
 	private final UUID ownerId;
 	private final IMachineType machineType;
 
-	public EntityExplosionCause(@Nonnull Entity entity, @Nullable UUID ownerId, @Nullable IMachineType machineType) {
+	public EntityExplosionCause(Entity entity, @Nullable UUID ownerId, @Nullable IMachineType machineType) {
 		this.entity = Objects.requireNonNull(entity, "entity");
 		this.ownerId = ownerId;
 		this.machineType = machineType;
 	}
 
-	public EntityExplosionCause(@Nonnull Entity entity, @Nullable UUID ownerId) {
+	public EntityExplosionCause(Entity entity, @Nullable UUID ownerId) {
 		this(entity, ownerId, null);
 	}
 
-	@Nonnull
 	public Entity getEntity() {
 		return entity;
 	}
@@ -40,7 +38,6 @@ public class EntityExplosionCause implements ExplosionCause {
 		return ownerId;
 	}
 
-	@Nonnull
 	@Override
 	public Location getLocation() {
 		return entity.getLocation();

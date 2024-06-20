@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,8 +33,7 @@ public final class BukkitEventFactory {
 	 * @param message Сообщение
 	 * @param recipients Получатели
 	 */
-	@Nonnull
-	public static AsyncPlayerChatEvent newPlayerChatEvent(@Nonnull EntityPlayer sender, @Nonnull String message, @Nonnull Collection<EntityPlayer> recipients) {
+	public static AsyncPlayerChatEvent newPlayerChatEvent(EntityPlayer sender, String message, Collection<EntityPlayer> recipients) {
 		if (sender == null) throw new IllegalArgumentException("sender is null");
 		if (message == null) throw new IllegalArgumentException("message is null");
 		if (recipients == null) throw new IllegalArgumentException("recipients is null");
@@ -54,8 +52,7 @@ public final class BukkitEventFactory {
 	 * @param player Игрок
 	 * @param stack Предмет в руке (ведро)
 	 */
-	@Nonnull
-	public static PlayerBucketFillEvent newPlayerBucketFillEvent(@Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, @Nullable ItemStack stack) {
+	public static PlayerBucketFillEvent newPlayerBucketFillEvent(EntityPlayer player, int clickX, int clickY, int clickZ, @Nullable ItemStack stack) {
 		return (PlayerBucketFillEvent)newPlayerBucketEvent(true, player, clickX, clickY, clickZ, BlockFace.SELF, stack);
 	}
 
@@ -65,8 +62,7 @@ public final class BukkitEventFactory {
 	 * @param face Сторона блока по которой был сделан клик
 	 * @param stack Предмет в руке (ведро)
 	 */
-	@Nonnull
-	public static PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(@Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, BlockFace face, @Nullable ItemStack stack) {
+	public static PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(EntityPlayer player, int clickX, int clickY, int clickZ, BlockFace face, @Nullable ItemStack stack) {
 		return (PlayerBucketEmptyEvent)newPlayerBucketEvent(false, player, clickX, clickY, clickZ, face, stack);
 	}
 
@@ -79,8 +75,7 @@ public final class BukkitEventFactory {
 	 * @param yTo Точка назначения
 	 * @param zTo Точка назначения
 	 */
-	@Nonnull
-	public static PlayerTeleportEvent newPlayerTeleportEvent(@Nonnull EntityPlayer player, double xFrom, double yFrom, double zFrom, double xTo, double yTo, double zTo, float pitch, float yaw, @Nonnull PlayerTeleportEvent.TeleportCause cause) {
+	public static PlayerTeleportEvent newPlayerTeleportEvent(EntityPlayer player, double xFrom, double yFrom, double zFrom, double xTo, double yTo, double zTo, float pitch, float yaw, PlayerTeleportEvent.TeleportCause cause) {
 		if (player == null) throw new IllegalArgumentException("player is null");
 		if (cause == null) throw new IllegalArgumentException("cause is null");
 
@@ -91,8 +86,7 @@ public final class BukkitEventFactory {
 				cause);
 	}
 
-	@Nonnull
-	private static PlayerBucketEvent newPlayerBucketEvent(boolean isFilling, @Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, BlockFace face, @Nullable ItemStack stack) {
+	private static PlayerBucketEvent newPlayerBucketEvent(boolean isFilling, EntityPlayer player, int clickX, int clickY, int clickZ, BlockFace face, @Nullable ItemStack stack) {
 		if (player == null) throw new IllegalArgumentException("player is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);

@@ -1,7 +1,6 @@
 package theandrey.bukkit.event.common;
 
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import theandrey.bukkit.event.BlockStateData;
@@ -22,7 +21,7 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 	 * @param destBlock Новое местоположение (для Action = {@link Action#PLACE}, {@link Action#MOVE}, {@link Action#SWAP})
 	 * @param placedData Тип устанавливаемого блока (для Action = {@link Action#PLACE})
 	 */
-	public BlockMoveEvent(@Nonnull Action action, @Nullable Block sourceBlock, @Nullable Block destBlock, @Nullable BlockStateData placedData) {
+	public BlockMoveEvent(Action action, @Nullable Block sourceBlock, @Nullable Block destBlock, @Nullable BlockStateData placedData) {
 		this.action = Objects.requireNonNull(action, "action is null");
 		this.sourceBlock = sourceBlock;
 		this.destinationBlock = destBlock;
@@ -32,7 +31,6 @@ public abstract class BlockMoveEvent extends CancellableEvent {
 	/**
 	 * Действие (вид перемещения)
 	 */
-	@Nonnull
 	public Action getAction() {
 		return action;
 	}

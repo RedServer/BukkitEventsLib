@@ -2,7 +2,6 @@ package theandrey.bukkit.event.helper;
 
 import java.util.Optional;
 import java.util.UUID;
-import javax.annotation.Nonnull;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.common.UsernameCache;
@@ -20,8 +19,7 @@ public final class FakeHelper {
 	 * Получить профиль игрока по UUID
 	 * @return Вернёт профиль даже если не удалось определить никнейм
 	 */
-	@Nonnull
-	public static GameProfile getPlayerProfile(@Nonnull UUID uuid) {
+	public static GameProfile getPlayerProfile(UUID uuid) {
 		if (uuid == null) throw new IllegalArgumentException("uuid is null");
 
 		// Используем профиль онлайн-игрока

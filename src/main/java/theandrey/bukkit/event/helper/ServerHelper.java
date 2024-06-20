@@ -2,7 +2,6 @@ package theandrey.bukkit.event.helper;
 
 import java.lang.reflect.Field;
 import java.util.List;
-import javax.annotation.Nonnull;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -17,7 +16,7 @@ public final class ServerHelper {
 	/**
 	 * Обнуляет счётчик полёта, чтобы не срабатывал анти-чит на игрока
 	 */
-	public static void resetPlayerInAirTime(@Nonnull EntityPlayerMP player) {
+	public static void resetPlayerInAirTime(EntityPlayerMP player) {
 		if (player == null) throw new IllegalArgumentException("player is null");
 		if (player.capabilities.allowFlying) return; // Фикс не требуется
 
@@ -35,7 +34,6 @@ public final class ServerHelper {
 	/**
 	 * Получить список игроков, находящихся на сервере
 	 */
-	@Nonnull
 	public static List<EntityPlayerMP> getOnlinePlayers() {
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 	}

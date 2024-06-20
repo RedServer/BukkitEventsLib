@@ -2,7 +2,6 @@ package theandrey.bukkit.event.common;
 
 import java.util.Objects;
 import java.util.UUID;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -30,12 +29,11 @@ public class EntityBlockModifyEvent extends BlockModifyEvent implements IEntityM
 	 * @param placed Размещаемый блок (может быть null)
 	 * @param machineType Тип механизма из мода
 	 */
-	public EntityBlockModifyEvent(@Nonnull Entity entity, @Nonnull Block block, @Nullable UUID ownerId, @Nonnull MachineAction action, @Nullable BlockStateData placed, @Nonnull IMachineType machineType) {
+	public EntityBlockModifyEvent(Entity entity, Block block, @Nullable UUID ownerId, MachineAction action, @Nullable BlockStateData placed, IMachineType machineType) {
 		super(block, ownerId, action, placed, machineType);
 		this.entity = Objects.requireNonNull(entity, "entity is null");
 	}
 
-	@Nonnull
 	@Override
 	public Entity getMachineEntity() {
 		return entity;

@@ -2,7 +2,6 @@ package theandrey.bukkit.event.common;
 
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -22,7 +21,7 @@ public class CustomExplosionEvent extends CancellableEvent {
 	private boolean isFlaming;
 	private float yield;
 
-	public CustomExplosionEvent(@Nullable Entity exploder, @Nonnull Location location, @Nonnull ExplosionCause cause, @Nonnull List<Block> blocks, @Nonnull List<Entity> entities, boolean isFlaming, float yield) {
+	public CustomExplosionEvent(@Nullable Entity exploder, Location location, ExplosionCause cause, List<Block> blocks, List<Entity> entities, boolean isFlaming, float yield) {
 		this.exploder = exploder;
 		this.location = Objects.requireNonNull(location, "location");
 		this.cause = Objects.requireNonNull(cause, "cause");
@@ -44,7 +43,6 @@ public class CustomExplosionEvent extends CancellableEvent {
 	/**
 	 * Точка эпицентра взрыва
 	 */
-	@Nonnull
 	public Location getLocation() {
 		return location;
 	}
@@ -52,7 +50,6 @@ public class CustomExplosionEvent extends CancellableEvent {
 	/**
 	 * Возвращает объект с описанием причины/источника взрыва
 	 */
-	@Nonnull
 	public ExplosionCause getCause() {
 		return cause;
 	}
@@ -60,7 +57,6 @@ public class CustomExplosionEvent extends CancellableEvent {
 	/**
 	 * Возвращает список затронутых блоков. Удаление элемента из этого списка предотвращает разрушение блока.
 	 */
-	@Nonnull
 	public List<Block> getAffectedBlocks() {
 		return blocks;
 	}
@@ -68,7 +64,6 @@ public class CustomExplosionEvent extends CancellableEvent {
 	/**
 	 * Возвращает список существ получающих урон. Удаление элемента из этого списка предотвращает получение урона существом.
 	 */
-	@Nonnull
 	public List<Entity> getAffectedEntities() {
 		return entities;
 	}

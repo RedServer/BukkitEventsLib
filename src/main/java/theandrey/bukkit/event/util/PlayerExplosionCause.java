@@ -2,7 +2,6 @@ package theandrey.bukkit.event.util;
 
 import java.util.Objects;
 import java.util.UUID;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -16,22 +15,19 @@ public class PlayerExplosionCause implements ExplosionCause {
 
 	private final Player player;
 
-	public PlayerExplosionCause(@Nonnull Player player) {
+	public PlayerExplosionCause(Player player) {
 		this.player = Objects.requireNonNull(player, "player");
 	}
 
-	@Nonnull
 	public Player getPlayer() {
 		return player;
 	}
 
-	@Nonnull
 	@Override
 	public UUID getOwnerId() {
 		return player.getUniqueId();
 	}
 
-	@Nonnull
 	@Override
 	public Location getLocation() {
 		return player.getLocation();

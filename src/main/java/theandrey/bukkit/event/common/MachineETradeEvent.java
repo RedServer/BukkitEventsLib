@@ -2,7 +2,6 @@ package theandrey.bukkit.event.common;
 
 import java.util.Objects;
 import java.util.UUID;
-import javax.annotation.Nonnull;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -33,7 +32,7 @@ public class MachineETradeEvent extends CancellableEvent {
 	 * @param player Игрок
 	 * @param merchant ID продавца (игрока)
 	 */
-	public MachineETradeEvent(@Nonnull Block machine, @Nonnull IMachineType type, @Nonnull ItemStack item, double sum, @Nonnull Player player, @Nonnull UUID merchant) {
+	public MachineETradeEvent(Block machine, IMachineType type, ItemStack item, double sum, Player player, UUID merchant) {
 		this.machine = Objects.requireNonNull(machine, "machine");
 		this.machineType = Objects.requireNonNull(type, "type");
 		this.item = Objects.requireNonNull(item, "item");
@@ -42,7 +41,6 @@ public class MachineETradeEvent extends CancellableEvent {
 		this.merchant = Objects.requireNonNull(merchant, "merchant");
 	}
 
-	@Nonnull
 	public Block getMachineBlock() {
 		return machine;
 	}
@@ -58,7 +56,6 @@ public class MachineETradeEvent extends CancellableEvent {
 	/**
 	 * Предмет, который покупает или продаёт игрок
 	 */
-	@Nonnull
 	public ItemStack getItem() {
 		return item;
 	}
@@ -66,7 +63,6 @@ public class MachineETradeEvent extends CancellableEvent {
 	/**
 	 * Игрок участвующий в сделке
 	 */
-	@Nonnull
 	public Player getPlayer() {
 		return player;
 	}
@@ -74,7 +70,6 @@ public class MachineETradeEvent extends CancellableEvent {
 	/**
 	 * ID продавца (обычно это игрок)
 	 */
-	@Nonnull
 	public UUID getMerchant() {
 		return merchant;
 	}
@@ -82,7 +77,6 @@ public class MachineETradeEvent extends CancellableEvent {
 	/**
 	 * Тип механизма из мода (enum)
 	 */
-	@Nonnull
 	public IMachineType getMachineType() {
 		return machineType;
 	}

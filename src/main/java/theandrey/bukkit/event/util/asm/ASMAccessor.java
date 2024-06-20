@@ -23,7 +23,7 @@ public final class ASMAccessor {
 		try {
 			String className = ASMAccessor.class.getName() + "_" + CraftBukkitAccessor.class.getSimpleName() + "Impl";
 			ClassWriter cw = new ClassWriter(0);
-			cw.visit(Opcodes.V1_7, Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER, className.replace('.', '/'), null, "java/lang/Object", new String[]{Type.getInternalName(CraftBukkitAccessor.class)});
+			cw.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC | Opcodes.ACC_FINAL | Opcodes.ACC_SUPER, className.replace('.', '/'), null, "java/lang/Object", new String[]{Type.getInternalName(CraftBukkitAccessor.class)});
 			cw.visitSource(".dynamic", null);
 
 			Method method;
