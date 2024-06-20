@@ -3,17 +3,16 @@ package theandrey.bukkit.event;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
@@ -61,27 +60,14 @@ public final class BukkitEventUtils {
 	}
 
 	/**
-	 * Получение Bukkit Block по ChunkCoordinates
-	 * @param world Vanilla World
-	 * @param coord ChunkCoordinates
-	 * @return Bukkit Block
-	 */
-	@Nonnull
-	public static org.bukkit.block.Block getBlock(@Nonnull World world, @Nonnull ChunkCoordinates coord) {
-		if (coord == null) return null;
-		return getBlock(world, coord.posX, coord.posY, coord.posZ);
-	}
-
-	/**
 	 * Получение Bukkit Block по ChunkPosition
 	 * @param world Vanilla World
 	 * @param pos ChunkPosition
 	 * @return Bukkit Block
 	 */
 	@Nonnull
-	public static org.bukkit.block.Block getBlock(@Nonnull World world, @Nonnull ChunkPosition pos) {
-		if (pos == null) return null;
-		return getBlock(world, pos.chunkPosX, pos.chunkPosY, pos.chunkPosZ);
+	public static org.bukkit.block.Block getBlock(@Nonnull World world, @Nonnull BlockPos pos) {
+		return getBlock(world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	/**
@@ -103,8 +89,21 @@ public final class BukkitEventUtils {
 	 */
 	@Nonnull
 	public static org.bukkit.block.Block getBlock(@Nonnull TileEntity tile) {
-		if (tile == null) throw new IllegalArgumentException("tile is null");
-		return getBlock(tile.getWorldObj(), tile.xCoord, tile.yCoord, tile.zCoord);
+		return getBlock(tile.getWorld(), tile.getPos());
+	}
+
+	/**
+	 * Возвращает {@link BlockPos} по координатам {@link org.bukkit.block.Block}
+	 */
+	public static BlockPos toBlockPos(org.bukkit.block.Block block) {
+		return new BlockPos(block.getX(), block.getY(), block.getZ());
+	}
+
+	/**
+	 * Возвращает {@link IBlockState} по координатам {@link org.bukkit.block.Block}
+	 */
+	public static IBlockState getBlockState(org.bukkit.block.Block block) {
+		return toVanillaWorld(block.getWorld()).getBlockState(toBlockPos(block));
 	}
 
 	/**
@@ -134,7 +133,7 @@ public final class BukkitEventUtils {
 	 * @param side Номер стороны
 	 * @return BlockFace. Если определить не удалось, вернёт SELF
 	 */
-	@Nonnull
+	@Deprecated
 	public static BlockFace getBlockFace(int side) {
 		switch (side) {
 			case 0:
@@ -153,8 +152,8 @@ public final class BukkitEventUtils {
 		return BlockFace.SELF;
 	}
 
-	public static BlockFace getBlockFace(ForgeDirection direction) {
-		switch (direction) {
+	public static BlockFace getBlockFace(EnumFacing facing) {
+		switch (facing) {
 			case UP:
 				return BlockFace.UP;
 			case DOWN:
@@ -186,7 +185,7 @@ public final class BukkitEventUtils {
 	 * Получить снимок блока
 	 */
 	@Nonnull
-	public static BlockState getBlockState(@Nonnull World world, int x, int y, int z) {
+	public static org.bukkit.block.BlockState getBukkitBlockState(@Nonnull World world, int x, int y, int z) {
 		if (world == null) throw new IllegalArgumentException("world is null");
 		return craftBukkitAccessor.getBlockState(world, x, y, z);
 	}

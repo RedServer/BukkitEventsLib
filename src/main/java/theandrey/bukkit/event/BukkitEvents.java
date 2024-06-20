@@ -1,11 +1,14 @@
 package theandrey.bukkit.event;
 
 import java.util.Collection;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,15 +27,16 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import theandrey.bukkit.event.util.FakeBlockImpl;
 
-public final class BukkitEventManager {
+public final class BukkitEvents {
 
 	private static final PluginManager pluginManager = Bukkit.getServer().getPluginManager();
 
-	private BukkitEventManager() {
+	private BukkitEvents() {
 	}
 
 	/**
@@ -52,8 +56,8 @@ public final class BukkitEventManager {
 	 * @param stack Предмет в руке (ведро)
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketEmptyEvent(@Nonnull EntityPlayer player, @Nullable net.minecraft.item.ItemStack stack, int clickX, int clickY, int clickZ, int clickSide) {
-		PlayerBucketEmptyEvent event = BukkitEventFactory.newPlayerBucketEmptyEvent(player, clickX, clickY, clickZ, clickSide, stack);
+	public static boolean callBucketEmptyEvent(@Nonnull EntityPlayer player, @Nullable net.minecraft.item.ItemStack stack, int clickX, int clickY, int clickZ, BlockFace face) {
+		PlayerBucketEmptyEvent event = BukkitEventFactory.newPlayerBucketEmptyEvent(player, clickX, clickY, clickZ, face, stack);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();
 	}
@@ -64,11 +68,12 @@ public final class BukkitEventManager {
 	 * @param stack Предмет (ведро)
 	 * @return true если событие не было отменено
 	 */
-	public static boolean callBucketEmptyEvent(@Nonnull EntityPlayer player, @Nullable net.minecraft.item.ItemStack stack, @Nonnull MovingObjectPosition mop) {
+	public static boolean callBucketEmptyEvent(@Nonnull EntityPlayer player, @Nullable net.minecraft.item.ItemStack stack, @Nonnull RayTraceResult target) {
 		if (player == null) throw new IllegalArgumentException("player is null");
-		if (mop.typeOfHit != MovingObjectPosition.MovingObjectType.BLOCK) throw new IllegalArgumentException("MovingObjectPosition.typeOfHit must be a BLOCK, given: " + mop.typeOfHit);
+		if (target.typeOfHit != RayTraceResult.Type.BLOCK) throw new IllegalArgumentException("typeOfHit must be a BLOCK, given: " + target.typeOfHit);
 
-		return callBucketEmptyEvent(player, stack, mop.blockX, mop.blockY, mop.blockZ, mop.sideHit);
+		BlockPos pos = target.getBlockPos();
+		return callBucketEmptyEvent(player, stack, pos.getX(), pos.getY(), pos.getZ(), BukkitEventUtils.getBlockFace(target.sideHit));
 	}
 
 	/**
@@ -115,23 +120,31 @@ public final class BukkitEventManager {
 	 * @param z Координата Z, куда будет установлен блок
 	 * @param blockPlaced Устанавливаемый блок
 	 * @param metadata meta устанавливаемого блока
-	 * @param side Сторона блока, по которому кликнули (в этом направление относительно него будет установлен новый блок). Укажите -1 если сторона неизвестна
-	 * @param stackInHand Предмет в руке игрока
+	 * @param face Сторона блока, по которому кликнули (в этом направление относительно него будет установлен новый блок).
+	 * @param hand Активная рука
 	 * @return Результат: выполнен успешно (разрешить) или отменён (запретить)
 	 */
-	public static boolean callBlockPlaceEvent(@Nonnull EntityPlayer player, int x, int y, int z, @Nonnull net.minecraft.block.Block blockPlaced, int metadata, int side, @Nullable net.minecraft.item.ItemStack stackInHand) {
+	public static boolean callBlockPlaceEvent(@Nonnull EntityPlayer player, int x, int y, int z, @Nonnull net.minecraft.block.Block blockPlaced, int metadata, BlockFace face, EnumHand hand) {
 		if (player == null) throw new IllegalArgumentException("player is null");
 		if (blockPlaced == null) throw new IllegalArgumentException("blockPlaced is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
-		Block bukkitBlock = BukkitEventUtils.getBlock(player.worldObj, x, y, z);
+		Block bukkitBlock = BukkitEventUtils.getBlock(player.getEntityWorld(), x, y, z);
 		FakeBlockImpl placed = new FakeBlockImpl(bukkitBlock, BukkitEventUtils.getMaterial(blockPlaced), (byte)metadata);
-		ItemStack item = BukkitEventUtils.getItemStack(stackInHand);
-		BlockFace face = (side == -1) ? BlockFace.SELF : BukkitEventUtils.getBlockFace(side).getOppositeFace();
 
-		BlockPlaceEvent event = new BlockPlaceEvent(placed, bukkitBlock.getState(), bukkitBlock.getRelative(face), item, bukkitPlayer, true);
+		org.bukkit.inventory.ItemStack item;
+		EquipmentSlot equipmentSlot;
+		if (hand == EnumHand.MAIN_HAND) {
+			item = bukkitPlayer.getInventory().getItemInMainHand();
+			equipmentSlot = EquipmentSlot.HAND;
+		} else {
+			item = bukkitPlayer.getInventory().getItemInOffHand();
+			equipmentSlot = EquipmentSlot.OFF_HAND;
+		}
+
+		BlockPlaceEvent event = new BlockPlaceEvent(placed, bukkitBlock.getState(), bukkitBlock.getRelative(face), item, bukkitPlayer, true, equipmentSlot);
 		pluginManager.callEvent(event);
-		return (!event.isCancelled() && event.canBuild());
+		return !event.isCancelled() && event.canBuild();
 	}
 
 	/**
@@ -220,10 +233,10 @@ public final class BukkitEventManager {
 		if (entity == null) throw new IllegalArgumentException("entity is null!");
 
 		EntityChangeBlockEvent event = new EntityChangeBlockEvent(
-				BukkitEventUtils.getBukkitEntity(entity),
-				BukkitEventUtils.getBlock(entity.worldObj, x, y, z),
-				(newBlock != null) ? newBlock.getType() : Material.AIR,
-				(newBlock != null) ? (byte)newBlock.getMeta() : 0
+			BukkitEventUtils.getBukkitEntity(entity),
+			BukkitEventUtils.getBlock(entity.world, x, y, z),
+			Optional.ofNullable(newBlock).map(BlockStateData::getType).orElse(Material.AIR),
+			Optional.ofNullable(newBlock).map(block -> (byte)block.getMeta()).orElse((byte)0)
 		);
 		pluginManager.callEvent(event);
 		return !event.isCancelled();

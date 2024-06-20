@@ -7,41 +7,55 @@ buildscript {
 		}
 	}
 	dependencies {
-		classpath('com.anatawa12.forge:ForgeGradle:1.2-1.1.+') {
-			changing = true
-		}
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
 	}
 }
 
 repositories {
-	flatDir {
-		dirs 'lib'
+	maven {
+		name = 'spigotmc'
+		url = 'https://hub.spigotmc.org/nexus/repository/public'
 	}
 	mavenCentral()
 }
 
-apply plugin: 'forge'
+apply plugin: 'java'
+apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 
 // Project settings
-sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+java {
+	toolchain.languageVersion = JavaLanguageVersion.of(8)
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
 minecraft {
-	version = '1.7.10-10.13.4.1614-1.7.10'
+	mappings channel: 'stable', version: '39-1.12'
+
+	accessTransformer = file('src/main/resources/META-INF/bukkitevents_at.cfg')
+
+	legacy {
+		fixClasspath = true
+		extractMappings = true
+		attachMappings = true
+	}
 }
 
 dependencies {
-	compile group: 'org.bukkit', name: 'bukkit', version: '1.7.10-R0.1'
+	minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
+	implementation 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
+	implementation 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
 }
 
 jar {
 	manifest {
 		attributes 'FMLCorePluginContainsFMLMod': 'true'
 		attributes 'FMLCorePlugin': 'theandrey.bukkit.asm.LoadingPlugin'
+		attributes 'FMLAT': 'bukkitevents_at.cfg'
 	}
 }
 

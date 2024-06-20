@@ -3,10 +3,9 @@ package theandrey.bukkit.event.helper;
 import java.lang.reflect.Field;
 import java.util.List;
 import javax.annotation.Nonnull;
-import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public final class ServerHelper {
 
@@ -27,8 +26,8 @@ public final class ServerHelper {
 				floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "field_147365_f", "floatingTickCount");
 			}
 
-			floatingTickCount.setInt(player.playerNetServerHandler, 0);
-		} catch (ReflectiveOperationException | ReflectionHelper.UnableToFindFieldException ex) {
+			floatingTickCount.setInt(player.connection, 0);
+		} catch (ReflectiveOperationException ex) {
 			throw new RuntimeException("Failed to reset fly counter", ex);
 		}
 	}
@@ -36,9 +35,8 @@ public final class ServerHelper {
 	/**
 	 * Получить список игроков, находящихся на сервере
 	 */
-	@SuppressWarnings("unchecked")
 	@Nonnull
 	public static List<EntityPlayerMP> getOnlinePlayers() {
-		return MinecraftServer.getServer().getConfigurationManager().playerEntityList;
+		return FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
 	}
 }

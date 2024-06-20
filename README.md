@@ -1,4 +1,4 @@
-# Bukkit Events Library / MC 1.7.10
+# Bukkit Events Library / MC 1.12.2
 
 [![Release](https://jitpack.io/v/RedServer/BukkitEventsLib.svg)](https://jitpack.io/#RedServer/BukkitEventsLib)
 

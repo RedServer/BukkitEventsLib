@@ -56,18 +56,18 @@ public final class BukkitEventFactory {
 	 */
 	@Nonnull
 	public static PlayerBucketFillEvent newPlayerBucketFillEvent(@Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, @Nullable ItemStack stack) {
-		return (PlayerBucketFillEvent)getPlayerBucketEvent(true, player, clickX, clickY, clickZ, -1, stack);
+		return (PlayerBucketFillEvent)newPlayerBucketEvent(true, player, clickX, clickY, clickZ, BlockFace.SELF, stack);
 	}
 
 	/**
 	 * Ивент наполнения ведра
 	 * @param player Игрок
-	 * @param clickSide Индекс стороны блока по которой был сделан клик
+	 * @param face Сторона блока по которой был сделан клик
 	 * @param stack Предмет в руке (ведро)
 	 */
 	@Nonnull
-	public static PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(@Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, int clickSide, @Nullable ItemStack stack) {
-		return (PlayerBucketEmptyEvent)getPlayerBucketEvent(false, player, clickX, clickY, clickZ, clickSide, stack);
+	public static PlayerBucketEmptyEvent newPlayerBucketEmptyEvent(@Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, BlockFace face, @Nullable ItemStack stack) {
+		return (PlayerBucketEmptyEvent)newPlayerBucketEvent(false, player, clickX, clickY, clickZ, face, stack);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public final class BukkitEventFactory {
 	}
 
 	@Nonnull
-	private static PlayerBucketEvent getPlayerBucketEvent(boolean isFilling, @Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, int side, @Nullable ItemStack stack) {
+	private static PlayerBucketEvent newPlayerBucketEvent(boolean isFilling, @Nonnull EntityPlayer player, int clickX, int clickY, int clickZ, BlockFace face, @Nullable ItemStack stack) {
 		if (player == null) throw new IllegalArgumentException("player is null");
 
 		Player bukkitPlayer = BukkitEventUtils.getPlayer(player);
@@ -102,7 +102,7 @@ public final class BukkitEventFactory {
 		if (isFilling) {
 			return new PlayerBucketFillEvent(bukkitPlayer, blockClicked, BlockFace.SELF, bukkitItem.getType(), bukkitItem);
 		} else {
-			return new PlayerBucketEmptyEvent(bukkitPlayer, blockClicked, BukkitEventUtils.getBlockFace(side), bukkitItem.getType(), bukkitItem);
+			return new PlayerBucketEmptyEvent(bukkitPlayer, blockClicked, face, bukkitItem.getType(), bukkitItem);
 		}
 	}
 

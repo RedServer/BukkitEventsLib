@@ -1,10 +1,10 @@
 package theandrey.bukkit.event.listener;
 
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class WorldEventHooks {
 
@@ -15,7 +15,7 @@ public class WorldEventHooks {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public final void handleEntitySpawn(EntityJoinWorldEvent event) {
-		if (blockItemSpawn && event.entity instanceof EntityItem) {
+		if (blockItemSpawn && event.getEntity() instanceof EntityItem) {
 			event.setCanceled(true);
 			event.setResult(Event.Result.DENY);
 		}

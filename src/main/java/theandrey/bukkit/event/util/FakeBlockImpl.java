@@ -299,4 +299,8 @@ public final class FakeBlockImpl implements Block {
 		block.removeMetadata(metadataKey, owningPlugin);
 	}
 
+	@Override
+	public void setType(Material type, boolean applyPhysics) {
+		block.setType(type, applyPhysics);
+	}
 }
