@@ -1,14 +1,9 @@
-buildscript {
-	repositories {
-		mavenCentral()
-		maven {
-			name = 'forge'
-			url = getProperty('minecraftforge.repository.url')
-		}
-	}
-	dependencies {
-		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '6.0.+', changing: true
-	}
+plugins {
+	id 'java'
+	id 'eclipse'
+	id 'idea'
+	id 'net.minecraftforge.gradle' version '6.0.+'
+	id 'maven-publish'
 }
 
 repositories {
@@ -18,10 +13,6 @@ repositories {
 	}
 	mavenCentral()
 }
-
-apply plugin: 'java'
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'maven-publish'
 
 // Project settings
 java {
@@ -35,14 +26,7 @@ tasks.withType(JavaCompile).configureEach {
 
 minecraft {
 	mappings channel: 'stable', version: '39-1.12'
-
 	accessTransformer = file('src/main/resources/META-INF/bukkitevents_at.cfg')
-
-	legacy {
-		fixClasspath = true
-		extractMappings = true
-		attachMappings = true
-	}
 }
 
 dependencies {
@@ -91,19 +75,19 @@ publishing {
 	repositories {
 		maven {
 			name = 'redserver'
-			url = findProperty('redserver.repository.url')
+			url = findProperty('ru.redserver.repository.publish_url')
 			credentials() {
-				username findProperty('redserver.repository.user')
-				password findProperty('redserver.repository.pass')
+				username findProperty('ru.redserver.repository.username')
+				password findProperty('ru.redserver.repository.password')
 			}
 		}
 	}
 
 	publications {
 		maven(MavenPublication) {
-			from components.java
-			artifact devJar
-			artifact sourcesJar
+			artifact tasks.named('jar')
+			artifact tasks.named('devJar')
+			artifact tasks.named('sourcesJar')
 
 			pom.withXml {
 				Node pomNode = asNode()

@@ -1,1 +1,10 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'forge'
+			url = getProperty('net.minecraftforge.repository.url')
+		}
+	}
+}
+
 rootProject.name = 'BukkitEventsLib'
