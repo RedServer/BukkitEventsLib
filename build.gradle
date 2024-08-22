@@ -3,7 +3,7 @@ buildscript {
 		mavenCentral()
 		maven {
 			name = 'forge'
-			url = getProperty('minecraftforge.repository.url')
+			url = getProperty('net.minecraftforge.repository.url')
 		}
 	}
 	dependencies {
@@ -15,7 +15,7 @@ buildscript {
 
 repositories {
 	flatDir {
-		dirs 'lib'
+		dirs rootProject.file('lib')
 	}
 	mavenCentral()
 }
@@ -35,7 +35,7 @@ minecraft {
 }
 
 dependencies {
-	compile group: 'org.bukkit', name: 'bukkit', version: '1.7.10-R0.1'
+	implementation 'org.bukkit:bukkit:1.7.10-R0.1'
 }
 
 jar {
@@ -59,6 +59,10 @@ tasks.register('sourcesJar', Jar) {
 artifacts {
 	archives tasks.devJar
 	archives tasks.sourcesJar
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+	enabled = false
 }
 
 publishing {
