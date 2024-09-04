@@ -1,5 +1,5 @@
 plugins {
-	id 'java'
+	id 'java-library'
 	id 'eclipse'
 	id 'idea'
 	id 'net.minecraftforge.gradle' version '6.0.+'
@@ -31,8 +31,7 @@ minecraft {
 
 dependencies {
 	minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
-	implementation 'org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT'
-	implementation 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
+	api 'org.bukkit:bukkit:1.12.2-R0.1-SNAPSHOT'
 }
 
 processResources {
@@ -71,6 +70,10 @@ artifacts {
 	archives tasks.sourcesJar
 }
 
+tasks.withType(GenerateModuleMetadata).configureEach {
+	enabled = false
+}
+
 publishing {
 	repositories {
 		maven {
@@ -84,15 +87,18 @@ publishing {
 	}
 
 	publications {
-		maven(MavenPublication) {
-			artifact tasks.named('jar')
+		register('mavenJava', MavenPublication) {
+			version = project.pom_version
+
+			from components.java
 			artifact tasks.named('devJar')
 			artifact tasks.named('sourcesJar')
 
+			/* Remove ForgeGradle deps */
 			pom.withXml {
 				Node pomNode = asNode()
 				pomNode.dependencies.'*'.findAll() {
-					it.artifactId.text() != 'bukkit'
+					it.groupId.text() == 'net.minecraftforge'
 				}.each() {
 					it.parent().remove(it)
 				}
