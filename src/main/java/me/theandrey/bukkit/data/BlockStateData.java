@@ -3,11 +3,10 @@ package me.theandrey.bukkit.data;
 import com.google.common.base.MoreObjects;
 import java.util.Objects;
 import me.theandrey.bukkit.util.Vanilla2Bukkit;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import org.bukkit.Material;
 
-/**
- * Просто хранить информацию о блоке
- */
 public final class BlockStateData {
 
 	private final Material type;
@@ -30,11 +29,18 @@ public final class BlockStateData {
 	}
 
 	public static BlockStateData create(net.minecraft.block.Block block, int meta) {
+		Objects.requireNonNull(block, "block");
 		return new BlockStateData(Vanilla2Bukkit.getMaterial(block), meta);
 	}
 
 	public static BlockStateData create(net.minecraft.block.Block block) {
 		return create(block, 0);
+	}
+
+	public static BlockStateData create(IBlockState state) {
+		Objects.requireNonNull(state, "state");
+		Block block = state.getBlock();
+		return create(block, block.getMetaFromState(state));
 	}
 
 	/**
@@ -52,8 +58,10 @@ public final class BlockStateData {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
+			.add("id", type.getId())
 			.add("type", type)
 			.add("meta", meta)
 			.toString();
