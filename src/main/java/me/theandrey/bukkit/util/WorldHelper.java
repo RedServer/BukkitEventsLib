@@ -11,6 +11,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketExplosion;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -37,8 +39,10 @@ public final class WorldHelper {
 	 * Создаёт CustomExplosion и отсылает пакеты клиентам.
 	 * Является аналогом {@link WorldServer#createExplosion(Entity, double, double, double, float, boolean)}
 	 */
-	public static CustomExplosion createExplosion(World world, @Nullable Entity exploder, double x, double y, double z, float size, boolean causesFire, boolean damagesTerrain, ExplosionCause cause) {
-		CustomExplosion explosion = new CustomExplosion(world, exploder, x, y, z, size, causesFire, damagesTerrain);
+	public static CustomExplosion createExplosion(World world, @Nullable Entity exploder, Vec3d pos, float size, boolean causesFire, boolean damagesTerrain, ExplosionCause cause) {
+		Objects.requireNonNull(pos, "pos");
+
+		CustomExplosion explosion = new CustomExplosion(world, exploder, pos.x, pos.y, pos.z, size, causesFire, damagesTerrain);
 		explosion.cause = Objects.requireNonNull(cause, "cause");
 
 		if (ForgeEventFactory.onExplosionStart(world, explosion)) {
@@ -57,8 +61,8 @@ public final class WorldHelper {
 		}
 
 		for (EntityPlayer player : world.playerEntities) {
-			if (!player.isDead && player.getDistanceSq(x, y, z) < 4096D) {
-				((EntityPlayerMP)player).connection.sendPacket(new SPacketExplosion(x, y, z, size, explosion.getAffectedBlockPositions(), explosion.getPlayerKnockbackMap().get(player)));
+			if (!player.isDead && player.getDistanceSq(pos.x, pos.y, pos.z) < 4096D) {
+				((EntityPlayerMP)player).connection.sendPacket(new SPacketExplosion(pos.x, pos.y, pos.z, size, explosion.getAffectedBlockPositions(), explosion.getPlayerKnockbackMap().get(player)));
 			}
 		}
 
@@ -75,6 +79,14 @@ public final class WorldHelper {
 			Objects.requireNonNull(entity, "entity"),
 			Objects.requireNonNull(reason, "reason")
 		);
+	}
+
+	/**
+	 * Преобразует {@link BlockPos} в точку {@link Vec3d} (по центру блока)
+	 */
+	public static Vec3d toVector(BlockPos pos) {
+		Objects.requireNonNull(pos, "pos");
+		return new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 	}
 
 	private static CraftBukkitAccessor getAccessor() {
