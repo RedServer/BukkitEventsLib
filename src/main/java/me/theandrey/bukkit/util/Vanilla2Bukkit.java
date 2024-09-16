@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.bukkit.Material;
@@ -29,21 +30,38 @@ public final class Vanilla2Bukkit {
 	}
 
 	/**
-	 * Получает Material блока
+	 * Ищет Material соответствующий блоку
 	 */
 	@Nullable
-	@SuppressWarnings("deprecation")
-	public static Material getMaterial(@Nullable Block block) {
-		return Material.getMaterial(Block.getIdFromBlock(block));
+	public static Material getMaterial(Block block) {
+		return getMaterial(Objects.requireNonNull(block, "block").getRegistryName());
 	}
 
 	/**
-	 * Получает Material предмета
+	 * Ищет Material соответствующий предмету
 	 */
 	@Nullable
-	@SuppressWarnings("deprecation")
-	public static Material getMaterial(@Nullable Item item) {
-		return Material.getMaterial(Item.getIdFromItem(item));
+	public static Material getMaterial(Item item) {
+		return getMaterial(Objects.requireNonNull(item, "item").getRegistryName());
+	}
+
+	/**
+	 * Ищет Material соответствующий {@link ResourceLocation}
+	 */
+	@Nullable
+	public static Material getMaterial(ResourceLocation identifier) {
+		return Material.getMaterial(getMaterialName(identifier));
+	}
+
+	/**
+	 * Возвращает преобразованное имя Bukkit Material для {@link ResourceLocation}
+	 */
+	public static String getMaterialName(ResourceLocation identifier) {
+		return Objects.requireNonNull(identifier, "identifier")
+			.toString()
+			.toUpperCase()
+			.replaceAll("(:|\\s)", "_")
+			.replaceAll("\\W", "");
 	}
 
 	public static BlockFace getBlockFace(EnumFacing facing) {

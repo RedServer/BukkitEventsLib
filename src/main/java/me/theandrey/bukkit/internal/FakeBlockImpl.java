@@ -48,7 +48,6 @@ public final class FakeBlockImpl implements Block {
 	}
 
 	// Переопределённые методы
-	@SuppressWarnings("deprecation")
 	@Override
 	public byte getData() {
 		return metadata;
@@ -87,9 +86,9 @@ public final class FakeBlockImpl implements Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean setTypeId(int type) {
-		if (block.setTypeId(type)) {
-			material = Material.getMaterial(type);
+	public boolean setTypeId(int id) {
+		if (block.setTypeId(id)) {
+			material = findMaterialById(id);
 			return true;
 		}
 		return false;
@@ -97,9 +96,9 @@ public final class FakeBlockImpl implements Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean setTypeId(int type, boolean applyPhysics) {
-		if (block.setTypeId(type, applyPhysics)) {
-			material = Material.getMaterial(type);
+	public boolean setTypeId(int id, boolean applyPhysics) {
+		if (block.setTypeId(id, applyPhysics)) {
+			material = findMaterialById(id);
 			return true;
 		}
 		return false;
@@ -107,9 +106,9 @@ public final class FakeBlockImpl implements Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean setTypeIdAndData(int type, byte data, boolean applyPhysics) {
-		if (block.setTypeIdAndData(type, data, applyPhysics)) {
-			material = Material.getMaterial(type);
+	public boolean setTypeIdAndData(int id, byte data, boolean applyPhysics) {
+		if (block.setTypeIdAndData(id, data, applyPhysics)) {
+			material = findMaterialById(id);
 			metadata = data;
 			return true;
 		}
@@ -118,13 +117,13 @@ public final class FakeBlockImpl implements Block {
 
 	@Override
 	public boolean isEmpty() {
-		return (material == Material.AIR);
+		return material == Material.AIR;
 	}
 
 	@Override
 	public boolean isLiquid() {
 		// TODO: Сделать поддержку модов
-		return (material == Material.STATIONARY_LAVA || material == Material.STATIONARY_WATER || material == Material.WATER || material == Material.LAVA);
+		return material == Material.STATIONARY_LAVA || material == Material.STATIONARY_WATER || material == Material.WATER || material == Material.LAVA;
 	}
 
 	// Стандартные методы
@@ -301,5 +300,10 @@ public final class FakeBlockImpl implements Block {
 	@Override
 	public void setType(Material type, boolean applyPhysics) {
 		block.setType(type, applyPhysics);
+	}
+
+	@SuppressWarnings("deprecation")
+	private static Material findMaterialById(int id) {
+		return Objects.requireNonNull(Material.getMaterial(id), "No such material for #" + id);
 	}
 }

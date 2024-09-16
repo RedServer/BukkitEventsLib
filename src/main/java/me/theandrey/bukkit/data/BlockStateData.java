@@ -58,10 +58,8 @@ public final class BlockStateData {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("id", type.getId())
 			.add("type", type)
 			.add("meta", meta)
 			.toString();
