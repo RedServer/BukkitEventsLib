@@ -52,7 +52,7 @@ public interface CraftBukkitAccessor {
 	/**
 	 * Создаёт новый экземпляр
 	 */
-	public static CraftBukkitAccessor get() {
+	static CraftBukkitAccessor get() {
 		try {
 			return (CraftBukkitAccessor)Launch.classLoader.loadClass(CraftBukkitAccessorGenerator.IMPLEMENTATION_CLASS).newInstance();
 		} catch (ReflectiveOperationException e) {
